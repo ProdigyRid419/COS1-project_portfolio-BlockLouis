@@ -10,6 +10,8 @@ public:
 private:
 
 	void StartGame();
+	void ViewStatus();
+	void Sleep();
 
 	Player Player1;
 

@@ -73,12 +73,12 @@ void Game::StartGame() {
 
 		case 1:
 
-
+			ViewStatus();
 			break;
 
 		case 2:
 
-
+			Sleep();
 			break;
 
 		case 3:
@@ -89,6 +89,43 @@ void Game::StartGame() {
 		}
 
 	}
+
+}
+
+void Game::ViewStatus() {
+
+	int temp = Player1.GetTemp();
+
+	cout << "\nTemperature: " << temp;
+
+	if (temp >= 35 && temp <= 65) {
+
+		cout << " (Comfortable)";
+
+	} else if (temp < 35) {
+
+		cout << " (Cold)";
+
+	}
+	else if (temp > 65) {
+
+		cout << " (Hot)";
+
+	}
+
+
+	cout << "\nHealth: " << Player1.GetHealth();
+	cout << "\nHunger: " << Player1.GetHunger();
+	cout << "\nHydration: " << Player1.GetHydration();
+	cout << "\nStamina: " << Player1.GetStamina();
+	cout << "\nSanity: " << Player1.GetSanity() << "\n\n";
+
+}
+
+void Game::Sleep() {
+
+	Player1.DecreaseHungerSleep();
+	Player1.DecreaseHydrationSleep();
 
 }
 
