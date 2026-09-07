@@ -25,7 +25,10 @@ Each week I will summarize my milestone activity and progress by writing a stand
 
 ### Week 1
 
-Replace this paragraph with your stand up for this week. Use the prompts above to summarize your most recent milestone activity and work.
+This week I worked on getting my Main menu started, and my initial character creation as well as my initial storyline beginning and character control menu interactions. I also created each survival stat and have the beginning game loop set up to show progress.
+I found myself only truly struggling with my spelling in logic error areas such as in the middle of output strings. as well as remembering some includes and usings.
+This week I absolutely nailed my game loops and menu interactions as well as my class creation and file organization. I remembered exactly how to validate user input and use switch statements for menu interaction. I also remembered exactly how to create class specific functions and used .h and .cpp properly to separate function declarations and function definitions.
+Next I plan to prioritize expansion of Camp and survival systems, implementation of inventory and exploration systems, adding time progression and survival stat changes.
 
 ### Week 2
 
