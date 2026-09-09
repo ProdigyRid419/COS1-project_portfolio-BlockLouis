@@ -8,16 +8,6 @@ int main() {
 
 	lostIsle.Run();
 
-
-
-
-
-
-
-
-
-
-
 }
 
 

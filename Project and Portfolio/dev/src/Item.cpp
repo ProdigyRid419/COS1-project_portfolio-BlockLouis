@@ -333,3 +333,81 @@ ItemCategory Item::GetCategory() const {
 	return ItemCategory::None;
 
 }
+
+bool Item::IsStackable() const {
+
+	switch (GetCategory()) {
+
+	case ItemCategory::None:
+
+		return false;
+
+	case ItemCategory::WaterContainer:
+
+		return false;
+
+	case ItemCategory::Tool:
+
+		return false;
+
+	case ItemCategory::Weapon:
+
+		return false;
+
+	case ItemCategory::Gear:
+
+		return false;
+
+	case ItemCategory::Resource:
+
+		return true;
+
+	case ItemCategory::CraftedMaterial:
+
+		return true;
+
+	case ItemCategory::Food:
+
+		return true;
+
+	case ItemCategory::Water:
+
+		return true;
+
+	case ItemCategory::Medicine:
+
+		return true;
+
+	case ItemCategory::Ammo:
+
+		return true;
+
+	}
+
+	return false;
+
+}
+
+int Item::GetMaxStack() const {
+
+	if (itemID == ItemID::Empty) {
+
+		return 0;
+
+	} else if (itemID == ItemID::FlintArrow || itemID == ItemID::StoneArrow || itemID == ItemID::MetalArrow) {
+
+		return 20;
+
+	} else if (IsStackable()) {
+
+		return 32;
+
+	} else {
+
+		return 1;
+
+	}
+
+}
+
+

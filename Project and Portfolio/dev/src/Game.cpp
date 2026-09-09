@@ -1,4 +1,6 @@
 #include "Game.h"
+#include "Item.h"
+#include "InventorySlot.h"
 #include <iostream>
 #include <string>
 
@@ -36,6 +38,8 @@ void Game::Run() {
 		break;
 
 	}
+
+	
 
 }
 

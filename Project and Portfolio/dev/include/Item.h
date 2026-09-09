@@ -58,6 +58,9 @@ public:
 	std::string GetName() const;
 	ItemCategory GetCategory() const;
 
+	bool IsStackable() const;
+	int GetMaxStack() const;
+
 private:
 
 	ItemID itemID;
