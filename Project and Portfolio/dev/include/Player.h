@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "Inventory.h"
 
 class Player {
 
@@ -12,6 +13,7 @@ public:
 	int GetHydration() const;
 	int GetStamina() const;
 	int GetSanity() const;
+	Inventory GetInventory() const;
 
 	void SetName(const std::string& name);
 	void DecreaseHungerSleep();
@@ -26,5 +28,6 @@ private:
 	int playerHydration = 100;
 	int playerStamina = 100;
 	int playerSanity = 100;
+	Inventory playerInventory;
 
 };

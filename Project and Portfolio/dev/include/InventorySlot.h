@@ -12,7 +12,7 @@ public:
 	int GetQuantity() const;
 
 	bool IsEmpty() const;
-	bool CanAcceptItem(const Item& newItem) const;
+	virtual bool CanAcceptItem(const Item& newItem) const;
 
 	int AddQuantity(const Item& newItem, int amount);
 	int RemoveQuantity(int amount);

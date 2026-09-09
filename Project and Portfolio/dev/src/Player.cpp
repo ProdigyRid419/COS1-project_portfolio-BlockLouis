@@ -49,6 +49,12 @@ int Player::GetSanity() const {
 	
 }
 
+Inventory Player::GetInventory() const{
+
+	return playerInventory;
+
+}
+
 void Player::DecreaseHungerSleep() {
 
 	playerHunger -= 10;

@@ -12,6 +12,7 @@ private:
 	void StartGame();
 	void ViewStatus();
 	void Sleep();
+	void ShowInventory();
 
 	Player Player1;
 
