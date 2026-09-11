@@ -3,7 +3,7 @@
 
 void Inventory::DisplayInventory() const {
 	
-	std::cout << "=== Dedicated Inventory Slots ===\n\n";
+	std::cout << "\n=== Dedicated Inventory Slots ===\n\n";
 
 	for (int i = 0; i < dedicatedInventorySlots.size(); i++) {
 
@@ -58,7 +58,7 @@ void Inventory::DisplayInventory() const {
 
 	}
 
-	std::cout << "\n\n=== Inventory Slots ===\n\n";
+	std::cout << "\n=== Inventory Slots ===\n\n";
 
 	for (int i = 0; i < inventorySlots.size(); i++) {
 
@@ -73,6 +73,8 @@ void Inventory::DisplayInventory() const {
 		}
 
 	}
+
+	std::cout << '\n';
 
 }
 

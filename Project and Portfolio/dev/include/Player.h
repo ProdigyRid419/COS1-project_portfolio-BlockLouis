@@ -13,7 +13,7 @@ public:
 	int GetHydration() const;
 	int GetStamina() const;
 	int GetSanity() const;
-	Inventory GetInventory() const;
+	Inventory& GetInventory();
 
 	void SetName(const std::string& name);
 	void DecreaseHungerSleep();

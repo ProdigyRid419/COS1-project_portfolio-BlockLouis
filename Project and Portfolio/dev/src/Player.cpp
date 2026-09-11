@@ -49,7 +49,7 @@ int Player::GetSanity() const {
 	
 }
 
-Inventory Player::GetInventory() const{
+Inventory& Player::GetInventory() {
 
 	return playerInventory;
 
