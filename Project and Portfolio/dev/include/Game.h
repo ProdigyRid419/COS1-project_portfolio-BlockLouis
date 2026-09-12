@@ -21,6 +21,8 @@ private:
 	void VisitLocation(Location& location);
 	void DisplayLocationInfo(const Location& location);
 	void DisplayLocationInfoDiscovery(const Location& location);
+	int GetLocationIndex(LocationType locationType);
+	std::string GetLocationName(int locationIndex);
 
 	Player Player1;
 	std::array<std::optional<Location>, 2> knownLocations{};

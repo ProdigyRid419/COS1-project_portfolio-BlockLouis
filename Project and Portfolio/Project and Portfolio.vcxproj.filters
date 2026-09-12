@@ -39,6 +39,9 @@
     <ClCompile Include="dev\src\Location.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="dev\src\Menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dev\include\Game.h">
@@ -60,6 +63,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="dev\include\Location.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dev\include\Menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

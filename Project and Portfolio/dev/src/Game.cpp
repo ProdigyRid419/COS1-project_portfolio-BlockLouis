@@ -5,23 +5,12 @@
 #include "Inventory.h"
 #include <iostream>
 #include <string>
-
+#include "Menu.h"
 #include "Location.h"
 
 void Game::Run() {
 
-	std::cout << "=== Welcome to The Long Lost Isle ===\n\n";
-
-	int menuChoice;
-
-	std::cout << "1. Start Game\n2. Exit\nPlayer choice: ";
-	std::cin >> menuChoice;
-	while (menuChoice != 1 && menuChoice != 2) {
-
-		std::cout << "\n\nInput not valid! Please choose from the menu choices.\n";
-		std::cin >> menuChoice;
-
-	}
+	int menuChoice = Menu::DisplayMenu(MenuType::Main);
 
 	switch (menuChoice) {
 
@@ -36,14 +25,11 @@ void Game::Run() {
 
 	}
 
-	
-
 }
 
 void Game::StartGame() {
 
 	std::string name;
-	int menuChoice;
 	bool shouldKeepRunning = true;
 
 	std::cout << "\n=======================================\n";
@@ -58,17 +44,10 @@ void Game::StartGame() {
 	std::cout << "\n\nWelcome to The Long Lost Isle " << Player1.GetName() << ", it's time for your survival journey to begin.\n\n";
 
 	std::cout << "===============================================\n\nYou find yourself stranded on an island, the last thing you remember is being on a cruise vacationing from work.\n\nYou must have fallen off while nobody was around to alert anybody and now you are here.\n\nYou quickly gather materials to start a small survival camp, a pile of leaves to sleep on, a quick shelter to prevent\nrain or wind from being too much of a hassle, a small storage space, and you find a suspiciously table-like stump.\n\n";
-	
+
 	while (shouldKeepRunning) {
 
-		std::cout << "=== Camp ===\n\n1. View Status\n2. Sleep\n3. Show Inventory\n4. Explore\n5. Exit Game\nPlayer Choice: ";
-		std::cin >> menuChoice;
-		while (menuChoice != 1 && menuChoice != 2 && menuChoice != 3 && menuChoice != 4 && menuChoice != 5) {
-
-			std::cout << "\n\nInput not valid! Please choose from the menu choices.\n";
-			std::cin >> menuChoice;
-
-		}
+		int menuChoice = Menu::DisplayMenu(MenuType::Camp);
 
 		switch (menuChoice) {
 
@@ -177,213 +156,54 @@ void Game::Explore() {
 
 	while (exploring) {
 
-		std::cout << "\n=== Exploration ===\n\n1. Search for New Location\n2. Travel to Known Location\n3. Return to Camp\nPlayer choice: ";
+		int exploreChoice = Menu::DisplayMenu(MenuType::Exploration);
 
-		int menuChoice;
-
-		std::cin >> menuChoice;
-
-		while (menuChoice != 1 && menuChoice != 2 && menuChoice != 3) {
-
-			std::cout << "\nInput not valid! Please choose from the menu choices.\n";
-			std::cin >> menuChoice;
-
-		}
-
-		switch (menuChoice) {
+		switch (exploreChoice) {
 
 		case 1: {
 
 			Location discoveredLocation;
+			int locationIndex = GetLocationIndex(discoveredLocation.GetLocType());
 
-			switch (discoveredLocation.GetLocType()) {
+			if (!knownLocations[locationIndex].has_value()) {
 
-			case LocationType::Forest:
+				knownLocations[locationIndex] = discoveredLocation;
+				DisplayLocationInfoDiscovery(discoveredLocation);
 
-				if (!knownLocations[0].has_value()) {
+				std::cout << "This location has been saved in your known locations.\nWould you like to visit this Location?\n\n";
 
-					knownLocations[0] = discoveredLocation;
-					DisplayLocationInfoDiscovery(discoveredLocation);
+				int yesNoChoice = Menu::DisplayMenu(MenuType::YesNo);
 
-					std::cout << "This location has been saved in your known locations.\nWould you like to visit this Location?\n\n1. Yes\n2. No\n";
+				if (yesNoChoice == 1) {
 
-					std::cin >> menuChoice;
-
-					while (menuChoice != 1 && menuChoice != 2) {
-
-						std::cout << "\nInput not valid! Please choose from the menu choices.\nPlayer choice: ";
-						std::cin >> menuChoice;
-
-					}
-
-					switch (menuChoice) {
-
-					case 1:
-
-						VisitLocation(*knownLocations[0]);
-						break;
-
-					case 2:
-						
-						break;
-
-					}
-
-				}
-				else {
-
-
-					DisplayLocationInfoDiscovery(discoveredLocation);
-
-					int menuChoice;
-
-					std::cout << "Would you like to visit this Location?\n\n1. Yes\n2. No\nPlayer choice: ";
-
-					std::cin >> menuChoice;
-
-					while (menuChoice != 1 && menuChoice != 2) {
-
-						std::cout << "\nInput not valid! Please choose from the menu choices.\n";
-						std::cin >> menuChoice;
-
-					}
-
-					switch (menuChoice) {
-
-					case 1: {
-
-						VisitLocation(discoveredLocation);
-
-						int menuChoice1;
-
-						std::cout << "Would you like to replace your currently known Forest with this newly discovered Forest?\n\n1. Yes\n2. No\nPlayer choice: ";
-						std::cin >> menuChoice1;
-
-						while (menuChoice1 != 1 && menuChoice1 != 2) {
-
-							std::cout << "\nInput not valid! Please choose from the menu choices.\n";
-							std::cin >> menuChoice1;
-
-						}
-
-						switch (menuChoice1) {
-
-						case 1:
-
-							knownLocations[0] = discoveredLocation;
-							break;
-
-						case 2:
-
-							break;
-
-						}
-
-						break;
-
-					}
-
-					case 2:
-
-						break;
-
-					}
-
-				}
-				break;
-
-			case LocationType::Cave:
-
-				if (!knownLocations[1].has_value()) {
-
-					knownLocations[1] = discoveredLocation;
-					DisplayLocationInfoDiscovery(discoveredLocation);
-
-					std::cout << "This location has been saved in your known locations.\nWould you like to visit this Location?\n\n1. Yes\n2. No\nPlayer choice: ";
-
-					std::cin >> menuChoice;
-
-					while (menuChoice != 1 && menuChoice != 2) {
-
-						std::cout << "\nInput not valid! Please choose from the menu choices.\n";
-						std::cin >> menuChoice;
-
-					}
-
-					switch (menuChoice) {
-
-					case 1:
-
-						VisitLocation(*knownLocations[1]);
-						break;
-
-					case 2:
-
-						break;
-
-					}
-
-				}
-				else {
-
-					DisplayLocationInfoDiscovery(discoveredLocation);
-
-					int menuChoice;
-
-					std::cout << "Would you like to visit this Location?\n\n1. Yes\n2. No\nPlayer Choice: ";
-
-					std::cin >> menuChoice;
-
-					while (menuChoice != 1 && menuChoice != 2) {
-
-						std::cout << "\nInput not valid! Please choose from the menu choices.\n";
-						std::cin >> menuChoice;
-
-					}
-
-					switch (menuChoice) {
-
-					case 1: {
-
-						VisitLocation(discoveredLocation);
-
-						int menuChoice1;
-
-						std::cout << "Would you like to replace your currently known Cave with this newly discovered Cave?\n\n1. Yes\n2. No\nPlayer choice: ";
-						std::cin >> menuChoice1;
-
-						while (menuChoice1 != 1 && menuChoice1 != 2) {
-
-							std::cout << "\nInput not valid! Please choose from the menu choices.\n";
-							std::cin >> menuChoice1;
-
-						}
-
-						switch (menuChoice1) {
-
-						case 1:
-
-							knownLocations[1] = discoveredLocation;
-							break;
-
-						case 2:
-
-							break;
-
-						}
-						break;
-
-					}
-
-					case 2:
-
-						break;
-
-					}
-
+					VisitLocation(*knownLocations[locationIndex]);
+					
 				}
 
-				break;
+			}
+			else {
+
+			DisplayLocationInfoDiscovery(discoveredLocation);
+
+			std::cout << "Would you like to visit this Location?\n\n";
+
+			int yesNoChoice = Menu::DisplayMenu(MenuType::YesNo);
+
+				if (yesNoChoice == 1) {
+
+					VisitLocation(discoveredLocation);
+
+					std::cout << "Would you like to replace your currently known " << GetLocationName(locationIndex) << " with this newly discovered " << GetLocationName(locationIndex) << "?\n\n";
+
+					int replaceChoice = Menu::DisplayMenu(MenuType::YesNo);
+
+					if (replaceChoice == 1) {
+
+						knownLocations[locationIndex] = discoveredLocation;
+
+					}
+				
+				}
 
 			}
 
@@ -393,32 +213,19 @@ void Game::Explore() {
 
 		case 2: {
 
-			std::cout << "\n=== Known Locations ===\n\n1. Forest";
-			
 			if (knownLocations[0].has_value()) {
 
 				DisplayLocationInfo(*knownLocations[0]);
 
 			}
 
-			std::cout << "\n2. Cave\n";
-			
 			if (knownLocations[1].has_value()) {
 
 				DisplayLocationInfo(*knownLocations[1]);
 
 			}
 
-			std::cout << "\n3.Back\nPlayer choice : ";
-			int menuChoice;
-			std::cin >> menuChoice;
-
-			while (menuChoice != 1 && menuChoice != 2 && menuChoice != 3) {
-
-				std::cout << "\nInput not valid! Please choose from the menu choices.\n";
-				std::cin >> menuChoice;
-
-			}
+			int menuChoice = Menu::DisplayMenu(MenuType::KnownLocations);
 
 			switch (menuChoice) {
 
@@ -479,17 +286,7 @@ void Game::VisitLocation(Location& location) {
 
 		DisplayLocationInfo(location);
 
-		std::cout << "=== Location Menu ===\n\n1. Gather Resources\n2. Show Inventory\n3. Leave Location\n";
-
-		int menuChoice;
-		std::cin >> menuChoice;
-
-		while (menuChoice != 1 && menuChoice != 2 && menuChoice != 3) {
-
-			std::cout << "\nInput not valid! Please choose from the menu choices.\n";
-			std::cin >> menuChoice;
-
-		}
+		int menuChoice = Menu::DisplayMenu(MenuType::Location);
 
 		switch (menuChoice) {
 
@@ -644,3 +441,36 @@ void Game::DisplayLocationInfoDiscovery(const Location& location) {
 
 }
 
+int Game::GetLocationIndex(LocationType locationType) {
+
+	switch (locationType) {
+
+	case LocationType::Forest:
+
+		return 0;
+		
+	case LocationType::Cave:
+
+		return 1;
+		
+	}
+
+}
+
+std::string Game::GetLocationName(int locationIndex) {
+
+	switch (locationIndex) {
+
+	case 0: 
+
+		return "Forest";
+
+	case 1:
+
+		return "Cave";
+
+	}
+
+	return "Unknown";
+
+}
