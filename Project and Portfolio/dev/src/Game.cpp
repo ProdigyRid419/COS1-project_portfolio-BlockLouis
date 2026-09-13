@@ -7,10 +7,12 @@
 #include <string>
 #include "Menu.h"
 #include "Location.h"
+#include "GameClock.h"
+#include <iomanip>
 
 void Game::Run() {
 
-	int menuChoice = Menu::DisplayMenu(MenuType::Main);
+	int menuChoice = Menu::DisplayMenu(MenuType::Main, gameClock);
 
 	switch (menuChoice) {
 
@@ -39,6 +41,13 @@ void Game::StartGame() {
 	std::cin.ignore();
 	std::getline(std::cin, name);
 
+	while (name.empty()) {
+
+		std::cout << "Empty input detected. Please input your name: ";
+		std::getline(std::cin, name);
+
+	}
+
 	Player1.SetName(name);
 
 	std::cout << "\n\nWelcome to The Long Lost Isle " << Player1.GetName() << ", it's time for your survival journey to begin.\n\n";
@@ -47,7 +56,7 @@ void Game::StartGame() {
 
 	while (shouldKeepRunning) {
 
-		int menuChoice = Menu::DisplayMenu(MenuType::Camp);
+		int menuChoice = Menu::DisplayMenu(MenuType::Camp, gameClock);
 
 		switch (menuChoice) {
 
@@ -106,7 +115,7 @@ void Game::ViewStatus() {
 	}
 
 
-	std::cout << "\nHealth: " << Player1.GetHealth();
+	std::cout << std::fixed << std::setprecision(2) << "\nHealth: " << Player1.GetHealth();
 	std::cout << "\nHunger: " << Player1.GetHunger();
 	std::cout << "\nHydration: " << Player1.GetHydration();
 	std::cout << "\nStamina: " << Player1.GetStamina();
@@ -117,9 +126,7 @@ void Game::ViewStatus() {
 void Game::Sleep() {
 
 	std::cout << "\n=== Sleep ===\n\nYou sleep for 8 hours.\nYour Hunger and Hydration have decreased by 10.\n\n";
-	
-	Player1.DecreaseHungerSleep();
-	Player1.DecreaseHydrationSleep();
+	ProcessTime(32, ActivityLevel::Normal);
 
 }
 
@@ -131,8 +138,6 @@ void Game::ShowInventory() {
 
 void Game::GatherFromLocation(Location& location) {
 
-	std::cout << "\nYou gather materials.";
-
 	int gatheredamount = location.GatherResource();
 
 	if (gatheredamount > 0) {
@@ -140,11 +145,19 @@ void Game::GatherFromLocation(Location& location) {
 		Item resourceType = location.GetResourceType();
 		int remaining = Player1.GetInventory().AddItem(resourceType, gatheredamount);
 
+		std::cout << "\nYou gathered " << gatheredamount - remaining << " materials.\n";
+
 		if (remaining > 0) {
 
 			location.RestoreResource(remaining);
 
 		}
+
+		ProcessTime(1, ActivityLevel::Strenuous);
+
+	} else {
+
+		std::cout << "The Location has no more resources to gather. Come back tomorrow.\n";
 
 	}
 	
@@ -156,7 +169,9 @@ void Game::Explore() {
 
 	while (exploring) {
 
-		int exploreChoice = Menu::DisplayMenu(MenuType::Exploration);
+		std::cout << '\n';
+
+		int exploreChoice = Menu::DisplayMenu(MenuType::Exploration, gameClock);
 
 		switch (exploreChoice) {
 
@@ -165,46 +180,49 @@ void Game::Explore() {
 			Location discoveredLocation;
 			int locationIndex = GetLocationIndex(discoveredLocation.GetLocType());
 
-			if (!knownLocations[locationIndex].has_value()) {
+			if (locationIndex != -1) {
 
-				knownLocations[locationIndex] = discoveredLocation;
-				DisplayLocationInfoDiscovery(discoveredLocation);
+				if (!knownLocations[locationIndex].has_value()) {
 
-				std::cout << "This location has been saved in your known locations.\nWould you like to visit this Location?\n\n";
+					knownLocations[locationIndex] = discoveredLocation;
+					DisplayLocationInfoDiscovery(discoveredLocation);
 
-				int yesNoChoice = Menu::DisplayMenu(MenuType::YesNo);
+					std::cout << "This location has been saved in your known locations.\nWould you like to visit this Location?\n\n";
 
-				if (yesNoChoice == 1) {
+					int yesNoChoice = Menu::DisplayMenu(MenuType::YesNo, gameClock);
 
-					VisitLocation(*knownLocations[locationIndex]);
-					
-				}
+					if (yesNoChoice == 1) {
 
-			}
-			else {
-
-			DisplayLocationInfoDiscovery(discoveredLocation);
-
-			std::cout << "Would you like to visit this Location?\n\n";
-
-			int yesNoChoice = Menu::DisplayMenu(MenuType::YesNo);
-
-				if (yesNoChoice == 1) {
-
-					VisitLocation(discoveredLocation);
-
-					std::cout << "Would you like to replace your currently known " << GetLocationName(locationIndex) << " with this newly discovered " << GetLocationName(locationIndex) << "?\n\n";
-
-					int replaceChoice = Menu::DisplayMenu(MenuType::YesNo);
-
-					if (replaceChoice == 1) {
-
-						knownLocations[locationIndex] = discoveredLocation;
+						TravelToLocation(*knownLocations[locationIndex]);
 
 					}
-				
-				}
 
+				}
+				else {
+
+					DisplayLocationInfoDiscovery(discoveredLocation);
+
+					std::cout << "Would you like to visit this Location?\n\n";
+
+					int yesNoChoice = Menu::DisplayMenu(MenuType::YesNo, gameClock);
+
+					if (yesNoChoice == 1) {
+
+						TravelToLocation(discoveredLocation);
+
+						std::cout << "Would you like to replace your currently known " << GetLocationName(locationIndex) << " with this newly discovered " << GetLocationName(locationIndex) << "?\n\n";
+
+						int replaceChoice = Menu::DisplayMenu(MenuType::YesNo, gameClock);
+
+						if (replaceChoice == 1) {
+
+							knownLocations[locationIndex] = discoveredLocation;
+
+						}
+
+					}
+
+				}
 			}
 
 			break;
@@ -225,7 +243,7 @@ void Game::Explore() {
 
 			}
 
-			int menuChoice = Menu::DisplayMenu(MenuType::KnownLocations);
+			int menuChoice = Menu::DisplayMenu(MenuType::KnownLocations, gameClock);
 
 			switch (menuChoice) {
 
@@ -233,7 +251,7 @@ void Game::Explore() {
 
 				if (knownLocations[0].has_value()) {
 
-					VisitLocation(*knownLocations[0]);
+					TravelToLocation(*knownLocations[0]);
 
 				}
 				else {
@@ -247,7 +265,7 @@ void Game::Explore() {
 
 				if (knownLocations[1].has_value()) {
 
-					VisitLocation(*knownLocations[1]);
+					TravelToLocation(*knownLocations[1]);
 
 				}
 				else {
@@ -269,6 +287,11 @@ void Game::Explore() {
 
 		case 3:
 
+			ViewStatus();
+			break;
+
+		case 4:
+
 			exploring = false;
 			break;
 
@@ -286,7 +309,7 @@ void Game::VisitLocation(Location& location) {
 
 		DisplayLocationInfo(location);
 
-		int menuChoice = Menu::DisplayMenu(MenuType::Location);
+		int menuChoice = Menu::DisplayMenu(MenuType::Location, gameClock);
 
 		switch (menuChoice) {
 
@@ -301,6 +324,11 @@ void Game::VisitLocation(Location& location) {
 			break;
 
 		case 3:
+
+			ViewStatus();
+			break;
+
+		case 4:
 			
 			std::cout << "\n\nYou leave the location.\n\n";
 			visiting = false;
@@ -409,17 +437,17 @@ void Game::DisplayLocationInfoDiscovery(const Location& location) {
 
 	case 1:
 
-		std::cout << "Travel Time: 1 hour\n";
+		std::cout << "Round-Trip Travel Time: 1 hour\n";
 		break;
 
 	case 2:
 
-		std::cout << "Travel Time: 2 hours\n";
+		std::cout << "Round-Trip Travel Time: 2 hours\n";
 		break;
 
 	case 3:
 
-		std::cout << "Travel Time: 3 hours\n";
+		std::cout << "Round-Trip Travel Time: 3 hours\n";
 		break;
 
 
@@ -455,6 +483,8 @@ int Game::GetLocationIndex(LocationType locationType) {
 		
 	}
 
+	return -1;
+
 }
 
 std::string Game::GetLocationName(int locationIndex) {
@@ -472,5 +502,70 @@ std::string Game::GetLocationName(int locationIndex) {
 	}
 
 	return "Unknown";
+
+}
+
+void Game::ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel) {
+
+	for (int i = 0; i < fifteenMinuteIntervals; i++) {
+
+		gameClock.AdvanceTime(1);
+		DrainResult statDrain = playerDrain.CalculateDrain(gameClock, activityLevel);
+		if (statDrain.hungerDrain > 0) {
+
+			Player1.DecreaseHunger(statDrain.hungerDrain);
+
+		}
+
+		if (statDrain.hydrationDrain > 0) {
+
+			Player1.DecreaseHydration(statDrain.hydrationDrain);
+
+		}
+
+		if (statDrain.staminaDrain > 0) {
+
+			Player1.DecreaseStamina(statDrain.staminaDrain);
+
+		}
+
+		if (statDrain.sanityDrain > 0) {
+
+			Player1.DecreaseSanity(statDrain.sanityDrain);
+
+		}
+
+	}
+
+}
+
+void Game::TravelToLocation(Location& location) {
+	
+	std::cout << "You travel to a ";
+	switch (location.GetLocSize()) {
+
+	case LocationSize::Small:
+
+		std::cout << "Small ";
+		break;
+
+	case LocationSize::Medium:
+
+		std::cout << "Medium ";
+		break;
+
+	case LocationSize::Large:
+
+		std::cout << "Large ";
+		break;
+
+	}
+	std::cout << GetLocationName(GetLocationIndex(location.GetLocType()));
+
+	ProcessTime((location.GetTravelTime() * 2), ActivityLevel::Strenuous);
+
+	VisitLocation(location);
+
+	ProcessTime((location.GetTravelTime() * 2), ActivityLevel::Strenuous);
 
 }

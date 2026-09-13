@@ -82,6 +82,12 @@ int Location::GatherResource() {
 		resourceAmount -= 5;
 		return 5;
 
+	} else if (resourceAmount > 0) {
+
+		int result = resourceAmount;
+		resourceAmount = 0;
+		return result;
+
 	} else {
 
 		return 0;

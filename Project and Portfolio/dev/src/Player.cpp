@@ -19,31 +19,31 @@ int Player::GetTemp() const{
 
 }
 
-int Player::GetHealth() const {
+float Player::GetHealth() const {
 
 	return playerHealth;
 
 }
 
-int Player::GetHunger() const {
+float Player::GetHunger() const {
 
 	return playerHunger;
 
 }
 
-int Player::GetHydration() const {
+float Player::GetHydration() const {
 
 	return playerHydration;
 
 }
 
-int Player::GetStamina() const {
+float Player::GetStamina() const {
 
 	return playerStamina;
 
 }
 
-int Player::GetSanity() const {
+float Player::GetSanity() const {
 
 	return playerSanity;
 	
@@ -55,9 +55,9 @@ Inventory& Player::GetInventory() {
 
 }
 
-void Player::DecreaseHungerSleep() {
+void Player::DecreaseHunger(float amount) {
 
-	playerHunger -= 10;
+	playerHunger -= amount;
 	if (playerHunger <= 0) {
 
 		playerHunger = 0;
@@ -68,14 +68,38 @@ void Player::DecreaseHungerSleep() {
 
 }
 
-void Player::DecreaseHydrationSleep() {
+void Player::DecreaseHydration(float amount) {
 
-	playerHydration -= 10;
+	playerHydration -= amount;
 	if (playerHydration <= 0) {
 
 		playerHydration = 0;
 		std::cout << "Your Hydration has reached Critical State!!!\nYou will now start losing health over time!!!\n";
 
+
+	}
+
+}
+
+void Player::DecreaseStamina(float amount) {
+
+	playerStamina -= amount;
+	if (playerStamina <= 0) {
+
+		playerStamina = 0;
+		std::cout << "Your stamina has reached 0, you can no longer perform strenuous actions.\nYou may return to Camp or rest to regain some stamina.\n";
+
+	}
+
+}
+
+void Player::DecreaseSanity(float amount) {
+
+	playerSanity -= amount;
+	if (playerSanity <= 0) {
+
+		playerSanity = 0;
+		std::cout << "Your Sanity has reached Critical State!!!\n";
 
 	}
 

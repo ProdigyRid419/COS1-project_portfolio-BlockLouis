@@ -1,7 +1,8 @@
 #include "Menu.h"
+#include "GameClock.h"
 #include <iostream>
 
-int Menu::DisplayMenu(MenuType menuType) {
+int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
 	int minimum = 1;
 	int maximum = 0;
@@ -17,6 +18,8 @@ int Menu::DisplayMenu(MenuType menuType) {
 
 	case MenuType::Camp:
 
+		gameClock.DisplayTime();
+
 		std::cout << "=== Camp ===\n\n1. View Status\n2. Sleep\n3. Show Inventory\n4. Explore\n5. Exit Game\nPlayer Choice: ";
 		maximum = 5;
 
@@ -24,12 +27,16 @@ int Menu::DisplayMenu(MenuType menuType) {
 
 	case MenuType::Exploration:
 
-		std::cout << "\n=== Exploration ===\n\n1. Search for New Location\n2. Travel to Known Location\n3. Return to Camp\nPlayer choice: ";
-		maximum = 3;
+		gameClock.DisplayTime();
+
+		std::cout << "\n=== Exploration ===\n\n1. Search for New Location\n2. Travel to Known Location\n3. View Status\n4. Return to Camp\nPlayer choice: ";
+		maximum = 4;
 
 		break;
 
 	case MenuType::KnownLocations:
+
+		gameClock.DisplayTime();
 
 		std::cout << "\n=== Known Locations ===\n\n1. Forest\n2. Cave\n3. Back\nPlayer choice: ";
 		maximum = 3;
@@ -38,8 +45,10 @@ int Menu::DisplayMenu(MenuType menuType) {
 
 	case MenuType::Location:
 
-		std::cout << "=== Location Menu ===\n\n1. Gather Resources\n2. Show Inventory\n3. Leave Location\n";
-		maximum = 3;
+		gameClock.DisplayTime();
+
+		std::cout << "=== Location Menu ===\n\n1. Gather Resources\n2. Show Inventory\n3. View Status\n4. Leave Location\nPlayer Choice: ";
+		maximum = 4;
 
 		break;
 

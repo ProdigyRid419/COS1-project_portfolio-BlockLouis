@@ -1,4 +1,5 @@
 #pragma once
+#include "GameClock.h"
 
 enum class MenuType {
 
@@ -11,7 +12,7 @@ class Menu {
 
 public:
 
-	static int DisplayMenu(MenuType menuType);
+	static int DisplayMenu(MenuType menuType, const GameClock& gameClock);
 
 private:
 
