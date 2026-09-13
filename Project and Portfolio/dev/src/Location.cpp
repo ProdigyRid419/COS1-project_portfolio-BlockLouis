@@ -102,4 +102,16 @@ void Location::RestoreResource(int amount) {
 
 }
 
+void Location::MarkVisited() {
+
+	hasBeenVisited = true;
+
+}
+
+bool Location::HasBeenVisited() const {
+
+	return hasBeenVisited;
+
+}
+
 

@@ -1,6 +1,7 @@
 #include "Menu.h"
 #include "GameClock.h"
 #include <iostream>
+#include <string>
 
 int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
@@ -58,19 +59,48 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 		maximum = 2;
 		break;
 
-	 }
+	}
 
-	int menuChoice;
-	std::cin >> menuChoice;
+	int intMenuChoice;
 
-	while (menuChoice < minimum || menuChoice > maximum) {
+	while (true) {
 
-		std::cout << "\n\nInput not valid! Please choose from the menu choices.\n";
+		std::string menuChoice;
 		std::cin >> menuChoice;
+
+		bool isInt = true;
+
+		for (char character : menuChoice) {
+
+			if (character < '0' || character > '9') {
+
+				isInt = false;
+				break;
+
+			}
+
+		}
+
+		if (!isInt) {
+
+			std::cout << "\n\nInput not valid! Please choose from the menu choices.\nPlayer Choice\n";
+			continue;
+
+		}
+
+		intMenuChoice = std::stoi(menuChoice);
+
+		if (intMenuChoice < minimum || intMenuChoice > maximum) {
+
+			std::cout << "\n\nInput not valid! Please choose from the menu choices.\nPlayer Choice\n";
+			continue;
+
+		}
+
+		return intMenuChoice;
 
 	}
 
-	return menuChoice;
 
 }
 

@@ -30,6 +30,9 @@ public:
 	
 	Location();
 
+	void MarkVisited();
+	bool HasBeenVisited() const;
+
 private:
 
 	LocationType locType;
@@ -39,5 +42,6 @@ private:
 	ItemID resourceType;
 	int resourceAmount;
 	
+	bool hasBeenVisited = false;
 
 };

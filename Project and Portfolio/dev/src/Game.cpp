@@ -151,6 +151,16 @@ void Game::GatherFromLocation(Location& location) {
 
 			location.RestoreResource(remaining);
 
+			if (remaining == gatheredamount) {
+
+				std::cout << "No resources gathered. Your inventory is full!!!\n";
+
+			} else if (remaining < gatheredamount) {
+
+				std::cout << "Your inventory is now full.\n" << remaining << " resources were not collected because you ran out of inventory space.\n";
+
+			}
+
 		}
 
 		ProcessTime(1, ActivityLevel::Strenuous);
@@ -233,13 +243,29 @@ void Game::Explore() {
 
 			if (knownLocations[0].has_value()) {
 
-				DisplayLocationInfo(*knownLocations[0]);
+				if (knownLocations[0]->HasBeenVisited()) {
+
+					DisplayLocationInfo(*knownLocations[0]);
+					
+				} else {
+
+					DisplayLocationInfoDiscovery(*knownLocations[0]);
+					
+				}
 
 			}
 
 			if (knownLocations[1].has_value()) {
 
-				DisplayLocationInfo(*knownLocations[1]);
+				if (knownLocations[1]->HasBeenVisited()) {
+
+					DisplayLocationInfo(*knownLocations[1]);
+					
+				} else {
+
+					DisplayLocationInfoDiscovery(*knownLocations[1]);
+					
+				}
 
 			}
 
@@ -381,17 +407,17 @@ void Game::DisplayLocationInfo(const Location& location) {
 
 	case 1:
 
-		std::cout << "Travel Time: 1 hour\n";
+		std::cout << "Round-trip Travel Time: 1 hour\n";
 		break;
 
 	case 2:
 
-		std::cout << "Travel Time: 2 hours\n";
+		std::cout << "Round-trip Travel Time: 2 hours\n";
 		break;
 
 	case 3:
 
-		std::cout << "Travel Time: 3 hours\n";
+		std::cout << "Round-trip Travel Time: 3 hours\n";
 		break;
 
 
@@ -457,12 +483,12 @@ void Game::DisplayLocationInfoDiscovery(const Location& location) {
 
 	case ItemID::CrudeWood:
 
-		std::cout << "Resource Type: Crude Wood\n";
+		std::cout << "Resource Type: Crude Wood\n\n";
 		break;
 
 	case ItemID::Flint:
 
-		std::cout << "Resource Type: Flint\n";
+		std::cout << "Resource Type: Flint\n\n";
 		break;
 
 	}
@@ -511,25 +537,25 @@ void Game::ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel) 
 
 		gameClock.AdvanceTime(1);
 		DrainResult statDrain = playerDrain.CalculateDrain(gameClock, activityLevel);
-		if (statDrain.hungerDrain > 0) {
+		if (statDrain.hungerDrain > 0 && Player1.GetHunger() > 0) {
 
 			Player1.DecreaseHunger(statDrain.hungerDrain);
 
 		}
 
-		if (statDrain.hydrationDrain > 0) {
+		if (statDrain.hydrationDrain > 0 && Player1.GetHydration() > 0) {
 
 			Player1.DecreaseHydration(statDrain.hydrationDrain);
-
+			
 		}
 
-		if (statDrain.staminaDrain > 0) {
+		if (statDrain.staminaDrain > 0 && Player1.GetStamina() > 0) {
 
 			Player1.DecreaseStamina(statDrain.staminaDrain);
 
 		}
 
-		if (statDrain.sanityDrain > 0) {
+		if (statDrain.sanityDrain > 0 && Player1.GetSanity() > 0) {
 
 			Player1.DecreaseSanity(statDrain.sanityDrain);
 
@@ -541,7 +567,13 @@ void Game::ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel) 
 
 void Game::TravelToLocation(Location& location) {
 	
-	std::cout << "You travel to a ";
+	std::cout << "You travel to a " << GetLocationName(GetLocationIndex(location.GetLocType()));
+
+	ProcessTime((location.GetTravelTime() * 2), ActivityLevel::Strenuous);
+
+	location.MarkVisited();
+
+	std::cout << "\nThis is a ";
 	switch (location.GetLocSize()) {
 
 	case LocationSize::Small:
@@ -560,9 +592,7 @@ void Game::TravelToLocation(Location& location) {
 		break;
 
 	}
-	std::cout << GetLocationName(GetLocationIndex(location.GetLocType()));
-
-	ProcessTime((location.GetTravelTime() * 2), ActivityLevel::Strenuous);
+	std::cout << GetLocationName(GetLocationIndex(location.GetLocType())) << ".\n";
 
 	VisitLocation(location);
 
