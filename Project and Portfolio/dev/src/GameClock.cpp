@@ -86,7 +86,7 @@ void GameClock::DisplayTime() const {
 
 	}
 
-	std::cout << "=== Current Time ===\n\nDay: " << GetCurrentDay() << '\n';
+	std::cout << "\n=== Current Time ===\n\nDay: " << GetCurrentDay() << '\n';
 
 	std::cout << "Time: " << displayHour << ':';
 	if (minute == 0) {

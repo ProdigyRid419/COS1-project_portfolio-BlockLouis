@@ -1,5 +1,6 @@
 #pragma once
 #include "Item.h"
+#include <vector>
 
 enum class LocationType {
 
@@ -13,6 +14,15 @@ enum class LocationSize {
 
 };
 
+struct LocationResource {
+
+	ItemID resourceType = ItemID::Empty;
+	int resourceAmount = dailyLimit;
+	int dailyLimit = 0;
+
+
+};
+
 class Location {
 
 public:
@@ -21,12 +31,14 @@ public:
 	LocationSize GetLocSize() const;
 	int GetTravelTime() const;
 
+	const std::vector<LocationResource>& GetLocationResources() const;
+
 	ItemID GetResourceType() const;
-	int GetResourceAmount() const;
+	
+	int GatherResource(ItemID item, int amount);
 
-	int GatherResource();
-
-	void RestoreResource(int amount);
+	void RestoreResource(ItemID item, int amount);
+	void RefreshResources();
 	
 	Location();
 
@@ -39,9 +51,8 @@ private:
 	LocationSize locSize;
 	int travelTime;
 
-	ItemID resourceType;
-	int resourceAmount;
-	
 	bool hasBeenVisited = false;
+
+	std::vector<LocationResource> locationResources;
 
 };

@@ -138,29 +138,31 @@ void Game::ShowInventory() {
 
 void Game::GatherFromLocation(Location& location) {
 
-	int gatheredamount = location.GatherResource();
+	ItemID selectedResource = location.GetResourceType();
 
-	if (gatheredamount > 0) {
+	int gatheredAmount = location.GatherResource(selectedResource, 5);
 
-		Item resourceType = location.GetResourceType();
-		int remaining = Player1.GetInventory().AddItem(resourceType, gatheredamount);
+	if (gatheredAmount > 0) {
 
-		std::cout << "\nYou gathered " << gatheredamount - remaining << " materials.\n";
+		Item resourceType = selectedResource;
+		int remaining = Player1.GetInventory().AddItem(resourceType, gatheredAmount);
+
+		std::cout << "\nYou gathered " << gatheredAmount - remaining << " materials.\n";
 
 		if (remaining > 0) {
 
-			location.RestoreResource(remaining);
+			location.RestoreResource(selectedResource, remaining);
 
-			if (remaining == gatheredamount) {
+			if (remaining == gatheredAmount) {
 
 				std::cout << "No resources gathered. Your inventory is full!!!\n";
 
-			} else if (remaining < gatheredamount) {
+			} else if (remaining < gatheredAmount) {
 
 				std::cout << "Your inventory is now full.\n" << remaining << " resources were not collected because you ran out of inventory space.\n";
 
 			}
-
+			
 		}
 
 		ProcessTime(1, ActivityLevel::Strenuous);
@@ -423,21 +425,14 @@ void Game::DisplayLocationInfo(const Location& location) {
 
 	}
 
-	switch (location.GetResourceType()) {
+	std::cout << "\n\n=== Location Resources ===\n\n";
 
-	case ItemID::CrudeWood:
+	for (const LocationResource& resource : location.GetLocationResources()) {
 
-		std::cout << "Resource Type: Crude Wood\n";
-		break;
-
-	case ItemID::Flint:
-
-		std::cout << "Resource Type: Flint\n";
-		break;
+		Item tempItem(resource.resourceType);
+		std::cout << tempItem.GetName() << ": " << resource.resourceAmount << " Remaining.\n";
 
 	}
-
-	std::cout << "Remaining Resource Amount: " << location.GetResourceAmount() << "\n\n";
 
 }
 
