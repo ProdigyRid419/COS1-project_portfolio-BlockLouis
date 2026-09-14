@@ -32,7 +32,14 @@ Next I plan to prioritize expansion of Camp and survival systems, implementation
 
 ### Week 2
 
-My next stand up will go here...
+This past week I worked on multiple key systems including Inventory and items, Exploration and resource gathering, Time progression and survival-stat drain, Menu integration and usability improvements, I also completed Regression testing and debugging across the program.
+My biggest challenge was connecting the systems. Each system worked separately, but the Game class needed to connect the player, inventory, locations, gathering, time, survival drain, and menus correctly.
+Regression testing revealed a problem in the loop responsible for processing time and survival-stat drain. I also had to ensure inventory overflow returned uncollected resources to the location.
+I tested the program action, by action, traced how values moved between classes, corrected the loop, and retested the full program.
+I successfully added several connected gameplay systems rather than one isolated feature.
+I improved at organizing classes by responsibility and allowing the Game class to coordinate them.
+The inventory, gathering, time, stat-drain, exploration, and menu systems now work together and passed regression testing.
+For week 3, I plan to prioritize basic crafting and fire-management systems that build on the inventory and resource-gathering features completed this week. I will also adding ways for the player to restore hunger and hydration. I will continue improving inventory interaction, integrating new features with the camp menu, and testing each system before connecting them. 
 
 ### Week 3
 
