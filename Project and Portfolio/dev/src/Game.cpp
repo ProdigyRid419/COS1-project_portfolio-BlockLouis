@@ -138,7 +138,19 @@ void Game::ShowInventory() {
 
 void Game::GatherFromLocation(Location& location) {
 
-	ItemID selectedResource = location.GetResourceType();
+	const std::vector<LocationResource>& resources = location.GetLocationResources();
+
+	int resourceChoice = Menu::DisplayResourceMenu(location); 
+
+	int backChoice = static_cast<int>(resources.size()) + 1;
+
+	if (resourceChoice == backChoice) {
+
+		return;
+
+	} 
+
+	ItemID selectedResource = resources[resourceChoice - 1].resourceType;
 
 	int gatheredAmount = location.GatherResource(selectedResource, 5);
 
@@ -474,19 +486,16 @@ void Game::DisplayLocationInfoDiscovery(const Location& location) {
 
 	}
 
-	switch (location.GetResourceType()) {
+	std::cout << "\n\n=== Location Resources ===\n\n";
 
-	case ItemID::CrudeWood:
+	for (const LocationResource& resource : location.GetLocationResources()) {
 
-		std::cout << "Resource Type: Crude Wood\n\n";
-		break;
-
-	case ItemID::Flint:
-
-		std::cout << "Resource Type: Flint\n\n";
-		break;
+		Item tempItem(resource.resourceType);
+		std::cout << tempItem.GetName() << '\n';
 
 	}
+
+	std::cout << '\n';
 
 }
 

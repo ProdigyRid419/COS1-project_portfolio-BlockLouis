@@ -71,18 +71,6 @@ const std::vector<LocationResource>& Location::GetLocationResources() const {
 
 }
 
-ItemID Location::GetResourceType() const {
-
-	if (!locationResources.empty()) {
-
-		return locationResources[0].resourceType;
-
-	}
-
-	return ItemID::Empty;
-
-}
-
 int Location::GatherResource(ItemID item, int amount) {
 
 	if (amount <= 0) {

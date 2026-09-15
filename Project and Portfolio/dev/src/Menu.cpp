@@ -2,6 +2,8 @@
 #include "GameClock.h"
 #include <iostream>
 #include <string>
+#include "Location.h"
+#include "Item.h"
 
 int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
@@ -61,6 +63,12 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
 	}
 
+	return GetValidatedChoice(minimum, maximum);
+
+}
+
+int Menu::GetValidatedChoice(int minimum, int maximum) {
+
 	int intMenuChoice;
 
 	while (true) {
@@ -101,6 +109,25 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
 	}
 
+}
+
+int Menu::DisplayResourceMenu(const Location& location) {
+
+	int i = 0;
+		
+	std::cout << "\n\n=== Location Resources ===\n\n";
+
+	for (const LocationResource& resource : location.GetLocationResources()) {
+		
+		Item tempItem(resource.resourceType);
+		std::cout << i + 1 << ". " << tempItem.GetName() << ": x" << resource.resourceAmount << '\n';
+		i++;
+
+	}
+
+	std::cout << i + 1 << ". Back\nPlayer choice: ";
+
+	return GetValidatedChoice(1, i + 1);
 
 }
 

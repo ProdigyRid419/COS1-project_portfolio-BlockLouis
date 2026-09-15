@@ -33,8 +33,6 @@ public:
 
 	const std::vector<LocationResource>& GetLocationResources() const;
 
-	ItemID GetResourceType() const;
-	
 	int GatherResource(ItemID item, int amount);
 
 	void RestoreResource(ItemID item, int amount);
