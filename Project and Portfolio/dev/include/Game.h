@@ -33,6 +33,7 @@ private:
 	int GetLocationIndex(LocationType locationType);
 	std::string GetLocationName(int locationIndex);
 	LocationType GenerateDiscoverableLocationType();
+	int GetGatherAmount(ItemID resourceType);
 
 	Player Player1;
 	GameClock gameClock;

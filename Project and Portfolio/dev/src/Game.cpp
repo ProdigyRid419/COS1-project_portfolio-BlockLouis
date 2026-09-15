@@ -158,7 +158,16 @@ void Game::GatherFromLocation(Location& location) {
 
 	ItemID selectedResource = resources[resourceChoice - 1].resourceType;
 
-	int gatheredAmount = location.GatherResource(selectedResource, 5);
+	int amountToGather = GetGatherAmount(selectedResource);
+
+	if (amountToGather == 0) {
+
+		std::cout << "You do not have the required tool to gather this item.\n";
+		return;
+
+	}
+
+	int gatheredAmount = location.GatherResource(selectedResource, amountToGather);
 
 	if (gatheredAmount > 0) {
 
@@ -644,5 +653,63 @@ LocationType Game::GenerateDiscoverableLocationType() {
 
 	int randomIndex = rand() % static_cast<int>(discoverableLocations.size());
 	return discoverableLocations[randomIndex];
+
+}
+
+int Game::GetGatherAmount(ItemID resourceType) {
+
+	switch (resourceType) {
+
+	case ItemID::Hardwood:
+
+		if (Player1.GetInventory().GetItemCount(ItemID::MetalAxe) > 0) {
+
+			return 5;
+
+		} else if (Player1.GetInventory().GetItemCount(ItemID::StoneAxe) > 0) {
+
+			return 3;
+
+		} 
+
+		return 0;
+
+	case ItemID::TreeSap:
+
+		if (Player1.GetInventory().GetItemCount(ItemID::FlintAxe) > 0 || Player1.GetInventory().GetItemCount(ItemID::StoneAxe) > 0 || Player1.GetInventory().GetItemCount(ItemID::MetalAxe) > 0) {
+
+			return 5;
+
+		}
+
+		return 0;
+
+	case ItemID::Stone:
+
+		if (Player1.GetInventory().GetItemCount(ItemID::FlintPickaxe) > 0 || Player1.GetInventory().GetItemCount(ItemID::StonePickaxe) > 0 || Player1.GetInventory().GetItemCount(ItemID::MetalPickaxe) > 0) {
+
+			return 5;
+
+		}
+
+		return 0;
+
+	case ItemID::Metal:
+
+		if (Player1.GetInventory().GetItemCount(ItemID::StonePickaxe) > 0) {
+
+			return 3;
+
+		} else if (Player1.GetInventory().GetItemCount(ItemID::MetalPickaxe) > 0) {
+
+			return 5;
+
+		}
+
+		return 0;
+
+	}
+
+	return 5;
 
 }
