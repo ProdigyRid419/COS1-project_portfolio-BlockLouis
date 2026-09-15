@@ -32,11 +32,12 @@ private:
 	
 	int GetLocationIndex(LocationType locationType);
 	std::string GetLocationName(int locationIndex);
+	LocationType GenerateDiscoverableLocationType();
 
 	Player Player1;
 	GameClock gameClock;
 	SurvivalDrain playerDrain;
-	std::array<std::optional<Location>, 2> knownLocations{};
+	std::array<std::optional<Location>, 6> knownLocations{};
 	Crafting craftingSystem;
 
 };

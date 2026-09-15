@@ -9,6 +9,7 @@
 #include "Location.h"
 #include "GameClock.h"
 #include <iomanip>
+#include <limits>
 
 void Game::Run() {
 
@@ -38,7 +39,7 @@ void Game::StartGame() {
 
 	std::cout << "\nPlease input your name: ";
 	
-	std::cin.ignore();
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	std::getline(std::cin, name);
 
 	while (name.empty()) {
@@ -206,7 +207,7 @@ void Game::Explore() {
 
 		case 1: {
 
-			Location discoveredLocation;
+			Location discoveredLocation(GenerateDiscoverableLocationType());
 			int locationIndex = GetLocationIndex(discoveredLocation.GetLocType());
 
 			if (locationIndex != -1) {
@@ -260,69 +261,45 @@ void Game::Explore() {
 
 		case 2: {
 
-			if (knownLocations[0].has_value()) {
+			for (int i = 0; i < static_cast<int>(knownLocations.size()); i++) {
 
-				if (knownLocations[0]->HasBeenVisited()) {
+				if (!knownLocations[i].has_value()) {
 
-					DisplayLocationInfo(*knownLocations[0]);
-					
-				} else {
+					continue;
 
-					DisplayLocationInfoDiscovery(*knownLocations[0]);
-					
 				}
 
-			}
+				if (knownLocations[i]->HasBeenVisited()) {
 
-			if (knownLocations[1].has_value()) {
+					DisplayLocationInfo(*knownLocations[i]);
 
-				if (knownLocations[1]->HasBeenVisited()) {
+				}
+				else {
 
-					DisplayLocationInfo(*knownLocations[1]);
-					
-				} else {
+					DisplayLocationInfoDiscovery(*knownLocations[i]);
 
-					DisplayLocationInfoDiscovery(*knownLocations[1]);
-					
 				}
 
 			}
 
 			int menuChoice = Menu::DisplayMenu(MenuType::KnownLocations, gameClock);
+			int backChoice = static_cast<int>(knownLocations.size()) + 1;
 
-			switch (menuChoice) {
-
-			case 1:
-
-				if (knownLocations[0].has_value()) {
-
-					TravelToLocation(*knownLocations[0]);
-
-				}
-				else {
-
-					std::cout << "No known location of this type.\n";
-
-				}
-				break;
-
-			case 2:
-
-				if (knownLocations[1].has_value()) {
-
-					TravelToLocation(*knownLocations[1]);
-
-				}
-				else {
-
-					std::cout << "No known location of this type.\n";
-
-				}
-				break;
-
-			case 3:
+			if (menuChoice == backChoice) {
 
 				break;
+
+			}
+			
+			int selectedIndex = menuChoice - 1;
+
+			if (knownLocations[selectedIndex].has_value()) {
+
+				TravelToLocation(*knownLocations[selectedIndex]);
+
+			} else {
+
+				std::cout << "\nNo known location of this type.\n";
 
 			}
 
@@ -408,19 +385,7 @@ void Game::DisplayLocationInfo(const Location& location) {
 
 	}
 
-	switch (location.GetLocType()) {
-
-	case LocationType::Forest:
-
-		std::cout << "Forest\n";
-		break;
-
-	case LocationType::Cave:
-
-		std::cout << "Cave\n";
-		break;
-
-	}
+	std::cout << GetLocationName(GetLocationIndex(location.GetLocType())) << '\n';
 
 	switch (location.GetTravelTime()) {
 
@@ -457,19 +422,7 @@ void Game::DisplayLocationInfoDiscovery(const Location& location) {
 
 	std::cout << "\n\n=== Location Information ===\n\n";
 
-	switch (location.GetLocType()) {
-
-	case LocationType::Forest:
-
-		std::cout << "Forest\n";
-		break;
-
-	case LocationType::Cave:
-
-		std::cout << "Cave\n";
-		break;
-
-	}
+	std::cout << GetLocationName(GetLocationIndex(location.GetLocType())) << '\n';
 
 	switch (location.GetTravelTime()) {
 
@@ -516,6 +469,22 @@ int Game::GetLocationIndex(LocationType locationType) {
 
 		return 1;
 		
+	case LocationType::HerbalGrove:
+
+		return 2;
+
+	case LocationType::BoarField:
+
+		return 3;
+
+	case LocationType::WaterSpring:
+
+		return 4;
+
+	case LocationType::SpiderNest:
+
+		return 5;
+
 	}
 
 	return -1;
@@ -533,6 +502,22 @@ std::string Game::GetLocationName(int locationIndex) {
 	case 1:
 
 		return "Cave";
+
+	case 2:
+
+		return "Herbal Grove";
+
+	case 3:
+
+		return "Boar Field";
+
+	case 4:
+
+		return "Water Spring";
+
+	case 5:
+
+		return "Spider Nest";
 
 	}
 
@@ -638,5 +623,26 @@ void Game::OpenCraftingMenu() {
 		}
 
 	}
+
+}
+
+LocationType Game::GenerateDiscoverableLocationType() {
+
+	std::vector<LocationType> discoverableLocations{ LocationType::Forest, LocationType::Cave, LocationType::HerbalGrove, LocationType::WaterSpring };
+
+	if (Player1.GetInventory().GetItemCount(ItemID::Spear) > 0) {
+
+		discoverableLocations.push_back(LocationType::BoarField);
+
+	}
+
+	if (Player1.GetInventory().GetItemCount(ItemID::Spear) > 0 && Player1.GetInventory().GetItemCount(ItemID::Bow) > 0) {
+
+		discoverableLocations.push_back(LocationType::SpiderNest);
+
+	}
+
+	int randomIndex = rand() % static_cast<int>(discoverableLocations.size());
+	return discoverableLocations[randomIndex];
 
 }

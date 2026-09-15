@@ -43,8 +43,8 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
 		gameClock.DisplayTime();
 
-		std::cout << "\n=== Known Locations ===\n\n1. Forest\n2. Cave\n3. Back\nPlayer choice: ";
-		maximum = 3;
+		std::cout << "\n=== Known Locations ===\n\n1. Forest\n2. Cave\n3. Herbal Grove\n4. Boar Field\n5. Water Spring\n6. Spider Nest\n7. Back\nPlayer choice: ";
+		maximum = 7;
 
 		break;
 

@@ -1,10 +1,15 @@
 #include "Location.h"
 #include <cstdlib>
 
-Location::Location() {
+Location::Location() : Location(static_cast<LocationType>(rand() % 2)) {
 
-	int randomLocType = rand() % 2;
-	locType = static_cast<LocationType>(randomLocType);
+
+
+}
+
+Location::Location(LocationType newLocType) {
+
+	locType = newLocType;
 	int randomLocSize = rand() % 3;
 	locSize = static_cast<LocationSize>(randomLocSize);
 	int randomLocTime = (rand() % 3) + 1;
@@ -36,12 +41,30 @@ Location::Location() {
 		locationResources.push_back({ ItemID::TreeSap, dailyResourceAmount, dailyResourceAmount });
 		locationResources.push_back({ ItemID::Vine, dailyResourceAmount, dailyResourceAmount });
 
-	}
-	else if (locType == LocationType::Cave) {
+	} else if (locType == LocationType::Cave) {
 
 		locationResources.push_back({ ItemID::Flint, dailyResourceAmount, dailyResourceAmount });
 		locationResources.push_back({ ItemID::Stone, dailyResourceAmount, dailyResourceAmount });
 		locationResources.push_back({ ItemID::Metal, dailyResourceAmount, dailyResourceAmount });
+
+	} else if (locType == LocationType::HerbalGrove) {
+
+		int herbDailyResourceAmount = 0;
+		if (locSize == LocationSize::Small) {
+
+			herbDailyResourceAmount = 20;
+
+		} else if (locSize == LocationSize::Medium) {
+
+			herbDailyResourceAmount = 50;
+
+		} else if (locSize == LocationSize::Large) {
+
+			herbDailyResourceAmount = 80;
+
+		}
+
+		locationResources.push_back({ ItemID::MedicinalHerbs, herbDailyResourceAmount, herbDailyResourceAmount });
 
 	}
 

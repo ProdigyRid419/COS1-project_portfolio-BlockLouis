@@ -4,7 +4,8 @@
 
 enum class LocationType {
 
-	Forest, Cave
+	Forest, Cave, HerbalGrove,
+	BoarField, WaterSpring, SpiderNest
 
 };
 
@@ -17,8 +18,8 @@ enum class LocationSize {
 struct LocationResource {
 
 	ItemID resourceType = ItemID::Empty;
-	int resourceAmount = dailyLimit;
 	int dailyLimit = 0;
+	int resourceAmount = dailyLimit;
 
 
 };
@@ -39,6 +40,7 @@ public:
 	void RefreshResources();
 	
 	Location();
+	Location(LocationType newLocType);
 
 	void MarkVisited();
 	bool HasBeenVisited() const;
