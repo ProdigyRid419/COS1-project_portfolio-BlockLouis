@@ -119,7 +119,7 @@ std::string Item::GetName() const {
 
 		return "Stone Axe";
 
-	case ItemID::CrudeMetalAxe:
+	case ItemID::MetalAxe:
 
 		return "Crude Metal Axe";
 
@@ -276,7 +276,7 @@ ItemCategory Item::GetCategory() const {
 
 		return ItemCategory::Tool;
 
-	case ItemID::CrudeMetalAxe:
+	case ItemID::MetalAxe:
 
 		return ItemCategory::Tool;
 

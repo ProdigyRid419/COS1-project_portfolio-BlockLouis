@@ -5,6 +5,7 @@
 #include "SurvivalDrain.h"
 #include <optional>
 #include <array>
+#include "Crafting.h"
 
 class Game {
 
@@ -20,6 +21,7 @@ private:
 	void ShowInventory();
 	void Explore();
 	void ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel);
+	void OpenCraftingMenu();
 
 	void TravelToLocation(Location& location);
 	void GatherFromLocation(Location& location);
@@ -35,6 +37,7 @@ private:
 	GameClock gameClock;
 	SurvivalDrain playerDrain;
 	std::array<std::optional<Location>, 2> knownLocations{};
+	Crafting craftingSystem;
 
 };
 

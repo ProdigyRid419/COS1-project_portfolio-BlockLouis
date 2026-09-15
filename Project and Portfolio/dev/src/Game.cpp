@@ -52,7 +52,7 @@ void Game::StartGame() {
 
 	std::cout << "\n\nWelcome to The Long Lost Isle " << Player1.GetName() << ", it's time for your survival journey to begin.\n\n";
 
-	std::cout << "===============================================\n\nYou find yourself stranded on an island, the last thing you remember is being on a cruise vacationing from work.\n\nYou must have fallen off while nobody was around to alert anybody and now you are here.\n\nYou quickly gather materials to start a small survival camp, a pile of leaves to sleep on, a quick shelter to prevent\nrain or wind from being too much of a hassle, a small storage space, and you find a suspiciously table-like stump.\n\n";
+	std::cout << "===============================================\n\nYou find yourself stranded on an island, the last thing you remember is being on a cruise vacationing from work.\n\nYou must have fallen off while nobody was around to alert anybody and now you are here.\n\nYou quickly gather materials to start a small survival camp, a pile of leaves to sleep on, a quick shelter to prevent\nrain or wind from being too much of a hassle, a small storage space, and you find a suspiciously table-like stump that could be used as a work station.\n\n";
 
 	while (shouldKeepRunning) {
 
@@ -77,10 +77,15 @@ void Game::StartGame() {
 
 		case 4:
 
-			Explore();
+			OpenCraftingMenu();
 			break;
 
 		case 5:
+
+			Explore();
+			break;
+
+		case 6:
 
 			shouldKeepRunning = false;
 			break;
@@ -601,5 +606,37 @@ void Game::TravelToLocation(Location& location) {
 	VisitLocation(location);
 
 	ProcessTime((location.GetTravelTime() * 2), ActivityLevel::Strenuous);
+
+}
+
+void Game::OpenCraftingMenu() {
+
+	const std::vector<CraftingRecipe>& recipes = craftingSystem.GetCraftingRecipes();
+
+	while (true) {
+
+		int recipeChoice = Menu::DisplayCraftingMenu(craftingSystem, Player1.GetInventory());
+		int backChoice = static_cast<int>(recipes.size()) + 1;
+
+		if (recipeChoice == backChoice) {
+
+			return;
+
+		}
+
+		const CraftingRecipe& selectedRecipe = recipes[recipeChoice - 1];
+
+		bool craftingSuccessful = craftingSystem.CraftItem(Player1.GetInventory(), selectedRecipe);
+		if (craftingSuccessful) {
+
+			std::cout << "\nSuccessfully crafted " << selectedRecipe.recipeResultAmount << ' ' << selectedRecipe.recipeName << '\n';
+
+		} else {
+
+			std::cout << "\nUnable to craft " << selectedRecipe.recipeName << ". You may be missing materials or inventory space.\n";
+
+		}
+
+	}
 
 }

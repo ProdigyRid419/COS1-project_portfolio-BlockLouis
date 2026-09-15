@@ -11,7 +11,7 @@ enum class ItemID {
 	SapReinforcedVine, MedicinalHerbs, Berries,
 	RawMeat, CookedMeat, PurifiedWaterBottle,
 	SmallWaterskin, MediumWaterskin, LargeWaterskin,
-	FlintAxe, StoneAxe, CrudeMetalAxe,
+	FlintAxe, StoneAxe, MetalAxe,
 	FlintPickaxe, StonePickaxe, MetalPickaxe,
 	Spear, Bow, FlintArrow,
 	StoneArrow, MetalArrow, VineGear,

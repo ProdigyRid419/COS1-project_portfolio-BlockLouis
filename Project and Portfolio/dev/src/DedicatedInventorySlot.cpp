@@ -62,7 +62,7 @@ bool DedicatedInventorySlot::CanAcceptItem(const Item& newItem) const {
 
 	case DedicatedSlotType::Axe:
 
-		if (newItem.GetID() != ItemID::FlintAxe && newItem.GetID() != ItemID::StoneAxe && newItem.GetID() != ItemID::CrudeMetalAxe) {
+		if (newItem.GetID() != ItemID::FlintAxe && newItem.GetID() != ItemID::StoneAxe && newItem.GetID() != ItemID::MetalAxe) {
 
 			return false;
 

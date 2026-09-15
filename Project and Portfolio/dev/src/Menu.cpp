@@ -4,6 +4,8 @@
 #include <string>
 #include "Location.h"
 #include "Item.h"
+#include "Crafting.h"
+#include "Inventory.h"
 
 int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
@@ -23,8 +25,8 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
 		gameClock.DisplayTime();
 
-		std::cout << "=== Camp ===\n\n1. View Status\n2. Sleep\n3. Show Inventory\n4. Explore\n5. Exit Game\nPlayer Choice: ";
-		maximum = 5;
+		std::cout << "=== Camp ===\n\n1. View Status\n2. Sleep\n3. Show Inventory\n4. Crafting\n5. Explore\n6. Exit Game\nPlayer Choice: ";
+		maximum = 6;
 
 		break;
 
@@ -131,4 +133,34 @@ int Menu::DisplayResourceMenu(const Location& location) {
 
 }
 
+int Menu::DisplayCraftingMenu(const Crafting& craftingSystem, const Inventory& inventory) {
+
+	const std::vector<CraftingRecipe>& recipes = craftingSystem.GetCraftingRecipes();
+
+	int i = 0;
+
+	std::cout << "\n\n=== Crafting ===\n\n";
+
+	for (const CraftingRecipe& recipe : recipes) {
+
+		std::cout << i + 1 << ". " << recipe.recipeName << '\n';
+
+		for (const RecipeIngredient& ingredient : recipe.ingredients) {
+
+			Item ingredientItem(ingredient.ingredientType);
+			int ownedAmount = inventory.GetItemCount(ingredient.ingredientType);
+			std::cout << ingredientItem.GetName() << ": " << ownedAmount << '/' << ingredient.requiredAmount << ".\n";
+
+		}
+
+		std::cout << '\n';
+		i++;
+
+	}
+
+	std::cout << i + 1 << ". Back\nPlayer choice: ";
+
+	return GetValidatedChoice(1, i + 1);
+
+}
 

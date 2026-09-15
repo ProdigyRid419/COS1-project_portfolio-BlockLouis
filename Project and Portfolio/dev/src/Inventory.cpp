@@ -206,3 +206,30 @@ int Inventory::RemoveItem(const Item& newItem, int amount) {
 
 }
 
+int Inventory::GetItemCount(ItemID itemID) const {
+
+	int total = 0;
+
+	for (const InventorySlot& inventorySlot : inventorySlots) {
+
+		if (inventorySlot.GetItem().GetID() == itemID) {
+
+			total += inventorySlot.GetQuantity();
+
+		} 
+
+	}
+
+	for (const DedicatedInventorySlot& dedicatedSlot : dedicatedInventorySlots) {
+
+		if (dedicatedSlot.GetItem().GetID() == itemID) {
+
+			total += dedicatedSlot.GetQuantity();
+
+		}
+
+	}
+
+	return total;
+
+}

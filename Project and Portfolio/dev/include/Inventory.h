@@ -10,6 +10,7 @@ public:
 	void DisplayInventory() const;
 	int AddItem(const Item& newItem, int amount);
 	int RemoveItem(const Item& newItem, int);
+	int GetItemCount(ItemID itemID) const;
 
 private:
 

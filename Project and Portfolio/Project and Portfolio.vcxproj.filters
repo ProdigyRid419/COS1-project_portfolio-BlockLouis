@@ -48,6 +48,9 @@
     <ClCompile Include="dev\src\SurvivalDrain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="dev\src\Crafting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dev\include\Game.h">
@@ -78,6 +81,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="dev\include\SurvivalDrain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dev\include\Crafting.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
