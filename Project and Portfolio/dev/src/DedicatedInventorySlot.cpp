@@ -80,6 +80,16 @@ bool DedicatedInventorySlot::CanAcceptItem(const Item& newItem) const {
 
 		return InventorySlot::CanAcceptItem(newItem);
 
+	case DedicatedSlotType::WaterContainer:
+
+		if (newItem.GetID() != ItemID::SmallWaterskin && newItem.GetID() != ItemID::MediumWaterskin && newItem.GetID() != ItemID::LargeWaterskin) {
+
+			return false;
+
+		}
+
+		return InventorySlot::CanAcceptItem(newItem);
+
 	}
 
 	return false;

@@ -341,6 +341,13 @@ void Game::VisitLocation(Location& location) {
 
 	}
 
+	if (location.GetLocType() == LocationType::WaterSpring) {
+
+		VisitWaterSpring(location);
+		return;
+
+	}
+
 	bool visiting = true;
 
 	while (visiting) {
@@ -870,5 +877,68 @@ void Game::RefreshKnownLocations() {
 		location->RefreshDailyState();
 
 	}
+
+}
+
+void Game::VisitWaterSpring(Location& location) {
+
+	bool visiting = true;
+
+	while (visiting) {
+
+		std::cout << "Current Water: " << Player1.GetInventory().GetStoredWater() << '/' << Player1.GetInventory().GetWaterCapacity() << '\n';
+
+		int menuChoice = Menu::DisplayMenu(MenuType::WaterSpring, gameClock);
+
+		switch (menuChoice) {
+
+		case 1:
+
+			FillAtWaterSpring();
+			break;
+
+		case 2:
+
+			ShowInventory();
+			break;
+
+		case 3:
+
+			ViewStatus();
+			break;
+
+		case 4:
+
+			visiting = false;
+			break;
+
+		}
+
+	}
+
+}
+
+void Game::FillAtWaterSpring() {
+
+	int capacity = Player1.GetInventory().GetWaterCapacity();
+
+	if (capacity <= 0) {
+
+		std::cout << "A Waterskin is required to collect water.\n";
+		return;
+
+	}
+
+	int waterAdded = Player1.GetInventory().FillWaterContainer();
+
+	if (waterAdded == 0) {
+
+		std::cout << "Waterskin is already full.\n";
+		return;
+
+	}
+
+	std::cout << "You collected " << waterAdded << " units of water in your Waterskin.\nYour Waterskin now holds " << Player1.GetInventory().GetStoredWater() << '/' << capacity << " water.\n";
+	ProcessTime(1, ActivityLevel::Normal);
 
 }

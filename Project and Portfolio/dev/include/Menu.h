@@ -9,7 +9,8 @@ enum class MenuType {
 
 	Main, Camp, Exploration,
 	KnownLocations,	Location, YesNo,
-	Resources, BoarField, BoarCarcass
+	Resources, BoarField, BoarCarcass,
+	WaterSpring, 
 
 };
 

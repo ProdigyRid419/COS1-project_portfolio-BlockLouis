@@ -77,6 +77,14 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 		maximum = 3;
 		break;
 
+	case MenuType::WaterSpring:
+
+		gameClock.DisplayTime();
+
+		std::cout << "\n\n=== Water Spring ===\n\n1. Fill water container\n2. Show inventory\n3. View status\n4. Leave location\nPlayer choice: ";
+		maximum = 4;
+		break;
+
 	}
 
 	return GetValidatedChoice(minimum, maximum);

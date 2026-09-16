@@ -3,7 +3,8 @@
 
 Crafting::Crafting() {
 
-
+	AddRecipe("Sap Reinforced Leather", ItemID::SapReinforcedLeather, 1, { { ItemID::TreeSap, 2 }, { ItemID::Leather, 2 } });
+	AddRecipe("Sap Reinforced Vine", ItemID::SapReinforcedVine, 1, { { ItemID::TreeSap, 2 }, { ItemID::Vine, 2 } });
 
 	AddRecipe("Flint Axe", ItemID::FlintAxe, 1, { { ItemID::CrudeWood, 15 }, { ItemID::Flint, 15 } });
 	AddRecipe("Flint Pickaxe", ItemID::FlintPickaxe, 1, { { ItemID::CrudeWood, 15 }, { ItemID::Flint, 15 } });
@@ -26,6 +27,10 @@ Crafting::Crafting() {
 	AddRecipe("Flint Arrows", ItemID::FlintArrow, 4, { { ItemID::CrudeWood, 1 }, { ItemID::Flint, 3 } });
 	AddRecipe("Stone Arrows", ItemID::StoneArrow, 4, { { ItemID::CrudeWood, 1 }, { ItemID::Stone, 3 } });
 	AddRecipe("Metal Arrows", ItemID::MetalArrow, 4, { { ItemID::CrudeWood, 1 }, { ItemID::Metal, 3 } });
+
+	AddRecipe("Small Waterskin", ItemID::SmallWaterskin, 1, { { ItemID::Leather, 5 }, { ItemID::Vine, 3 } });
+	AddRecipe("Medium Waterskin", ItemID::MediumWaterskin, 1, { { ItemID::Leather, 15 }, { ItemID::Vine, 8 } });
+	AddRecipe("Large Waterskin", ItemID::LargeWaterskin, 1, { { ItemID::SapReinforcedLeather, 10 }, { ItemID::SapReinforcedVine, 5 } });
 
 }
 
