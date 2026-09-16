@@ -66,6 +66,24 @@ Location::Location(LocationType newLocType) {
 
 		locationResources.push_back({ ItemID::MedicinalHerbs, herbDailyResourceAmount, herbDailyResourceAmount });
 
+	} else if (locType == LocationType::BoarField) {
+
+		if (locSize == LocationSize::Small) {
+
+			boarDailyLimit = 6;
+
+		} else if (locSize == LocationSize::Medium) {
+
+			boarDailyLimit = 10;
+
+		} else if (locSize == LocationSize::Large) {
+
+			boarDailyLimit = 20;
+
+		}
+
+		remainingBoars = boarDailyLimit;
+
 	}
 
 }
@@ -158,11 +176,18 @@ void Location::RestoreResource(ItemID item, int amount) {
 
 }
 
-void Location::RefreshResources() {
+void Location::RefreshDailyState() {
 
 	for (LocationResource& resource : locationResources) {
 
 		resource.resourceAmount = resource.dailyLimit;
+
+	}
+
+	if (locType == LocationType::BoarField) {
+
+		remainingBoars = boarDailyLimit;
+		unprocessedBoars = 0;
 
 	}
 
@@ -180,4 +205,50 @@ bool Location::HasBeenVisited() const {
 
 }
 
+int Location::GetRemainingBoars() const {
 
+	return remainingBoars;
+
+}
+
+int Location::GetUnprocessedBoars() const {
+
+	return unprocessedBoars;
+
+}
+
+int Location::HuntBoars() {
+
+	if (remainingBoars <= 0) {
+
+		return 0;
+
+	}
+
+	int randomBoarAmount = (rand() % 3) + 1;
+	
+	if (randomBoarAmount > remainingBoars) {
+
+		randomBoarAmount = remainingBoars;
+
+	}
+
+	remainingBoars -= randomBoarAmount;
+	unprocessedBoars += randomBoarAmount;
+
+	return randomBoarAmount;
+
+}
+
+bool Location::ProcessBoarCarcass() {
+
+	if (unprocessedBoars <= 0) {
+
+		return false; 
+
+	}
+
+	unprocessedBoars -= 1;
+	return true;
+
+}

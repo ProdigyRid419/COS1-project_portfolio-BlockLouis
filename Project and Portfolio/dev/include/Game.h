@@ -26,9 +26,13 @@ private:
 	void TravelToLocation(Location& location);
 	void GatherFromLocation(Location& location);
 	void VisitLocation(Location& location);
+	void VisitBoarField(Location& location);
+	void HuntAtBoarField(Location& location);
+	void ProcessBoarCarcassAtField(Location& location);
 	
 	void DisplayLocationInfo(const Location& location);
 	void DisplayLocationInfoDiscovery(const Location& location);
+	void RefreshKnownLocations();
 	
 	int GetLocationIndex(LocationType locationType);
 	std::string GetLocationName(int locationIndex);

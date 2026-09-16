@@ -8,7 +8,8 @@ class Inventory;
 enum class MenuType {
 
 	Main, Camp, Exploration,
-	KnownLocations,	Location, YesNo, Resources
+	KnownLocations,	Location, YesNo,
+	Resources, BoarField, BoarCarcass
 
 };
 

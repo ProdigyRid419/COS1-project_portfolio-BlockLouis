@@ -63,6 +63,20 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 		maximum = 2;
 		break;
 
+	case MenuType::BoarField:
+
+		gameClock.DisplayTime();
+
+		std::cout << "\n\n=== Boar Field ===\n\n1. Hunt boars\n2. Process boar carcass\n3. Show inventory\n4. View status\n5. Leave location\n";
+		maximum = 5;
+		break;
+
+	case MenuType::BoarCarcass:
+
+		std::cout << "\n\n=== Boar Carcasses ===\n\n1. Carve carcass (More meat than leather)\n2. Skin carcass (more leather than meat)\n3. Back\nPlayer choice: ";
+		maximum = 3;
+		break;
+
 	}
 
 	return GetValidatedChoice(minimum, maximum);

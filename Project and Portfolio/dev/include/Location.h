@@ -31,13 +31,18 @@ public:
 	LocationType GetLocType() const;
 	LocationSize GetLocSize() const;
 	int GetTravelTime() const;
+	
+	int GetRemainingBoars() const;
+	int GetUnprocessedBoars() const;
+	int HuntBoars();
+	bool ProcessBoarCarcass();
 
 	const std::vector<LocationResource>& GetLocationResources() const;
 
 	int GatherResource(ItemID item, int amount);
 
 	void RestoreResource(ItemID item, int amount);
-	void RefreshResources();
+	void RefreshDailyState();
 	
 	Location();
 	Location(LocationType newLocType);
@@ -54,5 +59,9 @@ private:
 	bool hasBeenVisited = false;
 
 	std::vector<LocationResource> locationResources;
+
+	int boarDailyLimit = 0;
+	int remainingBoars = 0;
+	int unprocessedBoars = 0;
 
 };

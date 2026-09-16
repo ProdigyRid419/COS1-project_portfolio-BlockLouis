@@ -334,6 +334,13 @@ void Game::Explore() {
 
 void Game::VisitLocation(Location& location) {
 
+	if (location.GetLocType() == LocationType::BoarField) {
+
+		VisitBoarField(location);
+		return;
+
+	}
+
 	bool visiting = true;
 
 	while (visiting) {
@@ -538,7 +545,17 @@ void Game::ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel) 
 
 	for (int i = 0; i < fifteenMinuteIntervals; i++) {
 
+		int dayBeforeAdvance = gameClock.GetCurrentDay();
+
 		gameClock.AdvanceTime(1);
+
+		if (gameClock.GetCurrentDay() > dayBeforeAdvance) {
+
+			RefreshKnownLocations();
+			std::cout << "\nA new day has begun. Location resources and wildlife have refreshed.\n";
+
+		}
+
 		DrainResult statDrain = playerDrain.CalculateDrain(gameClock, activityLevel);
 		if (statDrain.hungerDrain > 0 && Player1.GetHunger() > 0) {
 
@@ -711,5 +728,147 @@ int Game::GetGatherAmount(ItemID resourceType) {
 	}
 
 	return 5;
+
+}
+
+void Game::VisitBoarField(Location& location) {
+
+	bool visiting = true;
+
+	while (visiting) {
+
+		std::cout << "\nLiving Boars: " << location.GetRemainingBoars() << "\nUnprocessed Carcasses: " << location.GetUnprocessedBoars() << "\n\n";
+
+		int menuChoice = Menu::DisplayMenu(MenuType::BoarField, gameClock);
+
+		switch (menuChoice) {
+
+		case 1:
+
+			HuntAtBoarField(location);
+			break;
+
+		case 2:
+
+			ProcessBoarCarcassAtField(location);
+			break;
+
+		case 3:
+
+			ShowInventory();
+			break;
+
+		case 4:
+
+			ViewStatus();
+			break;
+
+		case 5:
+
+			visiting = false;
+			break;
+
+		}
+
+	}
+
+}
+
+void Game::HuntAtBoarField(Location& location) {
+
+	if (Player1.GetInventory().GetItemCount(ItemID::Spear) == 0) {
+
+		std::cout << "Spear is required to hunt.\n";
+		return;
+
+	} 
+
+	int huntedBoars = location.HuntBoars();
+
+	if (huntedBoars == 0) {
+
+		std::cout << "No living Boars remain. Please return tomorrow.\n";
+		return;
+
+	}
+
+	std::cout << "You successfully hunted " << huntedBoars << " Boars.\n";
+	ProcessTime(1, ActivityLevel::Strenuous);
+
+}
+
+void Game::ProcessBoarCarcassAtField(Location& location) {
+
+	if (location.GetUnprocessedBoars() <= 0) {
+
+		std::cout << "There are no carcasses to process.\n";
+		return;
+
+	}
+
+	int processingChoice = Menu::DisplayMenu(MenuType::BoarCarcass, gameClock);
+
+	int meatAmount = 0;
+	int leatherAmount = 0;
+
+	switch (processingChoice) {
+
+	case 1:
+
+		meatAmount = 8;
+		leatherAmount = 4;
+		break;
+
+	case 2:
+
+		meatAmount = 4;
+		leatherAmount = 8;
+		break;
+
+	case 3:
+
+		return;
+
+	}
+
+	Inventory tempInventory = Player1.GetInventory();
+	Item rawMeat(ItemID::RawMeat);
+	Item leather(ItemID::Leather);
+	int meatOverflow = tempInventory.AddItem(rawMeat, meatAmount);
+	int leatherOverflow = tempInventory.AddItem(leather, leatherAmount);
+
+	if (meatOverflow > 0 || leatherOverflow > 0) {
+
+		std::cout << "There is not enough space in your inventory.\nThe carcass will be here when you have inventory space.\n";
+		return;
+		
+	} 
+
+	if (!location.ProcessBoarCarcass()) {
+
+		std::cout << "The carcass could not be processed.\n";
+		return;
+
+	}
+
+	Player1.GetInventory() = tempInventory;
+	std::cout << "You have received " << meatAmount << " raw meat, and " << leatherAmount << " leather.\n";
+	ProcessTime(1, ActivityLevel::Normal);
+
+}
+
+void Game::RefreshKnownLocations() {
+	
+	for (std::optional<Location>& location : knownLocations) {
+
+		if (!location.has_value()) {
+
+			continue;
+
+		}
+
+		location->RefreshDailyState();
+
+	}
 
 }
