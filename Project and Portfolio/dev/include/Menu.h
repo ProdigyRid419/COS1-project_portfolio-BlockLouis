@@ -1,5 +1,6 @@
 #pragma once
 #include "GameClock.h"
+#include "Campfire.h"
 
 class Location;
 class Crafting;
@@ -21,7 +22,10 @@ public:
 	static int DisplayCraftingMenu(const Crafting& craftingSystem, const Inventory& inventory);
 	static int DisplayMenu(MenuType menuType, const GameClock& gameClock);
 	static int DisplayResourceMenu(const Location& location);
-	
+	static int DisplayCampfireMenu(const Campfire& campfire, const GameClock& gameClock);
+	static int DisplayFuelAmountMenu(int playerWood, int fuelFireCanAccept);
+	static int DisplayCookingMenu(int playerMeat);
+
 private:
 
 	static int GetValidatedChoice(int minimum, int maximum);

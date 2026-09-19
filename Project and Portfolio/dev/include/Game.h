@@ -6,6 +6,7 @@
 #include <optional>
 #include <array>
 #include "Crafting.h"
+#include "Campfire.h"
 
 class Game {
 
@@ -22,6 +23,11 @@ private:
 	void Explore();
 	void ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel);
 	void OpenCraftingMenu();
+	void OpenCampfireMenu();
+
+	void BuildCampfire();
+	void AddFuelToCampfire();
+	void CookMeatAtCampfire();
 
 	void TravelToLocation(Location& location);
 	void GatherFromLocation(Location& location);
@@ -48,6 +54,7 @@ private:
 	SurvivalDrain playerDrain;
 	std::array<std::optional<Location>, 6> knownLocations{};
 	Crafting craftingSystem;
+	Campfire campfire;
 
 };
 

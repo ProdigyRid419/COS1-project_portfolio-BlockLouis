@@ -83,10 +83,15 @@ void Game::StartGame() {
 
 		case 5:
 
-			Explore();
+			OpenCampfireMenu();
 			break;
 
 		case 6:
+
+			Explore();
+			break;
+
+		case 7:
 
 			shouldKeepRunning = false;
 			break;
@@ -588,6 +593,8 @@ void Game::ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel) 
 
 		}
 
+		campfire.BurnForMinutes(15);
+
 	}
 
 }
@@ -942,3 +949,191 @@ void Game::FillAtWaterSpring() {
 	ProcessTime(1, ActivityLevel::Normal);
 
 }
+
+void Game::OpenCampfireMenu() {
+
+	bool atCampfire = true;
+
+	while (atCampfire) {
+
+		int menuChoice = Menu::DisplayCampfireMenu(campfire, gameClock);
+
+		if (!campfire.IsBuilt()) {
+
+			if (menuChoice == 1) {
+
+				BuildCampfire();
+				continue;
+
+			}
+			else {
+
+				return;
+
+			}
+
+		}
+
+		switch (menuChoice) {
+
+		case 1:
+
+			AddFuelToCampfire();
+			break;
+
+		case 2:
+
+			CookMeatAtCampfire();
+			break;
+
+		case 3:
+
+			atCampfire = false;
+			break;
+
+		}
+
+	}
+
+}
+
+void Game::BuildCampfire() {
+
+	if (campfire.IsBuilt()) {
+
+		std::cout << "Campfire is already built.\n";
+		return;
+
+	}
+
+	if (Player1.GetInventory().GetItemCount(ItemID::CrudeWood) < 20 || Player1.GetInventory().GetItemCount(ItemID::Flint) < 10) {
+
+		std::cout << "You are missing materials.\nCrude Wood: " << Player1.GetInventory().GetItemCount(ItemID::CrudeWood) << "/20 Crude Wood\nFlint: " << Player1.GetInventory().GetItemCount(ItemID::Flint) << "/10 Flint.\n";
+		return;
+
+	} 
+
+	Player1.GetInventory().RemoveItem(ItemID::CrudeWood, 20);
+	Player1.GetInventory().RemoveItem(ItemID::Flint, 10);
+
+	campfire.Build();
+	ProcessTime(2, ActivityLevel::Normal);
+
+	std::cout << "Campfire has been built successfully.\n";
+
+}
+
+void Game::AddFuelToCampfire() {
+
+	if (!campfire.IsBuilt()) {
+
+		std::cout << "Campfire has not been built yet.\n";
+		return;
+
+	}
+
+	int playerWood = Player1.GetInventory().GetItemCount(ItemID::CrudeWood);
+	int campfireFuelCap = campfire.GetAvailableFuelCap();
+	
+	if (playerWood <= 0) {
+
+		std::cout << "Player has no wood.\n";
+		return;
+
+	}
+
+	if (campfireFuelCap <= 0) {
+
+		std::cout << "Campfire cannot accept any more fuel.\n";
+		return;
+
+	}
+	
+	int menuChoice = Menu::DisplayFuelAmountMenu(playerWood, campfireFuelCap);
+
+	if (menuChoice == 0) {
+
+		return;
+
+	}
+
+	int woodAdded = campfire.AddFuel(menuChoice);
+
+	if (woodAdded <= 0) {
+
+		std::cout << "Campfire could not accept any fuel.\n";
+		return;
+
+	}
+
+	Player1.GetInventory().RemoveItem(ItemID::CrudeWood, woodAdded);
+
+	int campfireTotalMinutes = campfire.GetFuelMinutes();
+
+	int fireRemainingHours = campfireTotalMinutes / 60;
+	int fireRemainingMinutes = campfireTotalMinutes % 60;
+
+	std::cout << "You have added " << woodAdded << " pieces of Crude Wood.\nThe fire will now burn for " << fireRemainingHours << " hours and " << fireRemainingMinutes << " minutes.\n";
+
+}
+
+void Game::CookMeatAtCampfire() {
+
+	if (!campfire.IsBuilt()) {
+
+		std::cout << "Campfire has not been built yet.\n";
+		return;
+
+	}
+
+	if (!campfire.IsLit()) {
+
+		std::cout << "Campfire has no fuel. You must add fuel before cooking.\n";
+		return;
+
+	}
+
+	int playerMeat = Player1.GetInventory().GetItemCount(ItemID::RawMeat);
+
+	if (playerMeat <= 0) {
+
+		std::cout << "You have no meat to cook.\n";
+		return;
+
+	}
+
+	int menuChoice = Menu::DisplayCookingMenu(playerMeat);
+
+	if (menuChoice == 0) {
+
+		return;
+
+	}
+
+	Inventory tempInventory = Player1.GetInventory();
+	int remaining = tempInventory.RemoveItem(ItemID::RawMeat, menuChoice);
+
+	if (remaining > 0) {
+
+		std::cout << "The requested raw meat could not be removed.\n";
+		return;
+
+	}
+
+	int overflow = tempInventory.AddItem(ItemID::CookedMeat, menuChoice);
+
+	if (overflow > 0) {
+
+		std::cout << "You do not have enough inventory space to cook any meat.\n";
+		return;
+
+	}
+
+	Player1.GetInventory() = tempInventory;
+
+	std::cout << "You cooked " << menuChoice << " raw meat into cooked meat.\n";
+
+	ProcessTime(1, ActivityLevel::Normal);
+
+}
+

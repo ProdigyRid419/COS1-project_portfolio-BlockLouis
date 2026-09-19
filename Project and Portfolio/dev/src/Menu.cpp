@@ -25,8 +25,8 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
 		gameClock.DisplayTime();
 
-		std::cout << "=== Camp ===\n\n1. View Status\n2. Sleep\n3. Show Inventory\n4. Crafting\n5. Explore\n6. Exit Game\nPlayer Choice: ";
-		maximum = 6;
+		std::cout << "=== Camp ===\n\n1. View Status\n2. Sleep\n3. Show Inventory\n4. Crafting\n5. Campfire\n6. Explore\n7. Exit Game\nPlayer Choice: ";
+		maximum = 7;
 
 		break;
 
@@ -186,3 +186,87 @@ int Menu::DisplayCraftingMenu(const Crafting& craftingSystem, const Inventory& i
 
 }
 
+int Menu::DisplayCampfireMenu(const Campfire& campfire, const GameClock& gameClock) {
+
+	gameClock.DisplayTime();
+
+	std::cout << "\n\n=== Campfire ===\n\n";
+
+	if (!campfire.IsBuilt()) {
+
+		std::cout << "The campfire has not been built yet.\n\n1. Build campfire\n2. Back\nPlayer choice: ";
+		return GetValidatedChoice(1, 2);
+
+	}
+
+	std::cout << "Remaining fuel: " << (campfire.GetFuelMinutes() / 60) << " hours and " << (campfire.GetFuelMinutes() % 60) << " minutes.\n\n1. Add fuel\n2. Cook meat\n3. Back\nPlayer choice: ";
+	return GetValidatedChoice(1, 3);
+
+}
+
+int Menu::DisplayFuelAmountMenu(int playerWood, int fuelFireCanAccept) {
+
+	int maximumFuelAmount = playerWood;
+
+	if (fuelFireCanAccept < playerWood) {
+
+		maximumFuelAmount = fuelFireCanAccept;
+
+	}
+
+	std::cout << "\n\n=== Add Fuel ===\n\nYou have " << playerWood << " Crude Wood.\nEach Crude wood will add one hour of fuel, up to 8 hours.\n";
+	
+	int i;
+
+	for (i = 1; i <= maximumFuelAmount; i++) {
+
+		std::cout << i << ". " << i << " Crude Wood\n";
+
+	}
+
+	std::cout << maximumFuelAmount + 1 << ". Back\nPlayer choice: ";
+
+	int validatedResult = GetValidatedChoice(1, maximumFuelAmount + 1);
+
+	if (validatedResult == (maximumFuelAmount + 1)) {
+
+		return 0;
+
+	}
+
+	return validatedResult;
+
+}
+
+int Menu::DisplayCookingMenu(int playerMeat) {
+
+	std::cout << "\n\n=== Cook Meat ===\n\nYou have " << playerMeat << " uncooked meat.\n";
+	int maximumCookableMeat = 3;
+
+	if (playerMeat < maximumCookableMeat) {
+
+		maximumCookableMeat = playerMeat;
+
+	}
+
+	int i;
+
+	for (i = 1; i <= maximumCookableMeat; i++) {
+
+		std::cout << i << ". Cook " << i << " raw meat.\n";
+
+	}
+
+	std::cout << i  << ". Back\nPlayer choice: ";
+
+	int validatedResult = GetValidatedChoice(1, i);
+
+	if (validatedResult == i) {
+
+		return 0;
+
+	}
+
+	return validatedResult;
+
+}
