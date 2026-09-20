@@ -93,10 +93,15 @@ void Game::StartGame() {
 
 		case 7:
 
-			Explore();
+			OpenCampStorageMenu();
 			break;
 
 		case 8:
+
+			Explore();
+			break;
+
+		case 9:
 
 			shouldKeepRunning = false;
 			break;
@@ -1333,3 +1338,163 @@ bool Game::CanPerformStrenuousAction() const {
 	return true;
 
 }
+
+void Game::OpenCampStorageMenu() {
+
+	bool organizing = true;
+
+	while (organizing) {
+
+		campStorage.DisplayCampStorage();
+		int menuChoice = Menu::DisplayMenu(MenuType::CampStorage, gameClock);
+
+		switch (menuChoice) {
+
+		case 1: 
+
+			DepositItemToStorage();
+			break;
+
+		case 2:
+
+			WithdrawItemFromStorage();
+			break;
+
+		case 3:
+
+			organizing = false;
+			break;
+
+		}
+
+	}
+
+}
+
+void Game::DepositItemToStorage() {
+
+	int menuChoice = Menu::DisplayInventorySlotSelection(Player1.GetInventory());
+
+	const std::array<InventorySlot, 10>& inventorySlots = Player1.GetInventory().GetInventorySlots();
+
+	int backChoice = static_cast<int>(inventorySlots.size()) + 1;
+
+	if (menuChoice == backChoice) {
+
+		return;
+
+	}
+
+	int indexNumber = menuChoice - 1;
+
+	const InventorySlot& selectedSlot = inventorySlots[indexNumber];
+
+	if (selectedSlot.IsEmpty()) {
+
+		std::cout << "Selected slot is empty.\n";
+		return;
+
+	}
+
+	Item itemCopy = selectedSlot.GetItem();
+
+	int transferAmount = Menu::DisplayQuantityMenu(itemCopy, selectedSlot.GetQuantity());
+
+	if (transferAmount <= 0) {
+
+		return;
+
+	}
+
+	CampStorage tempCampStorage = campStorage;
+	Inventory tempPlayerInventory = Player1.GetInventory();
+
+	int overflow = tempCampStorage.AddItem(itemCopy, transferAmount);
+
+	if (overflow > 0) {
+
+		std::cout << "There is not enough camp storage space to complete this transfer.\n";
+		return;
+
+	}
+
+	int unremovedAmount = tempPlayerInventory.RemoveItem(itemCopy, transferAmount);
+
+	if (unremovedAmount > 0) {
+
+		std::cout << "You were unable to store the items.\n";
+		return;
+
+	}
+
+	campStorage = tempCampStorage;
+	Player1.GetInventory() = tempPlayerInventory;
+
+	std::cout << "You successfully stored " << transferAmount << " of " << itemCopy.GetName() << " in camp storage.\n";
+
+}
+
+void Game::WithdrawItemFromStorage() {
+
+	int menuChoice = Menu::DisplayStorageSlotSelection(campStorage);
+
+	const std::array<InventorySlot, 20>& storageSlots = campStorage.GetCampStorageSlots();
+
+	int backChoice = static_cast<int>(storageSlots.size()) + 1;
+
+	if (menuChoice == backChoice) {
+
+		return;
+
+	}
+
+	int indexNumber = menuChoice - 1;
+
+	const InventorySlot& selectedSlot = storageSlots[indexNumber];
+
+	if (selectedSlot.IsEmpty()) {
+
+		std::cout << "Selected storage slot is empty.\n";
+		return;
+
+	}
+
+	Item itemCopy = selectedSlot.GetItem();
+
+	int transferAmount = Menu::DisplayQuantityMenu(itemCopy, selectedSlot.GetQuantity());
+
+	if (transferAmount <= 0) {
+
+		return;
+
+	}
+
+	CampStorage tempCampStorage = campStorage;
+	Inventory tempPlayerInventory = Player1.GetInventory();
+
+	int overflow = tempPlayerInventory.AddItem(itemCopy, transferAmount);
+
+	if (overflow > 0) {
+
+		std::cout << "You do not have the inventory space to withdraw items from camp storage.\n";
+		return;
+
+	}
+
+	int unremovedAmount = tempCampStorage.RemoveItem(itemCopy, transferAmount);
+
+	if (unremovedAmount > 0) {
+
+		std::cout << "You could not remove the chosen amount from camp storage.\n";
+		return;
+
+	}
+
+	campStorage = tempCampStorage;
+	Player1.GetInventory() = tempPlayerInventory;
+
+	std::cout << "You have removed " << transferAmount << " of " << itemCopy.GetName() << " from camp storage.\n";
+
+}
+
+

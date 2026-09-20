@@ -12,6 +12,8 @@ public:
 	int RemoveItem(const Item& newItem, int);
 	int GetItemCount(ItemID itemID) const;
 
+	const std::array<InventorySlot, 10>& GetInventorySlots() const;
+
 	int GetStoredWater() const;
 	int GetWaterCapacity() const;
 	int FillWaterContainer();

@@ -294,3 +294,9 @@ bool Inventory::ConsumeWater() {
 	return true;
 
 }
+
+const std::array<InventorySlot, 10>& Inventory::GetInventorySlots() const {
+
+	return inventorySlots;
+
+}

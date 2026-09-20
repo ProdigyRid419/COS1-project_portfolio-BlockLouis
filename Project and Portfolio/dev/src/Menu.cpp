@@ -6,6 +6,7 @@
 #include "Item.h"
 #include "Crafting.h"
 #include "Inventory.h"
+#include "CampStorage.h"
 
 int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
@@ -25,8 +26,8 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
 		gameClock.DisplayTime();
 
-		std::cout << "=== Camp ===\n\n1. View Status\n2. Sleep\n3. Rest\n4. Show Inventory\n5. Crafting\n6. Campfire\n7. Explore\n8. Exit Game\nPlayer Choice: ";
-		maximum = 8;
+		std::cout << "=== Camp ===\n\n1. View Status\n2. Sleep\n3. Rest\n4. Show Inventory\n5. Crafting\n6. Campfire\n7. Camp Storage\n8. Explore\n9. Exit Game\nPlayer Choice: ";
+		maximum = 9;
 
 		break;
 
@@ -83,6 +84,14 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
 		std::cout << "\n\n=== Water Spring ===\n\n1. Fill water container\n2. Show inventory\n3. View status\n4. Rest\n5. Leave location\nPlayer choice: ";
 		maximum = 5;
+		break;
+
+	case MenuType::CampStorage:
+
+		gameClock.DisplayTime();
+
+		std::cout << "1. Deposit item\n2. Withdraw item\n3. Back\nPlayer choice: ";
+		maximum = 3;
 		break;
 
 	}
@@ -277,5 +286,74 @@ int Menu::DisplayConsumableMenu(const Inventory& inventory) {
 
 	int validatedResult = GetValidatedChoice(1, 4);
 	return validatedResult;
+
+}
+
+int Menu::DisplayInventorySlotSelection(const Inventory& inventory) {
+
+	int menuNumber = 1;
+
+	for (const InventorySlot& slot : inventory.GetInventorySlots()) {
+
+		std::cout << menuNumber << ". " << slot.GetItem().GetName() << "\tAmount: " << slot.GetQuantity() << '\n';
+		menuNumber++;
+
+	}
+
+	std::cout << menuNumber << ". Back\nPlayer choice: ";
+
+	int validatedResult = GetValidatedChoice(1, menuNumber);
+
+	return validatedResult;
+
+}
+
+int Menu::DisplayQuantityMenu(const Item& item, int availableQuantity) {
+
+	if (availableQuantity <= 0) {
+
+		return 0;
+
+	}
+
+	std::cout << "\n\n=== Quantity Selection ===\n\n" << item.GetName() << "\tAvailable quantity: " << availableQuantity << "\n";
+
+	for (int i = 1; i <= availableQuantity; i++) {
+
+		std::cout << i << ". " << i << '\n';
+
+	}
+
+	std::cout << availableQuantity + 1 << ". Back\nPlayer choice: ";
+
+	int validatedChoice = GetValidatedChoice(1, availableQuantity + 1);
+
+	if (validatedChoice == availableQuantity + 1) {
+
+		return 0;
+
+	}
+
+	return validatedChoice;
+
+}
+
+int Menu::DisplayStorageSlotSelection(const CampStorage& campStorage) {
+
+	int menuNumber = 1;
+
+	for (const InventorySlot& storageSlot : campStorage.GetCampStorageSlots()) {
+
+		std::cout << menuNumber << ". " << storageSlot.GetItem().GetName() << "\tAmount: " << storageSlot.GetQuantity() << '\n';
+
+		menuNumber++;
+
+	}
+
+	std::cout << menuNumber << ". Back\nPlayer choice: ";
+
+	int validatedChoice = GetValidatedChoice(1, menuNumber);
+
+	return validatedChoice;
 
 }

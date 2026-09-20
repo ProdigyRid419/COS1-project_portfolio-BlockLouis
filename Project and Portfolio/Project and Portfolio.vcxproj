@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dev\src\Campfire.cpp" />
+    <ClCompile Include="dev\src\CampStorage.cpp" />
     <ClCompile Include="dev\src\Crafting.cpp" />
     <ClCompile Include="dev\src\DedicatedInventorySlot.cpp" />
     <ClCompile Include="dev\src\Game.cpp" />
@@ -35,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dev\include\Campfire.h" />
+    <ClInclude Include="dev\include\CampStorage.h" />
     <ClInclude Include="dev\include\Crafting.h" />
     <ClInclude Include="dev\include\DedicatedInventorySlot.h" />
     <ClInclude Include="dev\include\Game.h" />

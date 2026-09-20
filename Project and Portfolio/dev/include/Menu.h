@@ -5,13 +5,15 @@
 class Location;
 class Crafting;
 class Inventory;
+class Item;
+class CampStorage;
 
 enum class MenuType {
 
 	Main, Camp, Exploration,
 	KnownLocations,	Location, YesNo,
 	Resources, BoarField, BoarCarcass,
-	WaterSpring, 
+	WaterSpring, CampStorage
 
 };
 
@@ -26,6 +28,9 @@ public:
 	static int DisplayFuelAmountMenu(int playerWood, int fuelFireCanAccept);
 	static int DisplayCookingMenu(int playerMeat);
 	static int DisplayConsumableMenu(const Inventory& inventory);
+	static int DisplayInventorySlotSelection(const Inventory& inventory);
+	static int DisplayQuantityMenu(const Item& item, int availableQuantity);
+	static int DisplayStorageSlotSelection(const CampStorage& campStorage);
 
 private:
 
