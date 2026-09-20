@@ -31,10 +31,6 @@ std::string Item::GetName() const {
 
 		return "Crude Wood";
 
-	case ItemID::RegularWood:
-
-		return "Regular Wood";
-
 	case ItemID::Hardwood:
 
 		return "Hardwood";
@@ -83,10 +79,6 @@ std::string Item::GetName() const {
 
 		return "Medicinal Herbs";
 
-	case ItemID::Berries:
-
-		return "Berries";
-
 	case ItemID::RawMeat:
 
 		return "Raw Meat";
@@ -94,10 +86,6 @@ std::string Item::GetName() const {
 	case ItemID::CookedMeat:
 
 		return "Cooked Meat";
-
-	case ItemID::PurifiedWaterBottle:
-
-		return "Purified Water Bottle";
 
 	case ItemID::SmallWaterskin:
 
@@ -188,10 +176,6 @@ ItemCategory Item::GetCategory() const {
 
 		return ItemCategory::Resource;
 
-	case ItemID::RegularWood:
-
-		return ItemCategory::Resource;
-
 	case ItemID::Hardwood:
 
 		return ItemCategory::Resource;
@@ -240,10 +224,6 @@ ItemCategory Item::GetCategory() const {
 
 		return ItemCategory::Resource;
 
-	case ItemID::Berries:
-
-		return ItemCategory::Food;
-
 	case ItemID::RawMeat:
 
 		return ItemCategory::Food;
@@ -251,10 +231,6 @@ ItemCategory Item::GetCategory() const {
 	case ItemID::CookedMeat:
 
 		return ItemCategory::Food;
-
-	case ItemID::PurifiedWaterBottle:
-
-		return ItemCategory::Water;
 
 	case ItemID::SmallWaterskin:
 

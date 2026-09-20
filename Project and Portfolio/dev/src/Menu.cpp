@@ -25,8 +25,8 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
 		gameClock.DisplayTime();
 
-		std::cout << "=== Camp ===\n\n1. View Status\n2. Sleep\n3. Show Inventory\n4. Crafting\n5. Campfire\n6. Explore\n7. Exit Game\nPlayer Choice: ";
-		maximum = 7;
+		std::cout << "=== Camp ===\n\n1. View Status\n2. Sleep\n3. Rest\n4. Show Inventory\n5. Crafting\n6. Campfire\n7. Explore\n8. Exit Game\nPlayer Choice: ";
+		maximum = 8;
 
 		break;
 
@@ -34,8 +34,8 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
 		gameClock.DisplayTime();
 
-		std::cout << "\n=== Exploration ===\n\n1. Search for New Location\n2. Travel to Known Location\n3. View Status\n4. Return to Camp\nPlayer choice: ";
-		maximum = 4;
+		std::cout << "\n=== Exploration ===\n\n1. Search for New Location\n2. Travel to Known Location\n3. View Status\n4. Rest\n5. Return to Camp\nPlayer choice: ";
+		maximum = 5;
 
 		break;
 
@@ -52,8 +52,8 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
 		gameClock.DisplayTime();
 
-		std::cout << "=== Location Menu ===\n\n1. Gather Resources\n2. Show Inventory\n3. View Status\n4. Leave Location\nPlayer Choice: ";
-		maximum = 4;
+		std::cout << "=== Location Menu ===\n\n1. Gather Resources\n2. Show Inventory\n3. View Status\n4. Rest\n5. Leave Location\nPlayer Choice: ";
+		maximum = 5;
 
 		break;
 
@@ -67,8 +67,8 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
 		gameClock.DisplayTime();
 
-		std::cout << "\n\n=== Boar Field ===\n\n1. Hunt boars\n2. Process boar carcass\n3. Show inventory\n4. View status\n5. Leave location\n";
-		maximum = 5;
+		std::cout << "\n\n=== Boar Field ===\n\n1. Hunt boars\n2. Process boar carcass\n3. Show inventory\n4. View status\n5. Rest\n6. Leave location\n";
+		maximum = 6;
 		break;
 
 	case MenuType::BoarCarcass:
@@ -81,8 +81,8 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
 		gameClock.DisplayTime();
 
-		std::cout << "\n\n=== Water Spring ===\n\n1. Fill water container\n2. Show inventory\n3. View status\n4. Leave location\nPlayer choice: ";
-		maximum = 4;
+		std::cout << "\n\n=== Water Spring ===\n\n1. Fill water container\n2. Show inventory\n3. View status\n4. Rest\n5. Leave location\nPlayer choice: ";
+		maximum = 5;
 		break;
 
 	}
@@ -267,6 +267,15 @@ int Menu::DisplayCookingMenu(int playerMeat) {
 
 	}
 
+	return validatedResult;
+
+}
+
+int Menu::DisplayConsumableMenu(const Inventory& inventory) {
+
+	std::cout << "\n\n=== Consumables ===\n\n1. Raw meat\nAmount: " << inventory.GetItemCount(ItemID::RawMeat) << "\n2. Cooked meat\nAmount: " << inventory.GetItemCount(ItemID::CookedMeat) << "\n3. Water\nAmount: " << inventory.GetStoredWater() << "\n4. Back\nPlayer choice: ";
+
+	int validatedResult = GetValidatedChoice(1, 4);
 	return validatedResult;
 
 }

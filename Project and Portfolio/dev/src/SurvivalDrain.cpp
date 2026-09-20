@@ -16,6 +16,7 @@ DrainResult SurvivalDrain::CalculateDrain(const GameClock& time, ActivityLevel d
 
 		statDrain.hungerDrain += 1.25f;
 		statDrain.hydrationDrain += 1.25f;
+		statDrain.staminaDrain += 2.5f;
 
 	}
 

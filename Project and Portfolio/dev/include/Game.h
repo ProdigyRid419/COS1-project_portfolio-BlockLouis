@@ -24,6 +24,7 @@ private:
 	void ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel);
 	void OpenCraftingMenu();
 	void OpenCampfireMenu();
+	void Rest();
 
 	void BuildCampfire();
 	void AddFuelToCampfire();
@@ -48,6 +49,11 @@ private:
 	std::string GetLocationName(int locationIndex);
 	LocationType GenerateDiscoverableLocationType();
 	int GetGatherAmount(ItemID resourceType);
+
+	void ConsumeFood(ItemID item);
+	void ConsumeWater();
+
+	bool CanPerformStrenuousAction() const;
 
 	Player Player1;
 	GameClock gameClock;

@@ -282,3 +282,15 @@ int Inventory::FillWaterContainer() {
 
 }
 
+bool Inventory::ConsumeWater() {
+
+	if (storedWater <= 0) {
+
+		return false;
+
+	}
+
+	storedWater -= 1;
+	return true;
+
+}

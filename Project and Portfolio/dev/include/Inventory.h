@@ -16,6 +16,8 @@ public:
 	int GetWaterCapacity() const;
 	int FillWaterContainer();
 
+	bool ConsumeWater();
+
 private:
 
 	std::array<InventorySlot, 10> inventorySlots;

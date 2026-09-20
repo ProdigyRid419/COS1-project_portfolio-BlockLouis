@@ -25,6 +25,7 @@ public:
 	static int DisplayCampfireMenu(const Campfire& campfire, const GameClock& gameClock);
 	static int DisplayFuelAmountMenu(int playerWood, int fuelFireCanAccept);
 	static int DisplayCookingMenu(int playerMeat);
+	static int DisplayConsumableMenu(const Inventory& inventory);
 
 private:
 

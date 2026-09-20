@@ -73,25 +73,30 @@ void Game::StartGame() {
 
 		case 3:
 
-			ShowInventory();
+			Rest();
 			break;
 
 		case 4:
 
-			OpenCraftingMenu();
+			ShowInventory();
 			break;
 
 		case 5:
 
-			OpenCampfireMenu();
+			OpenCraftingMenu();
 			break;
 
 		case 6:
 
-			Explore();
+			OpenCampfireMenu();
 			break;
 
 		case 7:
+
+			Explore();
+			break;
+
+		case 8:
 
 			shouldKeepRunning = false;
 			break;
@@ -138,16 +143,55 @@ void Game::Sleep() {
 
 	std::cout << "\n=== Sleep ===\n\nYou sleep for 8 hours.\nYour Hunger and Hydration have decreased by 10.\n\n";
 	ProcessTime(32, ActivityLevel::Normal);
+	Player1.RestoreStamina(100.0);
 
 }
 
 void Game::ShowInventory() {
 
-	Player1.GetInventory().DisplayInventory();
+	bool viewing = true;
+
+	while (viewing) {
+
+		Player1.GetInventory().DisplayInventory();
+		
+		int menuChoice = Menu::DisplayConsumableMenu(Player1.GetInventory());
+
+		switch (menuChoice) {
+
+		case 1:
+
+			ConsumeFood(ItemID::RawMeat);
+			break;
+
+		case 2:
+
+			ConsumeFood(ItemID::CookedMeat);
+			break;
+
+		case 3:
+
+			ConsumeWater();
+			break;
+
+		case 4:
+
+			viewing = false;
+			break;
+
+		}
+
+	}
 
 }
 
 void Game::GatherFromLocation(Location& location) {
+
+	if (!CanPerformStrenuousAction()) {
+
+		return;
+
+	}
 
 	const std::vector<LocationResource>& resources = location.GetLocationResources();
 
@@ -328,6 +372,11 @@ void Game::Explore() {
 
 		case 4:
 
+			Rest();
+			break;
+
+		case 5:
+
 			exploring = false;
 			break;
 
@@ -380,6 +429,11 @@ void Game::VisitLocation(Location& location) {
 
 		case 4:
 			
+			Rest();
+			break;
+
+		case 5:
+
 			std::cout << "\n\nYou leave the location.\n\n";
 			visiting = false;
 			break;
@@ -601,6 +655,12 @@ void Game::ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel) 
 
 void Game::TravelToLocation(Location& location) {
 	
+	if (!CanPerformStrenuousAction()) {
+
+		return;
+
+	}
+
 	std::cout << "You travel to a " << GetLocationName(GetLocationIndex(location.GetLocType()));
 
 	ProcessTime((location.GetTravelTime() * 2), ActivityLevel::Strenuous);
@@ -779,6 +839,11 @@ void Game::VisitBoarField(Location& location) {
 
 		case 5:
 
+			Rest();
+			break;
+
+		case 6:
+
 			visiting = false;
 			break;
 
@@ -789,6 +854,12 @@ void Game::VisitBoarField(Location& location) {
 }
 
 void Game::HuntAtBoarField(Location& location) {
+
+	if (!CanPerformStrenuousAction()) {
+
+		return;
+
+	}
 
 	if (Player1.GetInventory().GetItemCount(ItemID::Spear) == 0) {
 
@@ -915,6 +986,11 @@ void Game::VisitWaterSpring(Location& location) {
 			break;
 
 		case 4:
+
+			Rest();
+			break;
+
+		case 5:
 
 			visiting = false;
 			break;
@@ -1137,3 +1213,123 @@ void Game::CookMeatAtCampfire() {
 
 }
 
+void Game::Rest() {
+
+	if (Player1.GetStamina() >= 100.0f) {
+
+		std::cout << "You do not need rest, your stamina is full.\n";
+		return;
+
+	}
+
+	ProcessTime(2, ActivityLevel::Normal);
+	Player1.RestoreStamina(50);
+
+	std::cout << "You have rested for 30 minutes and restored up to 50 stamina.\nCurrent stamina: " << Player1.GetStamina() << '\n';
+
+}
+
+void Game::ConsumeFood(ItemID item) {
+
+	if (Player1.GetHunger() >= 100) {
+
+		std::cout << "You are not hungry.\n";
+		return;
+
+	}
+
+	float restorationAmount = 0;
+
+	if (item != ItemID::RawMeat && item != ItemID::CookedMeat) {
+
+		std::cout << "Invalid food type.\n";
+		return;
+
+	} else if (item == ItemID::RawMeat) {
+
+		restorationAmount = 12.5f;
+
+	} else if (item == ItemID::CookedMeat) {
+
+		restorationAmount = 25.0f;
+
+	}
+
+	int itemAmount = Player1.GetInventory().GetItemCount(item);
+
+	if (itemAmount <= 0) {
+
+		Item tempItem = item;
+		std::cout << "You do not currently have any " << tempItem.GetName() << ".\n";
+		return;
+
+	}
+
+	int remaining = Player1.GetInventory().RemoveItem(item, 1);
+
+	if (remaining > 0) {
+
+		std::cout << "Failed to consume food.\n";
+		return;
+
+	}
+
+	float hungerBeforeEating = Player1.GetHunger();
+
+	Player1.RestoreHunger(restorationAmount);
+
+	float amountRestored = Player1.GetHunger() - hungerBeforeEating;
+
+	Item consumedItem = item;
+
+	std::cout << "You have consumed " << consumedItem.GetName() << " and restored " << amountRestored << " hunger.\nYour current hunger is: " << Player1.GetHunger() << ".\n";
+
+}
+
+void Game::ConsumeWater() {
+
+	if (Player1.GetHydration() >= 100) {
+
+		std::cout << "You are not thirsty.\n";
+		return;
+
+	}
+
+	if (Player1.GetInventory().GetStoredWater() <= 0) {
+
+		std::cout << "You currently have no water to drink.\n";
+		return;
+
+	}
+
+	bool result = Player1.GetInventory().ConsumeWater();
+
+	if (!result) {
+
+		std::cout << "Failed to consume water.\n";
+		return;
+
+	}
+
+	float hydrationBeforeDrinking = Player1.GetHydration();
+
+	Player1.RestoreHydration(25);
+
+	float amountRestored = Player1.GetHydration() - hydrationBeforeDrinking;
+
+	std::cout << "You have sipped from your Waterskin and restored " << amountRestored << " hydration.\nYour current hydration is: " << Player1.GetHydration() << ".\n";
+
+}
+
+bool Game::CanPerformStrenuousAction() const {
+
+	if (Player1.GetStamina() <= 0) {
+
+		std::cout << "You are out of stamina and can no longer perform strenuous actions.\nYou may rest to regain some stamina or return to camp.\n";
+		return false;
+
+	}
+
+	return true;
+
+}
