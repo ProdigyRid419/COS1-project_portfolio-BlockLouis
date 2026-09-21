@@ -407,6 +407,13 @@ void Game::VisitLocation(Location& location) {
 
 	}
 
+	if (location.GetLocType() == LocationType::SpiderNest) {
+
+		VisitSpiderNest(location);
+		return;
+
+	}
+
 	bool visiting = true;
 
 	while (visiting) {
@@ -1497,4 +1504,93 @@ void Game::WithdrawItemFromStorage() {
 
 }
 
+void Game::VisitSpiderNest(Location& location) {
 
+	bool visiting = true;
+
+	while (visiting) {
+
+		std::cout << "Remaining spiders: " << location.GetRemainingSpiders() << '\n';
+
+		int menuChoice = Menu::DisplayMenu(MenuType::SpiderNest, gameClock);
+
+		switch (menuChoice) {
+
+		case 1:
+
+			FightSpiderAtNest(location);
+			break;
+
+		case 2:
+
+			ShowInventory();
+			break;
+
+		case 3:
+
+			ViewStatus();
+			break;
+
+		case 4:
+
+			Rest();
+			break;
+
+		case 5:
+
+			visiting = false;
+			break;
+
+		}
+
+	}
+
+}
+
+void Game::FightSpiderAtNest(Location& location) {
+
+	if (!CanPerformStrenuousAction()) {
+		
+		return;
+
+	}
+
+	if (Player1.GetInventory().GetItemCount(ItemID::Spear) <= 0 && Player1.GetInventory().GetItemCount(ItemID::Bow) <= 0) {
+
+		std::cout << "You do not have required weapons to be here.\n";
+		return;
+
+	}
+
+	if (location.GetRemainingSpiders() <= 0) {
+
+		std::cout << "There are no spiders left.\n";
+		return;
+
+	}
+
+	Inventory tempPlayerInventory = Player1.GetInventory();
+
+	int overflow = tempPlayerInventory.AddItem(ItemID::Silk, 4);
+
+	if (overflow > 0) {
+
+		std::cout << "You do not have the inventory space to collect silk.\n";
+		return;
+
+	}
+
+	if (!location.DefeatSpider()) {
+
+		std::cout << "You cannot defeat spider.\n";
+		return;
+
+	}
+
+	std::cout << "You defeated 1 spider and got 4 silk.\n";
+
+	Player1.GetInventory() = tempPlayerInventory;
+
+	ProcessTime(1, ActivityLevel::Strenuous);
+
+}

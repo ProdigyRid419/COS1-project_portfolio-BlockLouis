@@ -53,6 +53,8 @@ private:
 	std::string GetLocationName(int locationIndex);
 	LocationType GenerateDiscoverableLocationType();
 	int GetGatherAmount(ItemID resourceType);
+	void VisitSpiderNest(Location& location);
+	void FightSpiderAtNest(Location& location);
 	
 	Crafting craftingSystem;
 	

@@ -37,6 +37,9 @@ public:
 	int HuntBoars();
 	bool ProcessBoarCarcass();
 
+	int GetRemainingSpiders() const;
+	bool DefeatSpider();
+
 	const std::vector<LocationResource>& GetLocationResources() const;
 
 	int GatherResource(ItemID item, int amount);
@@ -63,5 +66,8 @@ private:
 	int boarDailyLimit = 0;
 	int remainingBoars = 0;
 	int unprocessedBoars = 0;
+
+	int spiderDailyLimit = 0;
+	int remainingSpiders = 0;
 
 };

@@ -85,6 +85,26 @@ Location::Location(LocationType newLocType) {
 		remainingBoars = boarDailyLimit;
 
 	}
+	else if (locType == LocationType::SpiderNest) {
+
+		if (locSize == LocationSize::Small) {
+
+			spiderDailyLimit = 5;
+
+		} else if (locSize == LocationSize::Medium) {
+
+			spiderDailyLimit = 9;
+
+		}
+		else if (locSize == LocationSize::Large) {
+
+			spiderDailyLimit = 15;
+
+		}
+
+		remainingSpiders = spiderDailyLimit;
+
+	}
 
 }
 
@@ -191,6 +211,12 @@ void Location::RefreshDailyState() {
 
 	}
 
+	if (locType == LocationType::SpiderNest) {
+
+		remainingSpiders = spiderDailyLimit;
+
+	}
+
 }
 
 void Location::MarkVisited() {
@@ -249,6 +275,26 @@ bool Location::ProcessBoarCarcass() {
 	}
 
 	unprocessedBoars -= 1;
+	return true;
+
+}
+
+int Location::GetRemainingSpiders() const {
+
+	return remainingSpiders;
+
+}
+
+bool Location::DefeatSpider() {
+
+	if (remainingSpiders <= 0) {
+
+		remainingSpiders = 0;
+		return false;
+
+	}
+
+	remainingSpiders -= 1;
 	return true;
 
 }

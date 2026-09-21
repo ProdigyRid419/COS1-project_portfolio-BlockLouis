@@ -13,7 +13,7 @@ enum class MenuType {
 	Main, Camp, Exploration,
 	KnownLocations,	Location, YesNo,
 	Resources, BoarField, BoarCarcass,
-	WaterSpring, CampStorage
+	WaterSpring, CampStorage, SpiderNest
 
 };
 

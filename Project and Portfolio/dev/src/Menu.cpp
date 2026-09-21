@@ -94,6 +94,14 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 		maximum = 3;
 		break;
 
+	case MenuType::SpiderNest:
+
+		gameClock.DisplayTime();
+
+		std::cout << "\n\n=== Spider Nest ===\n\n1. Fight spider\n2. Show inventory\n3. View status\n4. Rest\n5. Leave location\nPlayer choice: ";
+		maximum = 5;
+		break;
+
 	}
 
 	return GetValidatedChoice(minimum, maximum);
