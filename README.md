@@ -43,7 +43,11 @@ For week 3, I plan to prioritize basic crafting and fire-management systems that
 
 ### Week 3
 
-Stay tuned, this stand up is coming soon...
+This week, I expanded The Long Lost Isle from a basic exploration and gathering system into a more complete survival gameplay loop. I added multiple-resource locations, tool-gated gathering, crafting progression, new discoverable locations, wildlife interaction, water collection, campfire cooking, survival-stat restoration, camp storage, and basic Spider encounters.
+I refactored Location to support multiple resource types through a vector instead of storing only one resource. I centralized menu validation, reduced duplicated crafting setup with AddRecipe(), and separated Boar Field, Water Spring, and Spider Nest interactions into specialized functions. I also used temporary copies during crafting, cooking, carcass processing, and storage transfers to prevent partial updates or item loss when an action fails.
+One of the main challenges was connecting the growing number of systems without making Game or Location too difficult to manage. Inventory capacity, dedicated equipment slots, crafting upgrades, location-specific menus, time progression, and survival-stat changes all needed to work together. I addressed these challenges by implementing one feature at a time, building frequently, and performing regression tests after each major system was completed.
+I improved my understanding of class responsibilities, vectors, arrays, const references, transactional inventory changes, and reusable menu functions. I also completed nine regression-testing groups that covered navigation, exploration, discovery gates, gathering, crafting, specialized locations, survival stats, camp storage, spider encounters, and daily rollover behavior.
+Before completing milestone 4, I plan to expand spider encounters with spear and bow attacks, arrow consumption, misses, and retaliation. I also plan to implement Health damage and restoration, Basic and Improved bandages, death and game-over behavior, a beginning-of-day checkpoint system, and a single save-game system. Gear effects, storage upgrades, and Silk Rope mechanics will remain optional stretch goals.
 
 ### Week 4
 
