@@ -16,9 +16,17 @@ public:
 	Inventory& GetInventory();
 
 	void SetName(const std::string& name);
+
+	void RestoreHunger(float amount);
 	void DecreaseHunger(float amount);
+	
+	void RestoreHydration(float amount);
 	void DecreaseHydration(float amount);
+	
+	void RestoreStamina(float amount);
 	void DecreaseStamina(float amount);
+	
+	void RestoreSanity(float amount);
 	void DecreaseSanity(float amount);
 
 private:

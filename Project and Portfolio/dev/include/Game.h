@@ -5,6 +5,9 @@
 #include "SurvivalDrain.h"
 #include <optional>
 #include <array>
+#include "Crafting.h"
+#include "Campfire.h"
+#include "CampStorage.h"
 
 class Game {
 
@@ -15,26 +18,57 @@ public:
 private:
 
 	void StartGame();
-	void ViewStatus();
 	void Sleep();
 	void ShowInventory();
 	void Explore();
-	void ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel);
+	void OpenCraftingMenu();
+	void OpenCampfireMenu();
+	void Rest();
 
+	
+	Player Player1;
+	void ViewStatus();
+	bool CanPerformStrenuousAction() const;
+
+	GameClock gameClock;
+	void ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel);
+	void RefreshKnownLocations();
+
+	SurvivalDrain playerDrain;
+	void ConsumeFood(ItemID item);
+	void ConsumeWater();
+	
+	std::array<std::optional<Location>, 6> knownLocations{};
 	void TravelToLocation(Location& location);
 	void GatherFromLocation(Location& location);
 	void VisitLocation(Location& location);
-	
+	void VisitBoarField(Location& location);
+	void HuntAtBoarField(Location& location);
+	void ProcessBoarCarcassAtField(Location& location);
+	void VisitWaterSpring(Location& location);
+	void FillAtWaterSpring();
 	void DisplayLocationInfo(const Location& location);
 	void DisplayLocationInfoDiscovery(const Location& location);
-	
 	int GetLocationIndex(LocationType locationType);
 	std::string GetLocationName(int locationIndex);
+	LocationType GenerateDiscoverableLocationType();
+	int GetGatherAmount(ItemID resourceType);
+	void VisitSpiderNest(Location& location);
+	void FightSpiderAtNest(Location& location);
+	
+	Crafting craftingSystem;
+	
+	
+	
+	Campfire campfire;
+	void BuildCampfire();
+	void AddFuelToCampfire();
+	void CookMeatAtCampfire();
 
-	Player Player1;
-	GameClock gameClock;
-	SurvivalDrain playerDrain;
-	std::array<std::optional<Location>, 2> knownLocations{};
+	CampStorage campStorage;
+	void OpenCampStorageMenu();
+	void DepositItemToStorage();
+	void WithdrawItemFromStorage();
 
 };
 

@@ -62,7 +62,7 @@ bool DedicatedInventorySlot::CanAcceptItem(const Item& newItem) const {
 
 	case DedicatedSlotType::Axe:
 
-		if (newItem.GetID() != ItemID::FlintAxe && newItem.GetID() != ItemID::StoneAxe && newItem.GetID() != ItemID::CrudeMetalAxe) {
+		if (newItem.GetID() != ItemID::FlintAxe && newItem.GetID() != ItemID::StoneAxe && newItem.GetID() != ItemID::MetalAxe) {
 
 			return false;
 
@@ -73,6 +73,16 @@ bool DedicatedInventorySlot::CanAcceptItem(const Item& newItem) const {
 	case DedicatedSlotType::Pickaxe:
 
 		if (newItem.GetID() != ItemID::FlintPickaxe && newItem.GetID() != ItemID::StonePickaxe && newItem.GetID() != ItemID::MetalPickaxe) {
+
+			return false;
+
+		}
+
+		return InventorySlot::CanAcceptItem(newItem);
+
+	case DedicatedSlotType::WaterContainer:
+
+		if (newItem.GetID() != ItemID::SmallWaterskin && newItem.GetID() != ItemID::MediumWaterskin && newItem.GetID() != ItemID::LargeWaterskin) {
 
 			return false;
 

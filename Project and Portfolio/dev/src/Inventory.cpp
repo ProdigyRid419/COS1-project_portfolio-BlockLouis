@@ -44,6 +44,11 @@ void Inventory::DisplayInventory() const {
 			std::cout << "Pickaxe: ";
 			break;
 
+		case DedicatedSlotType::WaterContainer:
+
+			std::cout << "Waterskin: ";
+			break;
+
 		}
 
 		if (dedicatedInventorySlots[i].IsEmpty()) {
@@ -83,7 +88,7 @@ int Inventory::AddItem(const Item& newItem, int amount) {
 	int remaining = amount;
 
 	bool dedicatedItemSlotCheck = true;
-	if (newItem.GetCategory() != ItemCategory::Tool && newItem.GetCategory() != ItemCategory::Weapon && newItem.GetCategory() != ItemCategory::Ammo && newItem.GetCategory() != ItemCategory::Gear) {
+	if (newItem.GetCategory() != ItemCategory::Tool && newItem.GetCategory() != ItemCategory::Weapon && newItem.GetCategory() != ItemCategory::Ammo && newItem.GetCategory() != ItemCategory::Gear && newItem.GetCategory() != ItemCategory::WaterContainer) {
 
 		dedicatedItemSlotCheck = false;
 
@@ -156,7 +161,7 @@ int Inventory::RemoveItem(const Item& newItem, int amount) {
 	
 	bool dedicatedItemSlotCheck = true;
 	
-	if (newItem.GetCategory() != ItemCategory::Tool && newItem.GetCategory() != ItemCategory::Weapon && newItem.GetCategory() != ItemCategory::Ammo && newItem.GetCategory() != ItemCategory::Gear) {
+	if (newItem.GetCategory() != ItemCategory::Tool && newItem.GetCategory() != ItemCategory::Weapon && newItem.GetCategory() != ItemCategory::Ammo && newItem.GetCategory() != ItemCategory::Gear && newItem.GetCategory() != ItemCategory::WaterContainer) {
 
 		dedicatedItemSlotCheck = false;
 
@@ -206,3 +211,92 @@ int Inventory::RemoveItem(const Item& newItem, int amount) {
 
 }
 
+int Inventory::GetItemCount(ItemID itemID) const {
+
+	int total = 0;
+
+	for (const InventorySlot& inventorySlot : inventorySlots) {
+
+		if (inventorySlot.GetItem().GetID() == itemID) {
+
+			total += inventorySlot.GetQuantity();
+
+		} 
+
+	}
+
+	for (const DedicatedInventorySlot& dedicatedSlot : dedicatedInventorySlots) {
+
+		if (dedicatedSlot.GetItem().GetID() == itemID) {
+
+			total += dedicatedSlot.GetQuantity();
+
+		}
+
+	}
+
+	return total;
+
+}
+
+int Inventory::GetStoredWater() const {
+
+	return storedWater;
+
+}
+
+int Inventory::GetWaterCapacity() const {
+
+	if (GetItemCount(ItemID::SmallWaterskin) > 0) {
+
+		return 1;
+
+	} else if (GetItemCount(ItemID::MediumWaterskin) > 0) {
+
+		return 3;
+
+	} else if (GetItemCount(ItemID::LargeWaterskin) > 0) {
+
+		return 8;
+
+	}
+
+	return 0;
+
+}
+
+int Inventory::FillWaterContainer() {
+
+	int capacity = GetWaterCapacity();
+	if (storedWater < capacity && capacity > 0) {
+
+		int waterAdded = capacity - storedWater;
+
+		storedWater = capacity;
+
+		return waterAdded;
+
+	}
+
+	return 0;
+
+}
+
+bool Inventory::ConsumeWater() {
+
+	if (storedWater <= 0) {
+
+		return false;
+
+	}
+
+	storedWater -= 1;
+	return true;
+
+}
+
+const std::array<InventorySlot, 10>& Inventory::GetInventorySlots() const {
+
+	return inventorySlots;
+
+}

@@ -10,11 +10,20 @@ public:
 	void DisplayInventory() const;
 	int AddItem(const Item& newItem, int amount);
 	int RemoveItem(const Item& newItem, int);
+	int GetItemCount(ItemID itemID) const;
+
+	const std::array<InventorySlot, 10>& GetInventorySlots() const;
+
+	int GetStoredWater() const;
+	int GetWaterCapacity() const;
+	int FillWaterContainer();
+
+	bool ConsumeWater();
 
 private:
 
 	std::array<InventorySlot, 10> inventorySlots;
-	std::array<DedicatedInventorySlot, 7> dedicatedInventorySlots{
+	std::array<DedicatedInventorySlot, 8> dedicatedInventorySlots{
 
 		DedicatedInventorySlot(DedicatedSlotType::LeatherGear),
 		DedicatedInventorySlot(DedicatedSlotType::VineGear),
@@ -22,9 +31,12 @@ private:
 		DedicatedInventorySlot(DedicatedSlotType::Bow),
 		DedicatedInventorySlot(DedicatedSlotType::Arrow),
 		DedicatedInventorySlot(DedicatedSlotType::Axe),
-		DedicatedInventorySlot(DedicatedSlotType::Pickaxe)
+		DedicatedInventorySlot(DedicatedSlotType::Pickaxe),
+		DedicatedInventorySlot(DedicatedSlotType::WaterContainer)
 
 	};
+
+	int storedWater = 0;
 
 };
 

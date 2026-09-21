@@ -3,19 +3,18 @@
 
 enum class ItemID {
 
-	Empty,
-	CrudeWood, RegularWood, Hardwood,
+	Empty, CrudeWood, Hardwood,
 	Flint, Stone, Metal,
 	Vine, TreeSap, Leather,
 	Silk, SapReinforcedLeather, SilkRope,
-	SapReinforcedVine, MedicinalHerbs, Berries,
-	RawMeat, CookedMeat, PurifiedWaterBottle,
-	SmallWaterskin, MediumWaterskin, LargeWaterskin,
-	FlintAxe, StoneAxe, CrudeMetalAxe,
-	FlintPickaxe, StonePickaxe, MetalPickaxe,
-	Spear, Bow, FlintArrow,
-	StoneArrow, MetalArrow, VineGear,
-	LeatherGear, BasicBandage, ImprovedBandage
+	SapReinforcedVine, MedicinalHerbs, RawMeat,
+	CookedMeat,	SmallWaterskin, MediumWaterskin,
+	LargeWaterskin,	FlintAxe, StoneAxe,
+	MetalAxe, FlintPickaxe, StonePickaxe,
+	MetalPickaxe, Spear, Bow,
+	FlintArrow,	StoneArrow, MetalArrow,
+	VineGear, LeatherGear, BasicBandage,
+	ImprovedBandage
 
 };
 
