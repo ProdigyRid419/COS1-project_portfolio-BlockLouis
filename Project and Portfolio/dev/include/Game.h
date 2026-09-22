@@ -8,6 +8,7 @@
 #include "Crafting.h"
 #include "Campfire.h"
 #include "CampStorage.h"
+#include "DailyCheckpoint.h"
 
 class Game {
 
@@ -29,6 +30,7 @@ private:
 	Player Player1;
 	void ViewStatus();
 	bool CanPerformStrenuousAction() const;
+	void UseBandage(ItemID item);
 
 	GameClock gameClock;
 	void ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel);
@@ -69,6 +71,10 @@ private:
 	void OpenCampStorageMenu();
 	void DepositItemToStorage();
 	void WithdrawItemFromStorage();
+
+	std::optional<DailyCheckpoint> dailyCheckpoint;
+	void CaptureDailyCheckpoint();
+	bool RestoreDailyCheckpoint();
 
 };
 

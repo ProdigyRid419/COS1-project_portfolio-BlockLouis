@@ -17,7 +17,7 @@ private:
 
 	bool isBuilt = false;
 	int fuelMinutes = 0;
-	const int maximumBurnTime = 480;
+	static constexpr int maximumBurnTime = 480;
 
 };
 

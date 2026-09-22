@@ -23,13 +23,15 @@ public:
 private:
 
 	std::array<InventorySlot, 10> inventorySlots;
-	std::array<DedicatedInventorySlot, 8> dedicatedInventorySlots{
+	std::array<DedicatedInventorySlot, 10> dedicatedInventorySlots{
 
 		DedicatedInventorySlot(DedicatedSlotType::LeatherGear),
 		DedicatedInventorySlot(DedicatedSlotType::VineGear),
 		DedicatedInventorySlot(DedicatedSlotType::Spear),
 		DedicatedInventorySlot(DedicatedSlotType::Bow),
-		DedicatedInventorySlot(DedicatedSlotType::Arrow),
+		DedicatedInventorySlot(DedicatedSlotType::FlintArrow),
+		DedicatedInventorySlot(DedicatedSlotType::StoneArrow),
+		DedicatedInventorySlot(DedicatedSlotType::MetalArrow),
 		DedicatedInventorySlot(DedicatedSlotType::Axe),
 		DedicatedInventorySlot(DedicatedSlotType::Pickaxe),
 		DedicatedInventorySlot(DedicatedSlotType::WaterContainer)

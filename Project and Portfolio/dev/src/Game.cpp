@@ -55,6 +55,8 @@ void Game::StartGame() {
 
 	std::cout << "===============================================\n\nYou find yourself stranded on an island, the last thing you remember is being on a cruise vacationing from work.\n\nYou must have fallen off while nobody was around to alert anybody and now you are here.\n\nYou quickly gather materials to start a small survival camp, a pile of leaves to sleep on, a quick shelter to prevent\nrain or wind from being too much of a hassle, a small storage space,\nand you find a suspiciously table-like stump that could be used as a work station.\n\n";
 
+	CaptureDailyCheckpoint();
+
 	while (shouldKeepRunning) {
 
 		int menuChoice = Menu::DisplayMenu(MenuType::Camp, gameClock);
@@ -108,6 +110,22 @@ void Game::StartGame() {
 
 		}
 
+		if (Player1.GetHealth() <= 0) {
+
+			std::cout << "You have died\n";
+			if (!RestoreDailyCheckpoint()) {
+
+				std::cout << "No available checkpoint.\n";
+				shouldKeepRunning = false;
+
+			} else {
+				
+				std::cout << "You will now restart at the beginning of the current day.\n";
+
+			}
+
+		}
+
 	}
 
 }
@@ -146,8 +164,17 @@ void Game::ViewStatus() {
 
 void Game::Sleep() {
 
-	std::cout << "\n=== Sleep ===\n\nYou sleep for 8 hours.\nYour Hunger and Hydration have decreased by 10.\n\n";
+	std::cout << "\n=== Sleep ===\n\n";
 	ProcessTime(32, ActivityLevel::Normal);
+
+	if (Player1.GetHealth() <= 0) {
+
+		return;
+
+	}
+
+	std::cout << "You sleep for 8 hours.\n";
+
 	Player1.RestoreStamina(100.0);
 
 }
@@ -180,6 +207,16 @@ void Game::ShowInventory() {
 			break;
 
 		case 4:
+
+			UseBandage(ItemID::BasicBandage);
+			break;
+
+		case 5:
+
+			UseBandage(ItemID::ImprovedBandage);
+			break;
+
+		case 6:
 
 			viewing = false;
 			break;
@@ -260,7 +297,7 @@ void Game::Explore() {
 
 	bool exploring = true;
 
-	while (exploring) {
+	while (exploring && Player1.GetHealth() > 0) {
 
 		std::cout << '\n';
 
@@ -302,6 +339,12 @@ void Game::Explore() {
 					if (yesNoChoice == 1) {
 
 						TravelToLocation(discoveredLocation);
+
+						if (Player1.GetHealth() <= 0) {
+
+							return;
+
+						}
 
 						std::cout << "Would you like to replace your currently known " << GetLocationName(locationIndex) << " with this newly discovered " << GetLocationName(locationIndex) << "?\n\n";
 
@@ -416,7 +459,7 @@ void Game::VisitLocation(Location& location) {
 
 	bool visiting = true;
 
-	while (visiting) {
+	while (visiting && Player1.GetHealth() > 0) {
 
 		DisplayLocationInfo(location);
 
@@ -659,7 +702,31 @@ void Game::ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel) 
 
 		}
 
+		if (Player1.GetHunger() == 0) {
+
+			Player1.DecreaseHealth(1.0f);
+
+		}
+
+		if (Player1.GetHydration() == 0) {
+
+			Player1.DecreaseHealth(1.0f);
+
+		}
+
+		if (Player1.GetHealth() <= 0) {
+
+			return;
+
+		}
+
 		campfire.BurnForMinutes(15);
+
+		if (dayBeforeAdvance < gameClock.GetCurrentDay() && Player1.GetHealth() > 0) {
+
+			CaptureDailyCheckpoint();
+
+		}
 
 	}
 
@@ -676,6 +743,12 @@ void Game::TravelToLocation(Location& location) {
 	std::cout << "You travel to a " << GetLocationName(GetLocationIndex(location.GetLocType()));
 
 	ProcessTime((location.GetTravelTime() * 2), ActivityLevel::Strenuous);
+
+	if (Player1.GetHealth() <= 0) {
+
+		return;
+
+	}
 
 	location.MarkVisited();
 
@@ -701,6 +774,12 @@ void Game::TravelToLocation(Location& location) {
 	std::cout << GetLocationName(GetLocationIndex(location.GetLocType())) << ".\n";
 
 	VisitLocation(location);
+
+	if (Player1.GetHealth() <= 0) {
+
+		return;
+
+	}
 
 	ProcessTime((location.GetTravelTime() * 2), ActivityLevel::Strenuous);
 
@@ -821,7 +900,7 @@ void Game::VisitBoarField(Location& location) {
 
 	bool visiting = true;
 
-	while (visiting) {
+	while (visiting && Player1.GetHealth() > 0) {
 
 		std::cout << "\nLiving Boars: " << location.GetRemainingBoars() << "\nUnprocessed Carcasses: " << location.GetUnprocessedBoars() << "\n\n";
 
@@ -974,7 +1053,7 @@ void Game::VisitWaterSpring(Location& location) {
 
 	bool visiting = true;
 
-	while (visiting) {
+	while (visiting && Player1.GetHealth() > 0) {
 
 		std::cout << "Current Water: " << Player1.GetInventory().GetStoredWater() << '/' << Player1.GetInventory().GetWaterCapacity() << '\n';
 
@@ -1042,7 +1121,7 @@ void Game::OpenCampfireMenu() {
 
 	bool atCampfire = true;
 
-	while (atCampfire) {
+	while (atCampfire && Player1.GetHealth() > 0) {
 
 		int menuChoice = Menu::DisplayCampfireMenu(campfire, gameClock);
 
@@ -1235,6 +1314,13 @@ void Game::Rest() {
 	}
 
 	ProcessTime(2, ActivityLevel::Normal);
+
+	if (Player1.GetHealth() <= 0) {
+
+		return;
+
+	}
+
 	Player1.RestoreStamina(50);
 
 	std::cout << "You have rested for 30 minutes and restored up to 50 stamina.\nCurrent stamina: " << Player1.GetStamina() << '\n';
@@ -1508,7 +1594,7 @@ void Game::VisitSpiderNest(Location& location) {
 
 	bool visiting = true;
 
-	while (visiting) {
+	while (visiting && Player1.GetHealth() > 0) {
 
 		std::cout << "Remaining spiders: " << location.GetRemainingSpiders() << '\n';
 
@@ -1569,6 +1655,151 @@ void Game::FightSpiderAtNest(Location& location) {
 
 	}
 
+	Inventory capacityCheck = Player1.GetInventory();
+	int silkOverflow = capacityCheck.AddItem(ItemID::Silk, 4);
+	if (silkOverflow > 0) {
+
+		std::cout << "You do not have enough inventory space to collect silk.\n";
+		return;
+
+	}
+
+	int spiderHealth = 6;
+
+	while (spiderHealth > 0 && Player1.GetHealth() > 0) {
+
+		int combatChoice = Menu::DisplayMenu(MenuType::SpiderCombat, gameClock);
+
+		switch (combatChoice) {
+
+		case 1:
+
+			if (Player1.GetInventory().GetItemCount(ItemID::Spear) <= 0) {
+
+				std::cout << "You do not have a spear.\n";
+				break;
+
+			}
+
+			spiderHealth -= 3;
+
+			if (spiderHealth < 0) {
+
+				spiderHealth = 0;
+
+			}
+
+			std::cout << "You attack the spider with your spear dealing 3 damage.\n";
+
+			if (spiderHealth > 0) {
+
+				int randomAttackCheck = rand() % 100;
+
+				if (randomAttackCheck < 75) {
+
+					Player1.DecreaseHealth(5.0f);
+					std::cout << "The spider attacks you dealing 5 damage.\nYour current health is " << Player1.GetHealth() << '\n';
+
+				}
+
+			}
+			break;
+
+		case 2: {
+
+			if (Player1.GetInventory().GetItemCount(ItemID::Bow) <= 0) {
+
+				std::cout << "You do not have a bow.\n";
+				break;
+
+			}
+
+			ItemID arrowType = ItemID::Empty;
+			int arrowDamage = 0;
+
+			int arrowChoice = Menu::DisplayArrowSelection(Player1.GetInventory());
+
+			if (arrowChoice == 4) {
+
+				break;
+				
+			}
+
+			switch (arrowChoice) {
+
+			case 1: 
+				
+				arrowType = ItemID::FlintArrow;
+				arrowDamage = 2;
+				break;
+
+			case 2:
+
+				arrowType = ItemID::StoneArrow;
+				arrowDamage = 3;
+				break;
+
+			case 3:
+
+				arrowType = ItemID::MetalArrow;
+				arrowDamage = 6;
+				break;
+
+			}
+
+			if (Player1.GetInventory().GetItemCount(arrowType) <= 0) {
+
+				std::cout << "You do not have any arrows of this kind.\n";
+				break;
+
+			}
+
+			int unremovedAmount = Player1.GetInventory().RemoveItem(arrowType, 1);
+
+			if (unremovedAmount > 0) {
+
+				std::cout << "Failed to use arrow.\n";
+				break;
+
+			}
+
+			int randomShotChance = rand() % 100;
+
+			if (randomShotChance < 25) {
+
+				std::cout << "You missed the shot.\n";
+				break;
+
+			}
+
+			spiderHealth -= arrowDamage;
+			if (spiderHealth < 0) {
+
+				spiderHealth = 0;
+
+			}
+
+			std::cout << "You shot the spider with an arrow and dealt " << arrowDamage << " damage.\nSpider health: " << spiderHealth << '\n';
+
+			break;
+
+		}
+
+		case 3:
+
+			std::cout << "You retreat from the fight.\n";
+			return;
+
+		}
+
+	}
+
+	if (Player1.GetHealth() <= 0) {
+
+		return;
+
+	}
+
 	Inventory tempPlayerInventory = Player1.GetInventory();
 
 	int overflow = tempPlayerInventory.AddItem(ItemID::Silk, 4);
@@ -1592,5 +1823,91 @@ void Game::FightSpiderAtNest(Location& location) {
 	Player1.GetInventory() = tempPlayerInventory;
 
 	ProcessTime(1, ActivityLevel::Strenuous);
+
+}
+
+void Game::UseBandage(ItemID item) {
+
+	if (Player1.GetHealth() >= 100) {
+
+		std::cout << "Your Health is full.\n";
+		return;
+
+	}
+
+	float restorationAmount = 0;
+
+	if (item != ItemID::BasicBandage && item != ItemID::ImprovedBandage) {
+
+		std::cout << "Invalid healing item.\n";
+		return;
+
+	} else if (item == ItemID::BasicBandage) {
+
+		restorationAmount = 5.0f;
+
+	} else if (item == ItemID::ImprovedBandage) {
+	
+		restorationAmount = 10.0f;
+	
+	}
+
+	int itemAmount = Player1.GetInventory().GetItemCount(item);
+
+	if (itemAmount <= 0) {
+
+		Item tempItem = item;
+		std::cout << "You do not currently have any " << tempItem.GetName() << ".\n";
+		return;
+
+	}
+
+	int remaining = Player1.GetInventory().RemoveItem(item, 1);
+
+	if (remaining > 0) {
+
+		std::cout << "Failed to use bandage.\n";
+		return;
+
+	}
+
+	float healthBeforeHealing = Player1.GetHealth();
+
+	Player1.RestoreHealth(restorationAmount);
+
+	float amountRestored = Player1.GetHealth() - healthBeforeHealing;
+
+	Item consumedItem = item;
+
+	std::cout << "You have used a " << consumedItem.GetName() << " and restored " << amountRestored << " health.\nYour current health is: " << Player1.GetHealth() << ".\n";
+
+}
+
+void Game::CaptureDailyCheckpoint() {
+
+	DailyCheckpoint checkpoint;
+	checkpoint.playerCheckpoint = Player1;
+	checkpoint.gameClockCheckpoint = gameClock;
+	checkpoint.knownLocationsCheckpoint = knownLocations;
+	checkpoint.campfireCheckpoint = campfire;
+	checkpoint.campStorageCheckpoint = campStorage;
+	dailyCheckpoint = checkpoint;
+
+}
+
+bool Game::RestoreDailyCheckpoint() {
+
+	if (!dailyCheckpoint.has_value()) {
+
+		return false;
+
+	}
+
+	Player1 = dailyCheckpoint->playerCheckpoint;
+	gameClock = dailyCheckpoint->gameClockCheckpoint;
+	knownLocations = dailyCheckpoint->knownLocationsCheckpoint;
+	campfire = dailyCheckpoint->campfireCheckpoint;
+	campStorage = dailyCheckpoint->campStorageCheckpoint;
+	return true; 
 
 }

@@ -7,17 +7,14 @@ Crafting::Crafting() {
 	AddRecipe("Sap Reinforced Vine", ItemID::SapReinforcedVine, 1, { { ItemID::TreeSap, 2 }, { ItemID::Vine, 2 } });
 
 	AddRecipe("Flint Axe", ItemID::FlintAxe, 1, { { ItemID::CrudeWood, 15 }, { ItemID::Flint, 15 } });
-	AddRecipe("Flint Pickaxe", ItemID::FlintPickaxe, 1, { { ItemID::CrudeWood, 15 }, { ItemID::Flint, 15 } });
-	
 	AddRecipe("Stone Axe", ItemID::StoneAxe, 1, { { ItemID::CrudeWood, 25 }, { ItemID::Stone, 25} });
 	AddRecipe("Stone Axe (UPGRADE)", ItemID::StoneAxe, 1, { { ItemID::FlintAxe, 1 }, { ItemID::CrudeWood, 10}, { ItemID::Stone, 10 } });
-	
-	AddRecipe("Stone Pickaxe", ItemID::StonePickaxe, 1, { { ItemID::CrudeWood, 25}, { ItemID::Stone, 25} });
-	AddRecipe("Stone Pickaxe (UPGRADE)", ItemID::StonePickaxe, 1, { { ItemID::FlintPickaxe, 1 }, { ItemID::CrudeWood, 10 }, { ItemID::Stone, 10 } });
-	
 	AddRecipe("Metal Axe", ItemID::MetalAxe, 1, { { ItemID::Hardwood, 30 }, { ItemID::Metal, 40 } });
 	AddRecipe("Metal Axe (UPGRADE)", ItemID::MetalAxe, 1, { { ItemID::StoneAxe, 1 }, { ItemID::Hardwood, 15 }, { ItemID::Metal, 20 } });
-	
+
+	AddRecipe("Flint Pickaxe", ItemID::FlintPickaxe, 1, { { ItemID::CrudeWood, 15 }, { ItemID::Flint, 15 } });
+	AddRecipe("Stone Pickaxe", ItemID::StonePickaxe, 1, { { ItemID::CrudeWood, 25}, { ItemID::Stone, 25} });
+	AddRecipe("Stone Pickaxe (UPGRADE)", ItemID::StonePickaxe, 1, { { ItemID::FlintPickaxe, 1 }, { ItemID::CrudeWood, 10 }, { ItemID::Stone, 10 } });
 	AddRecipe("Metal Pickaxe", ItemID::MetalPickaxe, 1, { { ItemID::Hardwood, 30 }, { ItemID::Metal, 40 } });
 	AddRecipe("Metal Pickaxe (UPGRADE)", ItemID::MetalPickaxe, 1, { { ItemID::StonePickaxe, 1 }, { ItemID::Hardwood, 15 }, { ItemID::Metal, 20 } });
 	
@@ -31,6 +28,9 @@ Crafting::Crafting() {
 	AddRecipe("Small Waterskin", ItemID::SmallWaterskin, 1, { { ItemID::Leather, 5 }, { ItemID::Vine, 3 } });
 	AddRecipe("Medium Waterskin", ItemID::MediumWaterskin, 1, { { ItemID::Leather, 15 }, { ItemID::Vine, 8 } });
 	AddRecipe("Large Waterskin", ItemID::LargeWaterskin, 1, { { ItemID::SapReinforcedLeather, 10 }, { ItemID::SapReinforcedVine, 5 } });
+
+	AddRecipe("Basic Bandage", ItemID::BasicBandage, 3, { { ItemID::Vine, 10}, { ItemID::MedicinalHerbs, 5 } });
+	AddRecipe("Improved Bandage", ItemID::ImprovedBandage, 5, { { ItemID::Leather, 10}, { ItemID::MedicinalHerbs, 10 }, { ItemID::SapReinforcedVine, 5 } });
 
 }
 

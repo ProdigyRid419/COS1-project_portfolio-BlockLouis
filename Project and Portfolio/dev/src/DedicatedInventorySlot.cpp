@@ -50,9 +50,29 @@ bool DedicatedInventorySlot::CanAcceptItem(const Item& newItem) const {
 
 		return InventorySlot::CanAcceptItem(newItem);
 
-	case DedicatedSlotType::Arrow:
+	case DedicatedSlotType::FlintArrow:
 
-		if (newItem.GetID() != ItemID::FlintArrow && newItem.GetID() != ItemID::StoneArrow && newItem.GetID() != ItemID::MetalArrow) {
+		if (newItem.GetID() != ItemID::FlintArrow) {
+
+			return false;
+
+		}
+
+		return InventorySlot::CanAcceptItem(newItem);
+
+	case DedicatedSlotType::StoneArrow:
+
+		if (newItem.GetID() != ItemID::StoneArrow) {
+
+			return false;
+
+		}
+
+		return InventorySlot::CanAcceptItem(newItem);
+
+	case DedicatedSlotType::MetalArrow:
+
+		if (newItem.GetID() != ItemID::MetalArrow) {
 
 			return false;
 

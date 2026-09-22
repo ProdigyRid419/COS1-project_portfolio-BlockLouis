@@ -75,6 +75,12 @@ void Player::RestoreHunger(float amount) {
 
 void Player::DecreaseHunger(float amount) {
 
+	if (amount <= 0) {
+
+		return;
+
+	}
+
 	playerHunger -= amount;
 	if (playerHunger <= 0) {
 
@@ -105,6 +111,12 @@ void Player::RestoreHydration(float amount) {
 }
 
 void Player::DecreaseHydration(float amount) {
+
+	if (amount <= 0) {
+
+		return;
+
+	}
 
 	playerHydration -= amount;
 	if (playerHydration <= 0) {
@@ -137,6 +149,12 @@ void Player::RestoreStamina(float amount) {
 
 void Player::DecreaseStamina(float amount) {
 
+	if (amount <= 0) {
+
+		return;
+
+	}
+
 	playerStamina -= amount;
 	if (playerStamina <= 0) {
 
@@ -167,12 +185,53 @@ void Player::RestoreSanity(float amount) {
 
 void Player::DecreaseSanity(float amount) {
 
+	if (amount <= 0) {
+
+		return;
+
+	}
+
 	playerSanity -= amount;
 	if (playerSanity <= 0) {
 
 		playerSanity = 0;
 		std::cout << "Your Sanity has reached Critical State!!!\n";
 
+	}
+
+}
+
+void Player::RestoreHealth(float amount) {
+
+	if (amount <= 0) {
+
+		return;
+
+	}
+
+	playerHealth += amount;
+	if (playerHealth >= 100.0f) {
+
+		playerHealth = 100.0f;
+		std::cout << "Your Health has reached maximum amount.\n";
+
+	}
+
+}
+
+void Player::DecreaseHealth(float amount) {
+
+	if (amount <= 0) {
+
+		return;
+
+	}
+
+	playerHealth -= amount;
+	if (playerHealth <= 0) {
+
+		playerHealth = 0;
+		
 	}
 
 }

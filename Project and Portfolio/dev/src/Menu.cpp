@@ -102,6 +102,14 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 		maximum = 5;
 		break;
 
+	case MenuType::SpiderCombat:
+
+		gameClock.DisplayTime();
+
+		std::cout << "\n\n=== Combat ===\n\n1. Attack with spear\n2. Attack with bow\n3. Retreat\nPlayer choice: ";
+		maximum = 3;
+		break;
+
 	}
 
 	return GetValidatedChoice(minimum, maximum);
@@ -290,9 +298,9 @@ int Menu::DisplayCookingMenu(int playerMeat) {
 
 int Menu::DisplayConsumableMenu(const Inventory& inventory) {
 
-	std::cout << "\n\n=== Consumables ===\n\n1. Raw meat\nAmount: " << inventory.GetItemCount(ItemID::RawMeat) << "\n2. Cooked meat\nAmount: " << inventory.GetItemCount(ItemID::CookedMeat) << "\n3. Water\nAmount: " << inventory.GetStoredWater() << "\n4. Back\nPlayer choice: ";
+	std::cout << "\n\n=== Consumables ===\n\n1. Raw meat\nAmount: " << inventory.GetItemCount(ItemID::RawMeat) << "\n2. Cooked meat\nAmount: " << inventory.GetItemCount(ItemID::CookedMeat) << "\n3. Water\nAmount: " << inventory.GetStoredWater() << "\n4. Basic Bandage\tAmount: " << inventory.GetItemCount(ItemID::BasicBandage) << "\n5. Improved Bandage\tAmount: " << inventory.GetItemCount(ItemID::ImprovedBandage) << "\n6. Back\nPlayer choice: ";
 
-	int validatedResult = GetValidatedChoice(1, 4);
+	int validatedResult = GetValidatedChoice(1, 6);
 	return validatedResult;
 
 }
@@ -362,6 +370,14 @@ int Menu::DisplayStorageSlotSelection(const CampStorage& campStorage) {
 
 	int validatedChoice = GetValidatedChoice(1, menuNumber);
 
+	return validatedChoice;
+
+}
+
+int Menu::DisplayArrowSelection(const Inventory& inventory) {
+
+	std::cout << "\n\n=== Arrows ===\n\n1. Flint arrows: " << inventory.GetItemCount(ItemID::FlintArrow) << "\n2. Stone arrows: " << inventory.GetItemCount(ItemID::StoneArrow) << "\n3. Metal arrows: " << inventory.GetItemCount(ItemID::MetalArrow) << "\n4. Back\nPlayer choice: ";
+	int validatedChoice = GetValidatedChoice(1, 4);
 	return validatedChoice;
 
 }

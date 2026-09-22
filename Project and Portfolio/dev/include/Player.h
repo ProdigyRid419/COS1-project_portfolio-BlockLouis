@@ -29,6 +29,9 @@ public:
 	void RestoreSanity(float amount);
 	void DecreaseSanity(float amount);
 
+	void RestoreHealth(float amount);
+	void DecreaseHealth(float amount);
+
 private:
 
 	std::string playerName;

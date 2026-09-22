@@ -29,9 +29,19 @@ void Inventory::DisplayInventory() const {
 			std::cout << "Bow: ";
 			break;
 
-		case DedicatedSlotType::Arrow:
+		case DedicatedSlotType::FlintArrow:
 
-			std::cout << "Arrows: ";
+			std::cout << "Flint arrows: ";
+			break;
+
+		case DedicatedSlotType::StoneArrow:
+
+			std::cout << "Stone arrows: ";
+			break;
+		
+		case DedicatedSlotType::MetalArrow:
+
+			std::cout << "Metal arrows: ";
 			break;
 
 		case DedicatedSlotType::Axe:

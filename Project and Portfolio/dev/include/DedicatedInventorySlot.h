@@ -4,7 +4,8 @@
 enum class DedicatedSlotType {
 
 	VineGear, LeatherGear, Spear, Bow,
-	Arrow, Axe, Pickaxe, WaterContainer
+	FlintArrow, StoneArrow, MetalArrow,
+	Axe, Pickaxe, WaterContainer
 
 };
 
