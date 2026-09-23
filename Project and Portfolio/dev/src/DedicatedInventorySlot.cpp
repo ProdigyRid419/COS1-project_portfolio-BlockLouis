@@ -122,3 +122,24 @@ DedicatedSlotType DedicatedInventorySlot::GetSlotType() const {
 
 }
 
+bool DedicatedInventorySlot::Load(std::istream& input) {
+
+	InventorySlot loadedSlot;
+	if (!loadedSlot.Load(input)) {
+
+		return false;
+
+	}
+
+	DedicatedInventorySlot validationSlot(slotType);
+
+	if (!loadedSlot.IsEmpty() && !validationSlot.CanAcceptItem(loadedSlot.GetItem())) {
+
+		return false;
+
+	}
+
+	InventorySlot::operator=(loadedSlot);
+	return true;
+
+}

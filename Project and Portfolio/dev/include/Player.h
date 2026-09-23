@@ -32,6 +32,9 @@ public:
 	void RestoreHealth(float amount);
 	void DecreaseHealth(float amount);
 
+	bool Save(std::ostream& output) const;
+	bool Load(std::istream& input);
+
 private:
 
 	std::string playerName;

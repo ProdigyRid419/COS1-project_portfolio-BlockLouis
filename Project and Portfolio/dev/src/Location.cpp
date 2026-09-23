@@ -1,5 +1,6 @@
 #include "Location.h"
 #include <cstdlib>
+#include <iostream>
 
 Location::Location() : Location(static_cast<LocationType>(rand() % 2)) {
 
@@ -295,6 +296,121 @@ bool Location::DefeatSpider() {
 	}
 
 	remainingSpiders -= 1;
+	return true;
+
+}
+
+bool Location::Save(std::ostream& output) const {
+
+	output << static_cast<int>(locType) << ' ' << static_cast<int>(locSize) << ' ' << travelTime << ' ' << hasBeenVisited << '\n';
+	output << locationResources.size() << '\n';
+
+	for (const LocationResource& resource : locationResources) {
+
+		output << static_cast<int>(resource.resourceType) << ' ' << resource.dailyLimit << ' ' << resource.resourceAmount << '\n';
+
+	}
+
+	output << boarDailyLimit << ' ' << remainingBoars << ' ' << unprocessedBoars << ' ' << spiderDailyLimit << ' ' << remainingSpiders << '\n';
+
+	return static_cast<bool>(output);
+
+}
+
+bool Location::Load(std::istream& input) {
+
+	int loadedType = 0;
+	int loadedSize = 0;
+	int loadedTravelTime = 0;
+	bool loadedVisited = false;
+
+	input >> loadedType >> loadedSize >> loadedTravelTime >> loadedVisited;
+	if (!static_cast<bool>(input)) {
+
+		return false;
+
+	}
+
+	if ((loadedType < 0 || loadedType > static_cast<int>(LocationType::SpiderNest) || (loadedSize < 0 || loadedSize > static_cast<int>(LocationSize::Large) || (loadedTravelTime <= 0 || loadedTravelTime > 3)))) {
+
+		return false;
+
+	}
+
+	int loadedResourceCount = 0;
+	input >> loadedResourceCount;
+	if (!static_cast<bool>(input)) {
+
+		return false;
+
+	}
+	if (loadedResourceCount < 0 || loadedResourceCount > 4) {
+
+		return false;
+
+	}
+
+	std::vector<LocationResource> loadedResources;
+
+	for (int i = 0; i < loadedResourceCount; i++) {
+
+		int loadedResourceType = 0;
+		LocationResource loadedResource;
+
+		input >> loadedResourceType >> loadedResource.dailyLimit >> loadedResource.resourceAmount;
+		if (!static_cast<bool>(input)) {
+
+			return false;
+
+		}
+
+		if (loadedResourceType <= static_cast<int>(ItemID::Empty) || loadedResourceType >= static_cast<int>(ItemID::Count)) {
+
+			return false;
+
+		}
+
+		if (loadedResource.dailyLimit < 0 || loadedResource.resourceAmount < 0 || loadedResource.resourceAmount > loadedResource.dailyLimit) {
+
+			return false;
+
+		}
+
+		loadedResource.resourceType = static_cast<ItemID>(loadedResourceType);
+		loadedResources.push_back(loadedResource);
+
+	}
+
+	int loadedBoarDailyLimit = 0;
+	int loadedRemainingBoars = 0;
+	int loadedUnprocessedBoars = 0;
+	int loadedSpiderDailyLimit = 0;
+	int loadedRemainingSpiders = 0;
+
+	input >> loadedBoarDailyLimit >> loadedRemainingBoars >> loadedUnprocessedBoars >> loadedSpiderDailyLimit >> loadedRemainingSpiders;
+	if (!input) {
+
+		return false;
+
+	}
+
+	if (loadedBoarDailyLimit < 0 || loadedRemainingBoars < 0 || loadedUnprocessedBoars < 0 || loadedSpiderDailyLimit < 0 || loadedRemainingSpiders < 0 || loadedRemainingBoars > loadedBoarDailyLimit || loadedRemainingSpiders > loadedSpiderDailyLimit || loadedUnprocessedBoars > (loadedBoarDailyLimit - loadedRemainingBoars)) {
+
+		return false;
+
+	}
+
+	locType = static_cast<LocationType>(loadedType);
+	locSize = static_cast<LocationSize>(loadedSize);
+	travelTime = loadedTravelTime;
+	hasBeenVisited = loadedVisited;
+	locationResources = loadedResources;
+	boarDailyLimit = loadedBoarDailyLimit;
+	remainingBoars = loadedRemainingBoars;
+	unprocessedBoars = loadedUnprocessedBoars;
+	spiderDailyLimit = loadedSpiderDailyLimit;
+	remainingSpiders = loadedRemainingSpiders;
+	
 	return true;
 
 }

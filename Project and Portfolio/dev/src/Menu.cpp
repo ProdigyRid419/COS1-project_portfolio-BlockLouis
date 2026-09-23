@@ -17,8 +17,8 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
 	case MenuType::Main:
 
-		std::cout << "=== Welcome to The Long Lost Isle ===\n\n1. Start Game\n2. Exit\nPlayer choice: ";
-		maximum = 2;
+		std::cout << "=== Welcome to The Long Lost Isle ===\n\n1. Start Game\n2. Continue Saved Game\n3. Exit\nPlayer choice: ";
+		maximum = 3;
 
 		break;
 
@@ -26,8 +26,8 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
 		gameClock.DisplayTime();
 
-		std::cout << "=== Camp ===\n\n1. View Status\n2. Sleep\n3. Rest\n4. Show Inventory\n5. Crafting\n6. Campfire\n7. Camp Storage\n8. Explore\n9. Exit Game\nPlayer Choice: ";
-		maximum = 9;
+		std::cout << "=== Camp ===\n\n1. View Status\n2. Sleep\n3. Rest\n4. Show Inventory\n5. Crafting\n6. Campfire\n7. Camp Storage\n8. Explore\n9. Save Game\n10. Exit Game\nPlayer Choice: ";
+		maximum = 10;
 
 		break;
 

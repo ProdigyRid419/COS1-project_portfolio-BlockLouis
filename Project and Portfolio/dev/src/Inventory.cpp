@@ -245,7 +245,7 @@ int Inventory::GetItemCount(ItemID itemID) const {
 
 	}
 
-	return total;
+return total;
 
 }
 
@@ -261,11 +261,13 @@ int Inventory::GetWaterCapacity() const {
 
 		return 1;
 
-	} else if (GetItemCount(ItemID::MediumWaterskin) > 0) {
+	}
+	else if (GetItemCount(ItemID::MediumWaterskin) > 0) {
 
 		return 3;
 
-	} else if (GetItemCount(ItemID::LargeWaterskin) > 0) {
+	}
+	else if (GetItemCount(ItemID::LargeWaterskin) > 0) {
 
 		return 8;
 
@@ -308,5 +310,69 @@ bool Inventory::ConsumeWater() {
 const std::array<InventorySlot, 10>& Inventory::GetInventorySlots() const {
 
 	return inventorySlots;
+
+}
+
+bool Inventory::Save(std::ostream& output) const {
+
+	for (const InventorySlot& slot : inventorySlots) {
+
+		if (!slot.Save(output)) {
+
+			return false;
+
+		}
+
+	}
+
+	for (const DedicatedInventorySlot& dedicatedSlot : dedicatedInventorySlots) {
+
+		if (!dedicatedSlot.Save(output)) {
+
+			return false;
+
+		}
+
+	}
+
+	output << storedWater << '\n';
+	return static_cast<bool>(output);
+
+}
+
+bool Inventory::Load(std::istream& input) {
+
+	Inventory loadedInventory;
+
+	for (InventorySlot& slot : loadedInventory.inventorySlots) {
+
+		if(!slot.Load(input)){
+
+			return false;
+
+		}
+
+	}
+
+	for (DedicatedInventorySlot& dedicatedSlot : loadedInventory.dedicatedInventorySlots) {
+
+		if (!dedicatedSlot.Load(input)) {
+
+			return false;
+
+		}
+
+	}
+
+	input >> loadedInventory.storedWater;
+	if (!static_cast<bool>(input)) {
+
+		return false;
+
+	}
+
+	inventorySlots = loadedInventory.inventorySlots;
+	dedicatedInventorySlots = loadedInventory.dedicatedInventorySlots;
+	storedWater = loadedInventory.storedWater;
 
 }

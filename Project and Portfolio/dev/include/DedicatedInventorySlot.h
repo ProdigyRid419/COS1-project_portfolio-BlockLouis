@@ -1,5 +1,6 @@
 #pragma once
 #include "InventorySlot.h"
+#include <iosfwd>
 
 enum class DedicatedSlotType {
 
@@ -16,6 +17,7 @@ public:
 	DedicatedInventorySlot(DedicatedSlotType newSlotType);
 	bool CanAcceptItem(const Item& newItem) const override;
 	DedicatedSlotType GetSlotType() const;
+	bool Load(std::istream& input);
 
 private:
 

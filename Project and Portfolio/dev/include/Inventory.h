@@ -2,6 +2,7 @@
 #include "InventorySlot.h"
 #include "DedicatedInventorySlot.h"
 #include <array>
+#include <iosfwd>
 
 class Inventory {
 
@@ -19,6 +20,9 @@ public:
 	int FillWaterContainer();
 
 	bool ConsumeWater();
+
+	bool Save(std::ostream& output) const;
+	bool Load(std::istream& input);
 
 private:
 

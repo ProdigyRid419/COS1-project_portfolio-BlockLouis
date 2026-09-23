@@ -26,7 +26,8 @@ private:
 	void OpenCampfireMenu();
 	void Rest();
 
-	
+	void RunCampLoop();
+
 	Player Player1;
 	void ViewStatus();
 	bool CanPerformStrenuousAction() const;
@@ -75,6 +76,9 @@ private:
 	std::optional<DailyCheckpoint> dailyCheckpoint;
 	void CaptureDailyCheckpoint();
 	bool RestoreDailyCheckpoint();
+
+	void SaveCurrentGame();
+	void ContinueSavedGame();
 
 };
 

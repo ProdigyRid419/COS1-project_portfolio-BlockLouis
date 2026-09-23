@@ -1,6 +1,7 @@
 #pragma once
 #include "Item.h"
 #include <vector>
+#include <iosfwd>
 
 enum class LocationType {
 
@@ -52,6 +53,9 @@ public:
 
 	void MarkVisited();
 	bool HasBeenVisited() const;
+
+	bool Save(std::ostream& output) const;
+	bool Load(std::istream& input);
 
 private:
 

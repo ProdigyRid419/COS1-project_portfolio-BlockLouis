@@ -124,3 +124,38 @@ const std::array<InventorySlot, 20>& CampStorage::GetCampStorageSlots() const {
 	return campStorageSlots;
 
 }
+
+bool CampStorage::Save(std::ostream& output) const {
+
+	for (const InventorySlot& slot : campStorageSlots) {
+
+		if (!slot.Save(output)) {
+
+			return false;
+
+		}
+
+	}
+
+	return static_cast<bool>(output);
+
+}
+
+bool CampStorage::Load(std::istream& input) {
+
+	CampStorage loadedStorage;
+
+	for (InventorySlot& loadedSlot : loadedStorage.campStorageSlots) {
+
+		if (!loadedSlot.Load(input)) {
+
+			return false;
+
+		}
+
+	}
+
+	campStorageSlots = loadedStorage.campStorageSlots;
+	return true;
+
+}

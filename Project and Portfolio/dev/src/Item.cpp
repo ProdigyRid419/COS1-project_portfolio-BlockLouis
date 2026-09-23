@@ -1,4 +1,5 @@
 #include "Item.h"
+#include <iostream>
 
 
 Item::Item() {
@@ -386,4 +387,30 @@ int Item::GetMaxStack() const {
 
 }
 
+bool Item::Save(std::ostream& output) const {
 
+	output << static_cast<int>(itemID) << '\n';
+	return static_cast<bool>(output);
+
+}
+
+bool Item::Load(std::istream& input) {
+
+	int loadedItemID;
+	input >> loadedItemID;
+	if (!static_cast<bool>(input)) {
+
+		return false;
+
+	}
+
+	if (loadedItemID < 0 || loadedItemID >= static_cast<int>(ItemID::Count)) {
+
+		return false;
+
+	}
+
+	itemID = static_cast<ItemID>(loadedItemID);
+	return true;
+
+}

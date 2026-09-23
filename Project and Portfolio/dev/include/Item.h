@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <iosfwd>
 
 enum class ItemID {
 
@@ -14,7 +15,7 @@ enum class ItemID {
 	MetalPickaxe, Spear, Bow,
 	FlintArrow,	StoneArrow, MetalArrow,
 	VineGear, LeatherGear, BasicBandage,
-	ImprovedBandage
+	ImprovedBandage, Count
 
 };
 
@@ -59,6 +60,9 @@ public:
 
 	bool IsStackable() const;
 	int GetMaxStack() const;
+
+	bool Save(std::ostream& output) const;
+	bool Load(std::istream& input);
 
 private:
 

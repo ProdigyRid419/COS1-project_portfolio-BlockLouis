@@ -10,6 +10,7 @@
 #include "GameClock.h"
 #include <iomanip>
 #include <limits>
+#include "SaveSystem.h"
 
 void Game::Run() {
 
@@ -24,6 +25,11 @@ void Game::Run() {
 
 	case 2:
 
+		ContinueSavedGame();
+		break;
+
+	case 3:
+
 		break;
 
 	}
@@ -33,8 +39,7 @@ void Game::Run() {
 void Game::StartGame() {
 
 	std::string name;
-	bool shouldKeepRunning = true;
-
+	
 	std::cout << "\n=======================================\n";
 
 	std::cout << "\nPlease input your name: ";
@@ -57,76 +62,7 @@ void Game::StartGame() {
 
 	CaptureDailyCheckpoint();
 
-	while (shouldKeepRunning) {
-
-		int menuChoice = Menu::DisplayMenu(MenuType::Camp, gameClock);
-
-		switch (menuChoice) {
-
-		case 1:
-
-			ViewStatus();
-			break;
-
-		case 2:
-
-			Sleep();
-			break;
-
-		case 3:
-
-			Rest();
-			break;
-
-		case 4:
-
-			ShowInventory();
-			break;
-
-		case 5:
-
-			OpenCraftingMenu();
-			break;
-
-		case 6:
-
-			OpenCampfireMenu();
-			break;
-
-		case 7:
-
-			OpenCampStorageMenu();
-			break;
-
-		case 8:
-
-			Explore();
-			break;
-
-		case 9:
-
-			shouldKeepRunning = false;
-			break;
-
-		}
-
-		if (Player1.GetHealth() <= 0) {
-
-			std::cout << "You have died\n";
-			if (!RestoreDailyCheckpoint()) {
-
-				std::cout << "No available checkpoint.\n";
-				shouldKeepRunning = false;
-
-			} else {
-				
-				std::cout << "You will now restart at the beginning of the current day.\n";
-
-			}
-
-		}
-
-	}
+	RunCampLoop();
 
 }
 
@@ -1909,5 +1845,139 @@ bool Game::RestoreDailyCheckpoint() {
 	campfire = dailyCheckpoint->campfireCheckpoint;
 	campStorage = dailyCheckpoint->campStorageCheckpoint;
 	return true; 
+
+}
+
+void Game::RunCampLoop() {
+
+	bool shouldKeepRunning = true;
+
+	while (shouldKeepRunning) {
+
+		int menuChoice = Menu::DisplayMenu(MenuType::Camp, gameClock);
+
+		switch (menuChoice) {
+
+		case 1:
+
+			ViewStatus();
+			break;
+
+		case 2:
+
+			Sleep();
+			break;
+
+		case 3:
+
+			Rest();
+			break;
+
+		case 4:
+
+			ShowInventory();
+			break;
+
+		case 5:
+
+			OpenCraftingMenu();
+			break;
+
+		case 6:
+
+			OpenCampfireMenu();
+			break;
+
+		case 7:
+
+			OpenCampStorageMenu();
+			break;
+
+		case 8:
+
+			Explore();
+			break;
+
+		case 9:
+
+			SaveCurrentGame();
+			break;
+
+		case 10:
+
+			shouldKeepRunning = false;
+			break;
+
+		}
+
+		if (Player1.GetHealth() <= 0) {
+
+			std::cout << "You have died\n";
+			if (!RestoreDailyCheckpoint()) {
+
+				std::cout << "No available checkpoint.\n";
+				shouldKeepRunning = false;
+
+			}
+			else {
+
+				std::cout << "You will now restart at the beginning of the current day.\n";
+
+			}
+
+		}
+
+	}
+
+}
+
+void Game::SaveCurrentGame() {
+
+	if (!dailyCheckpoint.has_value()) {
+
+		std::cout << "Could not save game\n";
+		return;
+
+	}
+
+	DailyCheckpoint currentState;
+	currentState.playerCheckpoint = Player1;
+	currentState.gameClockCheckpoint = gameClock;
+	currentState.knownLocationsCheckpoint = knownLocations;
+	currentState.campfireCheckpoint = campfire;
+	currentState.campStorageCheckpoint = campStorage;
+	
+	if (!SaveSystem::SaveGame(currentState, *dailyCheckpoint)) {
+
+		std::cout << "Game save failed please try again.\n";
+		return;
+
+	}
+
+	std::cout << "Game has been saved.\n";
+
+}
+
+void Game::ContinueSavedGame() {
+
+	DailyCheckpoint loadedCurrentState;
+	DailyCheckpoint loadedDailyCheckpoint;
+
+	if (!SaveSystem::LoadGame(loadedCurrentState, loadedDailyCheckpoint)) {
+
+		std::cout << "Loading game failed.\n";
+		return;
+
+	}
+
+	Player1 = loadedCurrentState.playerCheckpoint;
+	gameClock = loadedCurrentState.gameClockCheckpoint;
+	knownLocations = loadedCurrentState.knownLocationsCheckpoint;
+	campfire = loadedCurrentState.campfireCheckpoint;
+	campStorage = loadedCurrentState.campStorageCheckpoint;
+	dailyCheckpoint = loadedDailyCheckpoint;
+
+	std::cout << "\n\n=== GAME LOADED SUCCESFULLY ===\n\n";
+	RunCampLoop();
 
 }

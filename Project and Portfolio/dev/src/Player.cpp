@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <iostream>
+#include <iomanip>
 
 void Player::SetName(const std::string& name) {
 
@@ -236,5 +237,75 @@ void Player::DecreaseHealth(float amount) {
 
 }
 
+bool Player::Save(std::ostream& output) const {
 
+	output << std::quoted(playerName) << '\n';
+	output << playerTemp << ' ' << playerHealth << ' ' << playerHunger << ' ' << playerHydration << ' ' << playerStamina << ' ' << playerSanity << '\n';
+	if (!playerInventory.Save(output)) {
+
+		return false;
+
+	}
+
+	return static_cast<bool>(output);
+
+}
+
+bool Player::Load(std::istream& input) {
+
+	Player loadedPlayer;
+
+	input >> std::quoted(loadedPlayer.playerName) >> loadedPlayer.playerTemp >> loadedPlayer.playerHealth >> loadedPlayer.playerHunger >> loadedPlayer.playerHydration >> loadedPlayer.playerStamina >> loadedPlayer.playerSanity;
+	if (!static_cast<bool>(input)) {
+
+		return false;
+
+	}
+
+	if (loadedPlayer.playerName.empty()) {
+
+		return false;
+
+	}
+
+	if (loadedPlayer.playerHealth < 0 || loadedPlayer.playerHealth > 100) {
+
+		return false;
+
+	}
+
+	if (loadedPlayer.playerHunger < 0 || loadedPlayer.playerHunger > 100) {
+
+		return false;
+
+	}
+
+	if (loadedPlayer.playerHydration < 0 || loadedPlayer.playerHydration > 100) {
+
+		return false;
+
+	}
+
+	if (loadedPlayer.playerStamina < 0 || loadedPlayer.playerStamina > 100) {
+
+		return false;
+
+	}
+
+	if (loadedPlayer.playerSanity < 0 || loadedPlayer.playerSanity > 100) {
+
+		return false;
+
+	}
+
+	if (!loadedPlayer.playerInventory.Load(input)) {
+
+		return false;
+
+	}
+
+	*this = loadedPlayer;
+	return true;
+
+}
 

@@ -126,3 +126,33 @@ void GameClock::DisplayTime() const {
 
 }
 
+bool GameClock::Save(std::ostream& output) const {
+
+	output << currentDay << ' ' << currentTimeMinutes << ' ' << '\n';
+	return static_cast<bool>(output);
+
+}
+
+bool GameClock::Load(std::istream& input) {
+
+	int loadedDay = 0;
+	int loadedTimeMinutes = 0;
+
+	input >> loadedDay >> loadedTimeMinutes;
+	if (!static_cast<bool>(input)) {
+
+		return false;
+
+	}
+
+	if (loadedDay < 1 || loadedTimeMinutes < 0 || loadedTimeMinutes >= 1440) {
+
+		return false;
+
+	}
+
+	currentDay = loadedDay;
+	currentTimeMinutes = loadedTimeMinutes;
+	return true;
+
+}
