@@ -376,3 +376,24 @@ bool Inventory::Load(std::istream& input) {
 	storedWater = loadedInventory.storedWater;
 
 }
+
+int Inventory::RemoveWater(int amount) {
+
+	if (amount <= 0) {
+
+		return 0;
+
+	}
+
+	int acceptedAmount = amount;
+
+	if (amount > storedWater) {
+
+		acceptedAmount = storedWater;
+	
+	}
+
+	storedWater -= acceptedAmount;
+	return acceptedAmount;
+
+}

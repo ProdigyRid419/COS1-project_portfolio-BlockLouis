@@ -9,6 +9,8 @@
 #include "Campfire.h"
 #include "CampStorage.h"
 #include "DailyCheckpoint.h"
+#include "Raft.h"
+#include "Weather.h"
 
 class Game {
 
@@ -77,8 +79,16 @@ private:
 	void CaptureDailyCheckpoint();
 	bool RestoreDailyCheckpoint();
 
+	Raft raft;
+	bool OpenRaftMenu();
+	void ContributeToRaft();
+	void TransferWaterToRaft();
+
 	void SaveCurrentGame();
 	void ContinueSavedGame();
+
+	Weather gameWeather;
+
 
 };
 

@@ -13,7 +13,7 @@ bool SaveSystem::SaveGame(const DailyCheckpoint& currentState, const DailyCheckp
 
 	}
 	
-	output << "LONG_LOST_ISLE 1" << '\n';
+	output << "LONG_LOST_ISLE 3" << '\n';
 
 	if (!SaveCheckpoint(output, currentState)) {
 
@@ -93,7 +93,7 @@ std::string fileIdentifier;
 int version = 0;
 
 input >> fileIdentifier >> version;
-if (!input || fileIdentifier != "LONG_LOST_ISLE" || version != 1) {
+if (!input || fileIdentifier != "LONG_LOST_ISLE" || version != 3) {
 
 	return false;
 
@@ -171,6 +171,16 @@ bool SaveSystem::SaveCheckpoint(std::ostream& output, const DailyCheckpoint& che
 		return false;
 
 	}
+	if (!checkpoint.raftCheckpoint.Save(output)) {
+
+		return false;
+
+	}
+	if (!checkpoint.weatherCheckpoint.Save(output)) {
+
+		return false;
+
+	}
 
 	return static_cast<bool>(output);
 
@@ -225,6 +235,16 @@ bool SaveSystem::LoadCheckpoint(std::istream& input, DailyCheckpoint& checkpoint
 	}
 
 	if (!loadedCheckpoint.campStorageCheckpoint.Load(input)) {
+
+		return false;
+
+	}
+	if (!loadedCheckpoint.raftCheckpoint.Load(input)) {
+
+		return false;
+
+	}
+	if (!loadedCheckpoint.weatherCheckpoint.Load(input)) {
 
 		return false;
 

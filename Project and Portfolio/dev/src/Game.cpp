@@ -12,6 +12,7 @@
 #include <limits>
 #include "SaveSystem.h"
 
+
 void Game::Run() {
 
 	int menuChoice = Menu::DisplayMenu(MenuType::Main, gameClock);
@@ -60,6 +61,8 @@ void Game::StartGame() {
 
 	std::cout << "===============================================\n\nYou find yourself stranded on an island, the last thing you remember is being on a cruise vacationing from work.\n\nYou must have fallen off while nobody was around to alert anybody and now you are here.\n\nYou quickly gather materials to start a small survival camp, a pile of leaves to sleep on, a quick shelter to prevent\nrain or wind from being too much of a hassle, a small storage space,\nand you find a suspiciously table-like stump that could be used as a work station.\n\n";
 
+	Player1.SetTemp(gameWeather.GetTemp());
+
 	CaptureDailyCheckpoint();
 
 	RunCampLoop();
@@ -68,13 +71,15 @@ void Game::StartGame() {
 
 void Game::ViewStatus() {
 
+	gameWeather.DisplayWeather();
+
 	std::cout << "\n=== Player Status ===\n";
 
 	int temp = Player1.GetTemp();
 
 	std::cout << "\nTemperature: " << temp;
 
-	if (temp >= 35 && temp <= 65) {
+	if (temp > 34 && temp < 75) {
 
 		std::cout << " (Comfortable)";
 
@@ -83,7 +88,7 @@ void Game::ViewStatus() {
 		std::cout << " (Cold)";
 
 	}
-	else if (temp > 65) {
+	else if (temp > 74) {
 
 		std::cout << " (Hot)";
 
@@ -604,7 +609,15 @@ void Game::ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel) 
 
 		int dayBeforeAdvance = gameClock.GetCurrentDay();
 
+		DayPeriod periodBeforeAdvance = gameClock.GetDayPeriod();
+
 		gameClock.AdvanceTime(1);
+
+		if (periodBeforeAdvance != gameClock.GetDayPeriod()) {
+
+			gameWeather.RandomizeWeather();
+
+		}
 
 		if (gameClock.GetCurrentDay() > dayBeforeAdvance) {
 
@@ -613,7 +626,22 @@ void Game::ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel) 
 
 		}
 
+		Player1.SetTemp(gameWeather.GetTemp());
+
 		DrainResult statDrain = playerDrain.CalculateDrain(gameClock, activityLevel);
+
+		if (Player1.isHot() && Player1.GetInventory().GetItemCount(ItemID::VineGear) <= 0) {
+
+			statDrain.hydrationDrain *= 2;
+
+		}
+
+		if (Player1.isCold() && Player1.GetInventory().GetItemCount(ItemID::LeatherGear) <= 0) {
+
+			statDrain.hungerDrain *= 2;
+
+		}
+
 		if (statDrain.hungerDrain > 0 && Player1.GetHunger() > 0) {
 
 			Player1.DecreaseHunger(statDrain.hungerDrain);
@@ -1827,6 +1855,8 @@ void Game::CaptureDailyCheckpoint() {
 	checkpoint.knownLocationsCheckpoint = knownLocations;
 	checkpoint.campfireCheckpoint = campfire;
 	checkpoint.campStorageCheckpoint = campStorage;
+	checkpoint.raftCheckpoint = raft;
+	checkpoint.weatherCheckpoint = gameWeather;
 	dailyCheckpoint = checkpoint;
 
 }
@@ -1844,6 +1874,8 @@ bool Game::RestoreDailyCheckpoint() {
 	knownLocations = dailyCheckpoint->knownLocationsCheckpoint;
 	campfire = dailyCheckpoint->campfireCheckpoint;
 	campStorage = dailyCheckpoint->campStorageCheckpoint;
+	raft = dailyCheckpoint->raftCheckpoint;
+	gameWeather = dailyCheckpoint->weatherCheckpoint;
 	return true; 
 
 }
@@ -1900,10 +1932,19 @@ void Game::RunCampLoop() {
 
 		case 9:
 
+			if (OpenRaftMenu()) {
+
+				shouldKeepRunning = false;
+
+			}
+			break;
+			
+		case 10:
+
 			SaveCurrentGame();
 			break;
 
-		case 10:
+		case 11:
 
 			shouldKeepRunning = false;
 			break;
@@ -1946,6 +1987,9 @@ void Game::SaveCurrentGame() {
 	currentState.knownLocationsCheckpoint = knownLocations;
 	currentState.campfireCheckpoint = campfire;
 	currentState.campStorageCheckpoint = campStorage;
+	currentState.raftCheckpoint = raft;
+	currentState.weatherCheckpoint = gameWeather;
+
 	
 	if (!SaveSystem::SaveGame(currentState, *dailyCheckpoint)) {
 
@@ -1975,9 +2019,177 @@ void Game::ContinueSavedGame() {
 	knownLocations = loadedCurrentState.knownLocationsCheckpoint;
 	campfire = loadedCurrentState.campfireCheckpoint;
 	campStorage = loadedCurrentState.campStorageCheckpoint;
+	raft = loadedCurrentState.raftCheckpoint;
+	gameWeather = loadedCurrentState.weatherCheckpoint;
 	dailyCheckpoint = loadedDailyCheckpoint;
+	
 
 	std::cout << "\n\n=== GAME LOADED SUCCESFULLY ===\n\n";
 	RunCampLoop();
 
 }
+
+bool Game::OpenRaftMenu() {
+
+	bool atRaft = true;
+
+	while (atRaft && Player1.GetHealth() > 0) {
+
+		raft.DisplayProgress();
+		int menuChoice = Menu::DisplayMenu(MenuType::Raft, gameClock);
+
+		switch (menuChoice) {
+
+		case 1:
+
+			ContributeToRaft();
+			break;
+
+		case 2:
+
+			TransferWaterToRaft();
+			break;
+
+		case 3:
+
+			if (!raft.IsReadyToEscape()) {
+
+				if (!raft.IsBuilt()) {
+
+					std::cout << "The raft is not finished, please finish building and preparing for departure.\n";
+					break;
+
+				}
+
+				std::cout << "The raft is not stocked for departure, please finish stocking.\n";
+				break;
+
+			}
+
+			std::cout << "\n\n===========================================\n\nCONGRATULATIONS!!!!\n\nYOU HAVE ESCAPED THE LONG LOST ISLE!!!!!\n\n";
+			return true;
+
+
+		case 4:
+
+			atRaft = false;
+			break;
+
+		}
+
+	}
+
+		return false;
+
+}
+
+void Game::ContributeToRaft() {
+
+	int menuChoice = Menu::DisplayStorageSlotSelection(campStorage);
+
+	const std::array<InventorySlot, 20>& storageSlots = campStorage.GetCampStorageSlots();
+
+	int backChoice = static_cast<int>(storageSlots.size()) + 1;
+
+	if (menuChoice == backChoice) {
+
+		return;
+
+	}
+
+	int indexNumber = menuChoice - 1;
+
+	const InventorySlot& selectedSlot = storageSlots[indexNumber];
+
+	if (selectedSlot.IsEmpty()) {
+
+		std::cout << "Selected storage slot is empty.\n";
+		return;
+
+	}
+
+	Item itemCopy = selectedSlot.GetItem();
+
+	int remainingRequired = raft.GetRemainingRequirement(itemCopy.GetID());
+
+	if (remainingRequired <= 0) {
+
+		std::cout << "The raft does not require any more of this item.\n";
+		return;
+
+	}
+
+	int maxContribution = selectedSlot.GetQuantity();
+	if (maxContribution > remainingRequired) {
+
+		maxContribution = remainingRequired;
+
+	}
+
+	int transferAmount = Menu::DisplayQuantityMenu(itemCopy, maxContribution);
+
+	if (transferAmount == 0) {
+
+		return;
+
+	}
+
+	CampStorage tempCampStorage = campStorage;
+	Raft tempRaft = raft;
+	int acceptedAmount = tempRaft.ContributeItem(itemCopy.GetID(), transferAmount);
+	if (acceptedAmount == 0) {
+
+		return;
+
+	}
+
+	int unremovedAmount = tempCampStorage.RemoveItem(itemCopy, acceptedAmount);
+
+	if (unremovedAmount > 0) {
+
+		std::cout << "Failed to remove item from storage.\n";
+		return;
+	
+	}
+
+	campStorage = tempCampStorage;
+	raft = tempRaft;
+
+	std::cout << "You contributed " << acceptedAmount << ' ' << itemCopy.GetName() << ".\n";
+
+}
+
+void Game::TransferWaterToRaft() {
+
+	if (Player1.GetInventory().GetStoredWater() <= 0) {
+
+		std::cout << "You do not have any water to contribute.\n";
+		return;
+
+	}
+
+	if (raft.GetRemainingWaterRequirement() <= 0) {
+
+		std::cout << "The raft does not require any more water.\n";
+		return;
+
+	}
+
+	Inventory tempInventory = Player1.GetInventory();
+	Raft tempRaft = raft;
+
+	int acceptedWater = tempRaft.ContributeWater(tempInventory.GetStoredWater());
+	int removedWater = tempInventory.RemoveWater(acceptedWater);
+
+	if (acceptedWater != removedWater) {
+
+		return;
+
+	}
+
+	raft = tempRaft;
+	Player1.GetInventory() = tempInventory;
+	std::cout << "You have contributed " << acceptedWater << " units of water to the raft stock.\n";
+
+}
+

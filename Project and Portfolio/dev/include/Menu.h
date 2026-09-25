@@ -14,7 +14,7 @@ enum class MenuType {
 	KnownLocations,	Location, YesNo,
 	Resources, BoarField, BoarCarcass,
 	WaterSpring, CampStorage, SpiderNest,
-	SpiderCombat
+	SpiderCombat, Raft
 
 };
 

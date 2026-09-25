@@ -26,8 +26,8 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
 		gameClock.DisplayTime();
 
-		std::cout << "=== Camp ===\n\n1. View Status\n2. Sleep\n3. Rest\n4. Show Inventory\n5. Crafting\n6. Campfire\n7. Camp Storage\n8. Explore\n9. Save Game\n10. Exit Game\nPlayer Choice: ";
-		maximum = 10;
+		std::cout << "=== Camp ===\n\n1. View Status\n2. Sleep\n3. Rest\n4. Show Inventory\n5. Crafting\n6. Campfire\n7. Camp Storage\n8. Explore\n9. Raft\n10. Save Game\n11. Exit Game\nPlayer Choice: ";
+		maximum = 11;
 
 		break;
 
@@ -108,6 +108,14 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
 		std::cout << "\n\n=== Combat ===\n\n1. Attack with spear\n2. Attack with bow\n3. Retreat\nPlayer choice: ";
 		maximum = 3;
+		break;
+
+	case MenuType::Raft:
+
+		gameClock.DisplayTime();
+
+		std::cout << "1. Contribute materials or food\n2. Transfer water\n3. Leave island\n4. Back\nPlayer choice: ";
+		maximum = 4;
 		break;
 
 	}

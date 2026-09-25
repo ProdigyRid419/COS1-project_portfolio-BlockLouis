@@ -33,8 +33,10 @@
     <ClCompile Include="dev\src\main.cpp" />
     <ClCompile Include="dev\src\Menu.cpp" />
     <ClCompile Include="dev\src\Player.cpp" />
+    <ClCompile Include="dev\src\Raft.cpp" />
     <ClCompile Include="dev\src\SaveSystem.cpp" />
     <ClCompile Include="dev\src\SurvivalDrain.cpp" />
+    <ClCompile Include="dev\src\Weather.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dev\include\Campfire.h" />
@@ -50,8 +52,10 @@
     <ClInclude Include="dev\include\Location.h" />
     <ClInclude Include="dev\include\Menu.h" />
     <ClInclude Include="dev\include\Player.h" />
+    <ClInclude Include="dev\include\Raft.h" />
     <ClInclude Include="dev\include\SaveSystem.h" />
     <ClInclude Include="dev\include\SurvivalDrain.h" />
+    <ClInclude Include="dev\include\Weather.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>

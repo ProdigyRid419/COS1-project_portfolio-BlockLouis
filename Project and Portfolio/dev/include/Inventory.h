@@ -18,6 +18,7 @@ public:
 	int GetStoredWater() const;
 	int GetWaterCapacity() const;
 	int FillWaterContainer();
+	int RemoveWater(int amount);
 
 	bool ConsumeWater();
 

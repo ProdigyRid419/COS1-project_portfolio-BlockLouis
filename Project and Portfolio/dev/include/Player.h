@@ -17,6 +17,8 @@ public:
 
 	void SetName(const std::string& name);
 
+	void SetTemp(int temperature);
+
 	void RestoreHunger(float amount);
 	void DecreaseHunger(float amount);
 	
@@ -34,6 +36,9 @@ public:
 
 	bool Save(std::ostream& output) const;
 	bool Load(std::istream& input);
+
+	bool isHot() const;
+	bool isCold() const;
 
 private:
 

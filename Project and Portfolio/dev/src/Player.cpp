@@ -309,3 +309,44 @@ bool Player::Load(std::istream& input) {
 
 }
 
+bool Player::isHot() const {
+
+	if (playerTemp > 74) {
+
+		return true;
+
+	}
+
+	return false;
+
+}
+
+bool Player::isCold() const {
+
+	if (playerTemp < 35) {
+
+		return true;
+
+	}
+
+	return false;
+
+}
+
+void Player::SetTemp(int temperature) {
+
+	if (temperature > 100 || temperature < 0) {
+
+		return;
+
+	}
+
+	playerTemp = temperature;
+
+}
+
+
+
+
+
+
