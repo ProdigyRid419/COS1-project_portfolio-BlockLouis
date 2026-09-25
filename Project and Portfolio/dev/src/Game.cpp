@@ -71,6 +71,48 @@ void Game::StartGame() {
 
 void Game::ViewStatus() {
 
+	float health = Player1.GetHealth();
+	float hunger = Player1.GetHunger();
+	float hydration = Player1.GetHydration();
+	float stamina = Player1.GetStamina();
+	float sanity = Player1.GetSanity();
+
+	if (Player1.GetSanity() <= 30) {
+
+		int randomStat = rand() % 5;
+		int randomNumber = -((rand() % 100) + 1);
+
+		switch (randomStat) {
+
+		case 0:
+
+			health = randomNumber;
+			break;
+
+		case 1:
+
+			hunger = randomNumber;
+			break;
+
+		case 2:
+
+			hydration = randomNumber;
+			break;
+
+		case 3:
+
+			stamina = randomNumber;
+			break;
+
+		case 4:
+
+			sanity = randomNumber;
+			break;
+
+		}
+
+	}
+
 	gameWeather.DisplayWeather();
 
 	std::cout << "\n=== Player Status ===\n";
@@ -94,25 +136,27 @@ void Game::ViewStatus() {
 
 	}
 
-
-	std::cout << std::fixed << std::setprecision(2) << "\nHealth: " << Player1.GetHealth();
-	std::cout << "\nHunger: " << Player1.GetHunger();
-	std::cout << "\nHydration: " << Player1.GetHydration();
-	std::cout << "\nStamina: " << Player1.GetStamina();
-	std::cout << "\nSanity: " << Player1.GetSanity() << "\n\n";
+	std::cout << std::fixed << std::setprecision(2) << "\nHealth: " << health;
+	std::cout << "\nHunger: " << hunger;
+	std::cout << "\nHydration: " << hydration;
+	std::cout << "\nStamina: " << stamina;
+	std::cout << "\nSanity: " << sanity << "\n\n";
 
 }
 
 void Game::Sleep() {
 
 	std::cout << "\n=== Sleep ===\n\n";
-	ProcessTime(32, ActivityLevel::Normal);
+	ProcessTime(32, ActivityLevel::Normal, true);
 
 	if (Player1.GetHealth() <= 0) {
 
 		return;
 
 	}
+
+	Player1.ResetAwakeTime();
+	Player1.RestoreSanity(15.0f);
 
 	std::cout << "You sleep for 8 hours.\n";
 
@@ -603,7 +647,7 @@ std::string Game::GetLocationName(int locationIndex) {
 
 }
 
-void Game::ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel) {
+void Game::ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel, bool isSleeping) {
 
 	for (int i = 0; i < fifteenMinuteIntervals; i++) {
 
@@ -651,7 +695,7 @@ void Game::ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel) 
 		if (statDrain.hydrationDrain > 0 && Player1.GetHydration() > 0) {
 
 			Player1.DecreaseHydration(statDrain.hydrationDrain);
-			
+
 		}
 
 		if (statDrain.staminaDrain > 0 && Player1.GetStamina() > 0) {
@@ -686,11 +730,23 @@ void Game::ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel) 
 
 		campfire.BurnForMinutes(15);
 
+		if (!isSleeping) {
+
+			Player1.AdvanceAwakeTime(15);
+
+		}
+
 		if (dayBeforeAdvance < gameClock.GetCurrentDay() && Player1.GetHealth() > 0) {
 
 			CaptureDailyCheckpoint();
 
 		}
+
+	}
+
+	if (!isSleeping && Player1.GetHealth() > 0) {
+
+		DisplaySanityEffects();
 
 	}
 
@@ -2192,4 +2248,37 @@ void Game::TransferWaterToRaft() {
 	std::cout << "You have contributed " << acceptedWater << " units of water to the raft stock.\n";
 
 }
+
+void Game::DisplaySanityEffects() {
+
+	if (Player1.GetSanity() > 70) {
+
+		return;
+
+	}
+
+	int randomEffect = rand() % 3;
+	switch (randomEffect) {
+
+	case 0:
+
+		std::cout << "You keep seeing shadows behind trees in the corner of your eyes.\n";
+		break;
+
+	case 1:
+
+		std::cout << "You see a plane in the distance, oh wait that's just a bird.\n";
+		break;
+
+	case 2:
+
+		std::cout << "You keep hearing branches break around you but nobody is there.\n";
+		break;
+
+	}
+
+	std::cout << "Might be time to get some sleep.\n";
+
+}
+
 

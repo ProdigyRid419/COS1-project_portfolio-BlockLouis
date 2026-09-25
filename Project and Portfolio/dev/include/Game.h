@@ -34,9 +34,10 @@ private:
 	void ViewStatus();
 	bool CanPerformStrenuousAction() const;
 	void UseBandage(ItemID item);
+	void DisplaySanityEffects();
 
 	GameClock gameClock;
-	void ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel);
+	void ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel, bool isSleeping = false);
 	void RefreshKnownLocations();
 
 	SurvivalDrain playerDrain;

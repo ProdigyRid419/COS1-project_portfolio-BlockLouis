@@ -30,6 +30,8 @@ public:
 	
 	void RestoreSanity(float amount);
 	void DecreaseSanity(float amount);
+	void AdvanceAwakeTime(int minutes);
+	void ResetAwakeTime();
 
 	void RestoreHealth(float amount);
 	void DecreaseHealth(float amount);
@@ -49,6 +51,7 @@ private:
 	float playerHydration = 100.0f;
 	float playerStamina = 100.0f;
 	float playerSanity = 100.0f;
+	int awakeMinutes = 0;
 	Inventory playerInventory;
 
 };

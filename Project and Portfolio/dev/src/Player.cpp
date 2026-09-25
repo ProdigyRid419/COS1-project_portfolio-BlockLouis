@@ -240,7 +240,7 @@ void Player::DecreaseHealth(float amount) {
 bool Player::Save(std::ostream& output) const {
 
 	output << std::quoted(playerName) << '\n';
-	output << playerTemp << ' ' << playerHealth << ' ' << playerHunger << ' ' << playerHydration << ' ' << playerStamina << ' ' << playerSanity << '\n';
+	output << playerTemp << ' ' << playerHealth << ' ' << playerHunger << ' ' << playerHydration << ' ' << playerStamina << ' ' << playerSanity << ' ' << awakeMinutes << '\n';
 	if (!playerInventory.Save(output)) {
 
 		return false;
@@ -255,7 +255,7 @@ bool Player::Load(std::istream& input) {
 
 	Player loadedPlayer;
 
-	input >> std::quoted(loadedPlayer.playerName) >> loadedPlayer.playerTemp >> loadedPlayer.playerHealth >> loadedPlayer.playerHunger >> loadedPlayer.playerHydration >> loadedPlayer.playerStamina >> loadedPlayer.playerSanity;
+	input >> std::quoted(loadedPlayer.playerName) >> loadedPlayer.playerTemp >> loadedPlayer.playerHealth >> loadedPlayer.playerHunger >> loadedPlayer.playerHydration >> loadedPlayer.playerStamina >> loadedPlayer.playerSanity >> loadedPlayer.awakeMinutes;
 	if (!static_cast<bool>(input)) {
 
 		return false;
@@ -293,6 +293,12 @@ bool Player::Load(std::istream& input) {
 	}
 
 	if (loadedPlayer.playerSanity < 0 || loadedPlayer.playerSanity > 100) {
+
+		return false;
+
+	}
+
+	if (loadedPlayer.awakeMinutes < 0 || loadedPlayer.awakeMinutes >= 1440) {
 
 		return false;
 
@@ -345,8 +351,29 @@ void Player::SetTemp(int temperature) {
 
 }
 
+void Player::AdvanceAwakeTime(int minutes) {
 
+	if (minutes <= 0) {
 
+		return;
 
+	}
+
+	awakeMinutes += minutes;
+
+	while (awakeMinutes >= 1440) {
+
+		awakeMinutes -= 1440;
+		DecreaseSanity(10.0f);
+
+	}
+
+}
+
+void Player::ResetAwakeTime() {
+
+	awakeMinutes = 0;
+
+}
 
 

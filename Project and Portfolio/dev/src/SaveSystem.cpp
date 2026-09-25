@@ -13,7 +13,7 @@ bool SaveSystem::SaveGame(const DailyCheckpoint& currentState, const DailyCheckp
 
 	}
 	
-	output << "LONG_LOST_ISLE 3" << '\n';
+	output << "LONG_LOST_ISLE 4" << '\n';
 
 	if (!SaveCheckpoint(output, currentState)) {
 
@@ -93,7 +93,7 @@ std::string fileIdentifier;
 int version = 0;
 
 input >> fileIdentifier >> version;
-if (!input || fileIdentifier != "LONG_LOST_ISLE" || version != 3) {
+if (!input || fileIdentifier != "LONG_LOST_ISLE" || version != 4) {
 
 	return false;
 
