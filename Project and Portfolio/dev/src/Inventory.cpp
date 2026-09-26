@@ -371,9 +371,17 @@ bool Inventory::Load(std::istream& input) {
 
 	}
 
+	if (loadedInventory.storedWater < 0 || loadedInventory.storedWater > loadedInventory.GetWaterCapacity()) {
+
+		return false;
+
+	}
+
 	inventorySlots = loadedInventory.inventorySlots;
 	dedicatedInventorySlots = loadedInventory.dedicatedInventorySlots;
 	storedWater = loadedInventory.storedWater;
+
+	return true;
 
 }
 

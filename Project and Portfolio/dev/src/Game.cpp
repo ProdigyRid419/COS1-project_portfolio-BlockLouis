@@ -86,27 +86,27 @@ void Game::ViewStatus() {
 
 		case 0:
 
-			health = randomNumber;
+			health = static_cast<float>(randomNumber);
 			break;
 
 		case 1:
 
-			hunger = randomNumber;
+			hunger = static_cast<float>(randomNumber);
 			break;
 
 		case 2:
 
-			hydration = randomNumber;
+			hydration = static_cast<float>(randomNumber);
 			break;
 
 		case 3:
 
-			stamina = randomNumber;
+			stamina = static_cast<float>(randomNumber);
 			break;
 
 		case 4:
 
-			sanity = randomNumber;
+			sanity = static_cast<float>(randomNumber);
 			break;
 
 		}
