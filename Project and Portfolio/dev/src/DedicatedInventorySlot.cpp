@@ -50,9 +50,29 @@ bool DedicatedInventorySlot::CanAcceptItem(const Item& newItem) const {
 
 		return InventorySlot::CanAcceptItem(newItem);
 
-	case DedicatedSlotType::Arrow:
+	case DedicatedSlotType::FlintArrow:
 
-		if (newItem.GetID() != ItemID::FlintArrow && newItem.GetID() != ItemID::StoneArrow && newItem.GetID() != ItemID::MetalArrow) {
+		if (newItem.GetID() != ItemID::FlintArrow) {
+
+			return false;
+
+		}
+
+		return InventorySlot::CanAcceptItem(newItem);
+
+	case DedicatedSlotType::StoneArrow:
+
+		if (newItem.GetID() != ItemID::StoneArrow) {
+
+			return false;
+
+		}
+
+		return InventorySlot::CanAcceptItem(newItem);
+
+	case DedicatedSlotType::MetalArrow:
+
+		if (newItem.GetID() != ItemID::MetalArrow) {
 
 			return false;
 
@@ -102,3 +122,24 @@ DedicatedSlotType DedicatedInventorySlot::GetSlotType() const {
 
 }
 
+bool DedicatedInventorySlot::Load(std::istream& input) {
+
+	InventorySlot loadedSlot;
+	if (!loadedSlot.Load(input)) {
+
+		return false;
+
+	}
+
+	DedicatedInventorySlot validationSlot(slotType);
+
+	if (!loadedSlot.IsEmpty() && !validationSlot.CanAcceptItem(loadedSlot.GetItem())) {
+
+		return false;
+
+	}
+
+	InventorySlot::operator=(loadedSlot);
+	return true;
+
+}

@@ -17,6 +17,8 @@ public:
 
 	void SetName(const std::string& name);
 
+	void SetTemp(int temperature);
+
 	void RestoreHunger(float amount);
 	void DecreaseHunger(float amount);
 	
@@ -28,6 +30,17 @@ public:
 	
 	void RestoreSanity(float amount);
 	void DecreaseSanity(float amount);
+	void AdvanceAwakeTime(int minutes);
+	void ResetAwakeTime();
+
+	void RestoreHealth(float amount);
+	void DecreaseHealth(float amount);
+
+	bool Save(std::ostream& output) const;
+	bool Load(std::istream& input);
+
+	bool isHot() const;
+	bool isCold() const;
 
 private:
 
@@ -38,6 +51,7 @@ private:
 	float playerHydration = 100.0f;
 	float playerStamina = 100.0f;
 	float playerSanity = 100.0f;
+	int awakeMinutes = 0;
 	Inventory playerInventory;
 
 };

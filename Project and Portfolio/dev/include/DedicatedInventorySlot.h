@@ -1,10 +1,12 @@
 #pragma once
 #include "InventorySlot.h"
+#include <iosfwd>
 
 enum class DedicatedSlotType {
 
 	VineGear, LeatherGear, Spear, Bow,
-	Arrow, Axe, Pickaxe, WaterContainer
+	FlintArrow, StoneArrow, MetalArrow,
+	Axe, Pickaxe, WaterContainer
 
 };
 
@@ -15,6 +17,7 @@ public:
 	DedicatedInventorySlot(DedicatedSlotType newSlotType);
 	bool CanAcceptItem(const Item& newItem) const override;
 	DedicatedSlotType GetSlotType() const;
+	bool Load(std::istream& input);
 
 private:
 

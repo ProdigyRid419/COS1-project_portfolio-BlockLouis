@@ -17,8 +17,8 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
 	case MenuType::Main:
 
-		std::cout << "=== Welcome to The Long Lost Isle ===\n\n1. Start Game\n2. Exit\nPlayer choice: ";
-		maximum = 2;
+		std::cout << "=== Welcome to The Long Lost Isle ===\n\n1. Start Game\n2. Continue Saved Game\n3. Exit\nPlayer choice: ";
+		maximum = 3;
 
 		break;
 
@@ -26,8 +26,8 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
 		gameClock.DisplayTime();
 
-		std::cout << "=== Camp ===\n\n1. View Status\n2. Sleep\n3. Rest\n4. Show Inventory\n5. Crafting\n6. Campfire\n7. Camp Storage\n8. Explore\n9. Exit Game\nPlayer Choice: ";
-		maximum = 9;
+		std::cout << "=== Camp ===\n\n1. View Status\n2. Sleep\n3. Rest\n4. Show Inventory\n5. Crafting\n6. Campfire\n7. Camp Storage\n8. Explore\n9. Raft\n10. Save Game\n11. Exit Game\nPlayer Choice: ";
+		maximum = 11;
 
 		break;
 
@@ -100,6 +100,22 @@ int Menu::DisplayMenu(MenuType menuType, const GameClock& gameClock) {
 
 		std::cout << "\n\n=== Spider Nest ===\n\n1. Fight spider\n2. Show inventory\n3. View status\n4. Rest\n5. Leave location\nPlayer choice: ";
 		maximum = 5;
+		break;
+
+	case MenuType::SpiderCombat:
+
+		gameClock.DisplayTime();
+
+		std::cout << "\n\n=== Combat ===\n\n1. Attack with spear\n2. Attack with bow\n3. Retreat\nPlayer choice: ";
+		maximum = 3;
+		break;
+
+	case MenuType::Raft:
+
+		gameClock.DisplayTime();
+
+		std::cout << "1. Contribute materials or food\n2. Transfer water\n3. Leave island\n4. Back\nPlayer choice: ";
+		maximum = 4;
 		break;
 
 	}
@@ -290,9 +306,9 @@ int Menu::DisplayCookingMenu(int playerMeat) {
 
 int Menu::DisplayConsumableMenu(const Inventory& inventory) {
 
-	std::cout << "\n\n=== Consumables ===\n\n1. Raw meat\nAmount: " << inventory.GetItemCount(ItemID::RawMeat) << "\n2. Cooked meat\nAmount: " << inventory.GetItemCount(ItemID::CookedMeat) << "\n3. Water\nAmount: " << inventory.GetStoredWater() << "\n4. Back\nPlayer choice: ";
+	std::cout << "\n\n=== Consumables ===\n\n1. Raw meat\nAmount: " << inventory.GetItemCount(ItemID::RawMeat) << "\n2. Cooked meat\nAmount: " << inventory.GetItemCount(ItemID::CookedMeat) << "\n3. Water\nAmount: " << inventory.GetStoredWater() << "\n4. Basic Bandage\tAmount: " << inventory.GetItemCount(ItemID::BasicBandage) << "\n5. Improved Bandage\tAmount: " << inventory.GetItemCount(ItemID::ImprovedBandage) << "\n6. Back\nPlayer choice: ";
 
-	int validatedResult = GetValidatedChoice(1, 4);
+	int validatedResult = GetValidatedChoice(1, 6);
 	return validatedResult;
 
 }
@@ -362,6 +378,14 @@ int Menu::DisplayStorageSlotSelection(const CampStorage& campStorage) {
 
 	int validatedChoice = GetValidatedChoice(1, menuNumber);
 
+	return validatedChoice;
+
+}
+
+int Menu::DisplayArrowSelection(const Inventory& inventory) {
+
+	std::cout << "\n\n=== Arrows ===\n\n1. Flint arrows: " << inventory.GetItemCount(ItemID::FlintArrow) << "\n2. Stone arrows: " << inventory.GetItemCount(ItemID::StoneArrow) << "\n3. Metal arrows: " << inventory.GetItemCount(ItemID::MetalArrow) << "\n4. Back\nPlayer choice: ";
+	int validatedChoice = GetValidatedChoice(1, 4);
 	return validatedChoice;
 
 }

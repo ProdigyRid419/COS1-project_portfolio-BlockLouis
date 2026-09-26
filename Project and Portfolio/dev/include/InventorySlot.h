@@ -1,5 +1,6 @@
 #pragma once
 #include "Item.h"
+#include <iosfwd>
 
 class InventorySlot {
 
@@ -16,6 +17,9 @@ public:
 
 	int AddQuantity(const Item& newItem, int amount);
 	int RemoveQuantity(int amount);
+
+	bool Save(std::ostream& output) const;
+	bool Load(std::istream& input);
 
 private:
 

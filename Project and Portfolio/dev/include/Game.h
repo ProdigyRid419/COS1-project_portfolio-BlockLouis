@@ -8,6 +8,9 @@
 #include "Crafting.h"
 #include "Campfire.h"
 #include "CampStorage.h"
+#include "DailyCheckpoint.h"
+#include "Raft.h"
+#include "Weather.h"
 
 class Game {
 
@@ -25,13 +28,16 @@ private:
 	void OpenCampfireMenu();
 	void Rest();
 
-	
+	void RunCampLoop();
+
 	Player Player1;
 	void ViewStatus();
 	bool CanPerformStrenuousAction() const;
+	void UseBandage(ItemID item);
+	void DisplaySanityEffects();
 
 	GameClock gameClock;
-	void ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel);
+	void ProcessTime(int fifteenMinuteIntervals, ActivityLevel activityLevel, bool isSleeping = false);
 	void RefreshKnownLocations();
 
 	SurvivalDrain playerDrain;
@@ -69,6 +75,21 @@ private:
 	void OpenCampStorageMenu();
 	void DepositItemToStorage();
 	void WithdrawItemFromStorage();
+
+	std::optional<DailyCheckpoint> dailyCheckpoint;
+	void CaptureDailyCheckpoint();
+	bool RestoreDailyCheckpoint();
+
+	Raft raft;
+	bool OpenRaftMenu();
+	void ContributeToRaft();
+	void TransferWaterToRaft();
+
+	void SaveCurrentGame();
+	void ContinueSavedGame();
+
+	Weather gameWeather;
+
 
 };
 

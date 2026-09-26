@@ -2,6 +2,7 @@
 #include "InventorySlot.h"
 #include "DedicatedInventorySlot.h"
 #include <array>
+#include <iosfwd>
 
 class Inventory {
 
@@ -17,19 +18,25 @@ public:
 	int GetStoredWater() const;
 	int GetWaterCapacity() const;
 	int FillWaterContainer();
+	int RemoveWater(int amount);
 
 	bool ConsumeWater();
+
+	bool Save(std::ostream& output) const;
+	bool Load(std::istream& input);
 
 private:
 
 	std::array<InventorySlot, 10> inventorySlots;
-	std::array<DedicatedInventorySlot, 8> dedicatedInventorySlots{
+	std::array<DedicatedInventorySlot, 10> dedicatedInventorySlots{
 
 		DedicatedInventorySlot(DedicatedSlotType::LeatherGear),
 		DedicatedInventorySlot(DedicatedSlotType::VineGear),
 		DedicatedInventorySlot(DedicatedSlotType::Spear),
 		DedicatedInventorySlot(DedicatedSlotType::Bow),
-		DedicatedInventorySlot(DedicatedSlotType::Arrow),
+		DedicatedInventorySlot(DedicatedSlotType::FlintArrow),
+		DedicatedInventorySlot(DedicatedSlotType::StoneArrow),
+		DedicatedInventorySlot(DedicatedSlotType::MetalArrow),
 		DedicatedInventorySlot(DedicatedSlotType::Axe),
 		DedicatedInventorySlot(DedicatedSlotType::Pickaxe),
 		DedicatedInventorySlot(DedicatedSlotType::WaterContainer)

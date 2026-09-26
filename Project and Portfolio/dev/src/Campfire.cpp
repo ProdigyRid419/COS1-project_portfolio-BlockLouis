@@ -1,4 +1,5 @@
 #include "Campfire.h"
+#include <iostream>
 
 bool Campfire::IsBuilt() const {
 
@@ -85,5 +86,36 @@ int Campfire::GetAvailableFuelCap() const {
 	int acceptableFuelAmount = remainingMinutes / 60;
 
 	return acceptableFuelAmount;
+
+}
+
+bool Campfire::Save(std::ostream& output) const {
+
+	output << isBuilt << ' ' << fuelMinutes << '\n';
+	return static_cast<bool>(output);
+
+}
+
+bool Campfire::Load(std::istream& input) {
+
+	bool loadedIsBuilt;
+	int loadedFuelMinutes;
+
+	input >> loadedIsBuilt >> loadedFuelMinutes;
+	if (!static_cast<bool>(input)) {
+
+		return false;
+
+	}
+
+	if (loadedFuelMinutes < 0 || loadedFuelMinutes > maximumBurnTime || (!loadedIsBuilt && loadedFuelMinutes > 0)) {
+
+		return false;
+
+	}
+
+	isBuilt = loadedIsBuilt;
+	fuelMinutes = loadedFuelMinutes;
+	return true;
 
 }

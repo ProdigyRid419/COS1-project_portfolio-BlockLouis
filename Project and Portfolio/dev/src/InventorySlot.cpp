@@ -1,4 +1,5 @@
 #include "InventorySlot.h"
+#include <iostream>
 
 InventorySlot::InventorySlot() {
 
@@ -120,4 +121,44 @@ int InventorySlot::RemoveQuantity(int amount) {
 
 }
 
+bool InventorySlot::Save(std::ostream& output) const {
 
+	if (!item.Save(output)) {
+
+		return false;
+
+	}
+
+	output << quantity << '\n';
+	return static_cast<bool>(output);
+
+}
+
+bool InventorySlot::Load(std::istream& input) {
+
+	Item loadedItem;
+	int loadedQuantity = 0;
+	if (!loadedItem.Load(input)) {
+
+		return false;
+
+	}
+
+	input >> loadedQuantity;
+	if (!static_cast<bool>(input)) {
+
+		return false;
+
+	}
+
+	if (loadedQuantity < 0 || loadedQuantity > loadedItem.GetMaxStack() || (loadedItem.GetID() != ItemID::Empty && loadedQuantity == 0)) {
+
+		return false;
+
+	}
+
+	item = loadedItem;
+	quantity = loadedQuantity;
+	return true;
+
+}

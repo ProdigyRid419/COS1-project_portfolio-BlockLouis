@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -22,6 +22,7 @@
     <ClCompile Include="dev\src\Campfire.cpp" />
     <ClCompile Include="dev\src\CampStorage.cpp" />
     <ClCompile Include="dev\src\Crafting.cpp" />
+    <ClCompile Include="dev\src\DailyCheckpoint.cpp" />
     <ClCompile Include="dev\src\DedicatedInventorySlot.cpp" />
     <ClCompile Include="dev\src\Game.cpp" />
     <ClCompile Include="dev\src\GameClock.cpp" />
@@ -32,12 +33,16 @@
     <ClCompile Include="dev\src\main.cpp" />
     <ClCompile Include="dev\src\Menu.cpp" />
     <ClCompile Include="dev\src\Player.cpp" />
+    <ClCompile Include="dev\src\Raft.cpp" />
+    <ClCompile Include="dev\src\SaveSystem.cpp" />
     <ClCompile Include="dev\src\SurvivalDrain.cpp" />
+    <ClCompile Include="dev\src\Weather.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dev\include\Campfire.h" />
     <ClInclude Include="dev\include\CampStorage.h" />
     <ClInclude Include="dev\include\Crafting.h" />
+    <ClInclude Include="dev\include\DailyCheckpoint.h" />
     <ClInclude Include="dev\include\DedicatedInventorySlot.h" />
     <ClInclude Include="dev\include\Game.h" />
     <ClInclude Include="dev\include\GameClock.h" />
@@ -47,7 +52,10 @@
     <ClInclude Include="dev\include\Location.h" />
     <ClInclude Include="dev\include\Menu.h" />
     <ClInclude Include="dev\include\Player.h" />
+    <ClInclude Include="dev\include\Raft.h" />
+    <ClInclude Include="dev\include\SaveSystem.h" />
     <ClInclude Include="dev\include\SurvivalDrain.h" />
+    <ClInclude Include="dev\include\Weather.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>

@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <iostream>
+#include <iomanip>
 
 void Player::SetName(const std::string& name) {
 
@@ -75,6 +76,12 @@ void Player::RestoreHunger(float amount) {
 
 void Player::DecreaseHunger(float amount) {
 
+	if (amount <= 0) {
+
+		return;
+
+	}
+
 	playerHunger -= amount;
 	if (playerHunger <= 0) {
 
@@ -105,6 +112,12 @@ void Player::RestoreHydration(float amount) {
 }
 
 void Player::DecreaseHydration(float amount) {
+
+	if (amount <= 0) {
+
+		return;
+
+	}
 
 	playerHydration -= amount;
 	if (playerHydration <= 0) {
@@ -137,6 +150,12 @@ void Player::RestoreStamina(float amount) {
 
 void Player::DecreaseStamina(float amount) {
 
+	if (amount <= 0) {
+
+		return;
+
+	}
+
 	playerStamina -= amount;
 	if (playerStamina <= 0) {
 
@@ -167,6 +186,12 @@ void Player::RestoreSanity(float amount) {
 
 void Player::DecreaseSanity(float amount) {
 
+	if (amount <= 0) {
+
+		return;
+
+	}
+
 	playerSanity -= amount;
 	if (playerSanity <= 0) {
 
@@ -177,5 +202,178 @@ void Player::DecreaseSanity(float amount) {
 
 }
 
+void Player::RestoreHealth(float amount) {
+
+	if (amount <= 0) {
+
+		return;
+
+	}
+
+	playerHealth += amount;
+	if (playerHealth >= 100.0f) {
+
+		playerHealth = 100.0f;
+		std::cout << "Your Health has reached maximum amount.\n";
+
+	}
+
+}
+
+void Player::DecreaseHealth(float amount) {
+
+	if (amount <= 0) {
+
+		return;
+
+	}
+
+	playerHealth -= amount;
+	if (playerHealth <= 0) {
+
+		playerHealth = 0;
+		
+	}
+
+}
+
+bool Player::Save(std::ostream& output) const {
+
+	output << std::quoted(playerName) << '\n';
+	output << playerTemp << ' ' << playerHealth << ' ' << playerHunger << ' ' << playerHydration << ' ' << playerStamina << ' ' << playerSanity << ' ' << awakeMinutes << '\n';
+	if (!playerInventory.Save(output)) {
+
+		return false;
+
+	}
+
+	return static_cast<bool>(output);
+
+}
+
+bool Player::Load(std::istream& input) {
+
+	Player loadedPlayer;
+
+	input >> std::quoted(loadedPlayer.playerName) >> loadedPlayer.playerTemp >> loadedPlayer.playerHealth >> loadedPlayer.playerHunger >> loadedPlayer.playerHydration >> loadedPlayer.playerStamina >> loadedPlayer.playerSanity >> loadedPlayer.awakeMinutes;
+	if (!static_cast<bool>(input)) {
+
+		return false;
+
+	}
+
+	if (loadedPlayer.playerName.empty()) {
+
+		return false;
+
+	}
+
+	if (loadedPlayer.playerHealth < 0 || loadedPlayer.playerHealth > 100) {
+
+		return false;
+
+	}
+
+	if (loadedPlayer.playerHunger < 0 || loadedPlayer.playerHunger > 100) {
+
+		return false;
+
+	}
+
+	if (loadedPlayer.playerHydration < 0 || loadedPlayer.playerHydration > 100) {
+
+		return false;
+
+	}
+
+	if (loadedPlayer.playerStamina < 0 || loadedPlayer.playerStamina > 100) {
+
+		return false;
+
+	}
+
+	if (loadedPlayer.playerSanity < 0 || loadedPlayer.playerSanity > 100) {
+
+		return false;
+
+	}
+
+	if (loadedPlayer.awakeMinutes < 0 || loadedPlayer.awakeMinutes >= 1440) {
+
+		return false;
+
+	}
+
+	if (!loadedPlayer.playerInventory.Load(input)) {
+
+		return false;
+
+	}
+
+	*this = loadedPlayer;
+	return true;
+
+}
+
+bool Player::isHot() const {
+
+	if (playerTemp > 74) {
+
+		return true;
+
+	}
+
+	return false;
+
+}
+
+bool Player::isCold() const {
+
+	if (playerTemp < 35) {
+
+		return true;
+
+	}
+
+	return false;
+
+}
+
+void Player::SetTemp(int temperature) {
+
+	if (temperature > 100 || temperature < 0) {
+
+		return;
+
+	}
+
+	playerTemp = temperature;
+
+}
+
+void Player::AdvanceAwakeTime(int minutes) {
+
+	if (minutes <= 0) {
+
+		return;
+
+	}
+
+	awakeMinutes += minutes;
+
+	while (awakeMinutes >= 1440) {
+
+		awakeMinutes -= 1440;
+		DecreaseSanity(10.0f);
+
+	}
+
+}
+
+void Player::ResetAwakeTime() {
+
+	awakeMinutes = 0;
+
+}
 
 

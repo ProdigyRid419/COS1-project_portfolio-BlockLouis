@@ -57,6 +57,18 @@
     <ClCompile Include="dev\src\CampStorage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="dev\src\DailyCheckpoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dev\src\SaveSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dev\src\Raft.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dev\src\Weather.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dev\include\Game.h">
@@ -96,6 +108,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="dev\include\CampStorage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dev\include\DailyCheckpoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dev\include\SaveSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dev\include\Raft.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dev\include\Weather.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

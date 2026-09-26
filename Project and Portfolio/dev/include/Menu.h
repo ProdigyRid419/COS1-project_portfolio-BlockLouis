@@ -13,7 +13,8 @@ enum class MenuType {
 	Main, Camp, Exploration,
 	KnownLocations,	Location, YesNo,
 	Resources, BoarField, BoarCarcass,
-	WaterSpring, CampStorage, SpiderNest
+	WaterSpring, CampStorage, SpiderNest,
+	SpiderCombat, Raft
 
 };
 
@@ -31,6 +32,7 @@ public:
 	static int DisplayInventorySlotSelection(const Inventory& inventory);
 	static int DisplayQuantityMenu(const Item& item, int availableQuantity);
 	static int DisplayStorageSlotSelection(const CampStorage& campStorage);
+	static int DisplayArrowSelection(const Inventory& inventory);
 
 private:
 

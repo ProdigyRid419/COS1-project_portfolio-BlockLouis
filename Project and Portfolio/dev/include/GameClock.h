@@ -1,4 +1,5 @@
 #pragma once
+#include <iosfwd>
 
 enum class DayPeriod {
 
@@ -11,6 +12,9 @@ class GameClock {
 public:
 
 	GameClock();
+
+	bool Save(std::ostream& output) const;
+	bool Load(std::istream& input);
 
 	int GetCurrentDay() const;
 	int GetCurrentTimeMinutes() const;

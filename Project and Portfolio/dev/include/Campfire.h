@@ -1,4 +1,5 @@
 #pragma once
+#include <iosfwd>
 
 class Campfire {
 
@@ -13,11 +14,14 @@ public:
 	int AddFuel(int woodAmount);
 	void BurnForMinutes(int minutes);
 
+	bool Save(std::ostream& output) const;
+	bool Load(std::istream& input);
+
 private:
 
 	bool isBuilt = false;
 	int fuelMinutes = 0;
-	const int maximumBurnTime = 480;
+	static constexpr int maximumBurnTime = 480;
 
 };
 
